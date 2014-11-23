@@ -3,6 +3,10 @@ package com.codebattle.model;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.codebattle.utility.GameUnits;
+import com.codebattle.utility.GameUnits.Direction;
+import com.codebattle.utility.GameUnits.Interval;
+import com.codebattle.utility.GameUnits.Speed;
 import com.codebattle.utility.TextureFactory;
 
 /*
@@ -16,130 +20,128 @@ import com.codebattle.utility.TextureFactory;
  * */
 
 public class GameActor extends Actor
-{
-	public enum Direction
-	{
-		DOWN(0),
-		LEFT(1),
-		RIGHT(2),
-		UP(3);
-		
-		public int value;
-		private Direction(int value)
-		{
-			this.value = value;
-		}
-		
-		public void set(int value)
-		{
-			this.value = value;
-		}
-	}
-	
-	final String name;
+{	
 	private Direction direction;
 	private TextureRegion[][] frames;
-	final private int sleepTime = 10;
-	private int interval;
+	private Interval interval;
 	private int frameIndex;
 	private int frameCount;
-	private float speed;
-	
+	private Speed speed;
+		
 	public GameActor(String name , float sx , float sy)
 	{
 		super();
-		this.name = name;
-		this.frames = TextureFactory.getInstance().loadTextureRegionFromFile(name, 4, 4, 32, 48);
+		this.setName(name);
+		this.frames = TextureFactory.getInstance().loadTextureRegionFromFile(name, 
+				GameUnits.CHR_VSLICES, GameUnits.CHR_HSLICES, GameUnits.CHR_WIDTH, GameUnits.CHR_HEIGHT);
 		this.direction = Direction.DOWN;
 		this.frameIndex = 0;
 		this.frameCount = 0;
-		this.interval = 30; //default
-		this.speed = 0.2f;
+		this.interval = Interval.HIGH; 
+		this.speed = Speed.VERYFAST;
 		this.setX(sx);
 		this.setY(sy);
 	}
 	
-	/*Turn the actor's facing*/
-	public void turn(int value)
+	/*User interface : turn*/
+	public void turnDown()
 	{
-		direction.set(value);
+		this.setDirection(Direction.DOWN);
+	}
+	
+	public void turnLeft()
+	{
+		this.setDirection(Direction.LEFT);
+	}
+	
+	public void turnRight()
+	{
+		this.setDirection(Direction.RIGHT);
+	}
+	
+	public void turnUp()
+	{
+		this.setDirection(Direction.UP);
+	}
+	
+	/*User interface : move*/
+	public void moveDown(int pace)
+	{
+		this.move(pace, Direction.DOWN);
+	}
+	
+	public void moveLeft(int pace)
+	{
+		this.move(pace, Direction.LEFT);
+	}
+	
+	public void moveRight(int pace)
+	{
+		this.move(pace, Direction.RIGHT);
+	}
+	
+	public void moveUp(int pace)
+	{
+		this.move(pace, Direction.UP);
 	}
 	
 	/*Stop animation , reseting all animation variables*/
-	public void stop()
+	private void stop()
 	{
 		this.frameCount = 0;
 		this.frameIndex = 0;
 	}
 	
-	public void moveRight(int pace)
+	/*Set a new direction for this actor*/
+	private void setDirection(Direction dir)
 	{
-		while(pace > 0) {
-		}
+		this.direction = dir;
 	}
-	
-	/*Move to the destination point*/
-	private void moveTo(float x	 , float y)
+
+	/*Move to specific direction in a paces*/
+	private void move(int pace , Direction dir)
 	{
-		float destX = x , destY = y;
 		try {
-			while(!isReached(destX , destY)) {
-				switch(this.direction) {
+			this.setDirection(dir);
+			for(float diff = pace * GameUnits.CELL_SIZE ; diff > 0 ; diff -= speed.Val()) {
+				switch(dir) {
 				case DOWN:
-					this.moveBy(0 , -speed);
+					this.moveBy(0 , -speed.Val());
 					break;
 				case LEFT:
-					this.moveBy(speed, 0);
+					this.moveBy(-speed.Val() , 0);
 					break;
 				case RIGHT:
-					this.moveBy(-speed, 0);
+					this.moveBy(speed.Val() , 0);
 					break;
 				case UP:
-					this.moveBy(0, speed);
+					this.moveBy(0 , speed.Val());
 					break;
 				default:
 					break;
 				}
-				Thread.sleep(this.sleepTime);
+				Thread.sleep(GameUnits.SLEEP_TIME);
 			}
-		} catch(Exception e) {
+			stop();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/*Judging if reached end*/
-	private boolean isReached(float destX , float destY)
-	{
-		switch(this.direction) {
-		case DOWN:
-			return (this.getX() == destX && this.getY() <= destY) ? true : false;
-		case LEFT:
-			return (this.getX() <= destX && this.getY() == destY) ? true : false;
-		case RIGHT:
-			return (this.getX() >= destX && this.getY() == destY) ? true : false;
-		case UP:
-			return (this.getX() == destX && this.getY() >= destY) ? true : false;
-		default:
-			break;
-		}
-		
-		return true;
 	}
 	
 	@Override
 	public void moveBy(float x, float y) {
 		// TODO Auto-generated method stub
 		super.moveBy(x, y);
-		frameCount = (frameCount < interval) ? frameCount + 1 : 0;
+		frameCount = (frameCount < interval.Val()) ? frameCount + 1 : 0;
 		
-		if(frameCount >= interval)
-			frameIndex = (frameIndex < 3) ? frameIndex + 1 : 0;
+		if(frameCount >= interval.Val())
+			frameIndex = (frameIndex < GameUnits.ANI_CYCLE) ? frameIndex + 1 : 0;
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
-		batch.draw(frames[this.direction.value][frameIndex], this.getX(), this.getY());
+		batch.draw(frames[this.direction.Val()][frameIndex], this.getX(), this.getY());
 	}
 
 	@Override

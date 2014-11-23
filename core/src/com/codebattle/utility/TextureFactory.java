@@ -8,9 +8,7 @@ public class TextureFactory {
 	
 	private static TextureFactory instance = null;
 	
-	private TextureFactory()
-	{
-	}
+	private TextureFactory(){}
 	
 	public static TextureFactory getInstance()
 	{
@@ -19,7 +17,7 @@ public class TextureFactory {
 	
 	public Texture loadTextureFromFile(String resName)
 	{
-		return new Texture(Gdx.files.internal("graphics/characters/" + resName));
+		return new Texture(Gdx.files.internal("graphics/characters/" + resName + ".png"));
 		
 	}
 	

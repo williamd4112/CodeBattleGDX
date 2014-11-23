@@ -2,11 +2,13 @@ package com.codebattle.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.codebattle.gui.ScriptEditor;
 import com.codebattle.model.GameActor;
 import com.codebattle.model.GameStage;
+import com.codebattle.model.ScriptProcessor;
 
 /*
  * GameScene:
@@ -20,17 +22,18 @@ public class GameScene implements Screen{
 	final GameStage stage;
 	final ScriptEditor scriptEditor;
 	
-	GameActor a;
-	
 	public GameScene(String mapName)
 	{
 		this.stage = new GameStage(mapName);
 		this.scriptEditor = new ScriptEditor(new Handler());
-		this.stage.addActor(this.scriptEditor);
+		this.stage.addGUI(this.scriptEditor);
 		
-		//Test segment
-		a = new GameActor("001-Fighter01.png" , 320 , 240);
-		this.stage.addActor(a);
+		//TODO : After test completed , remove this
+		GameActor a,b;
+		a = new GameActor("Knight" , 96 , 96);
+		b = new GameActor("Lancer" , 128 , 128);
+		
+		this.stage.addGameActor(a).addGameActor(b);
 		
 		Gdx.input.setInputProcessor(this.stage);
 	}
@@ -78,6 +81,7 @@ public class GameScene implements Screen{
 		this.stage.dispose();
 	}
 	
+	/*Handling script interpretation*/
 	private class Handler extends ClickListener
 	{
 		@Override
@@ -85,23 +89,7 @@ public class GameScene implements Screen{
 			// TODO Auto-generated method stub
 			super.clicked(event, x, y);
 			String script = scriptEditor.getScript();
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					try {
-						a.turn(GameActor.Direction.LEFT.value);
-						while(a.getX() > 0) {
-							a.moveBy(-0.2f, 0);
-							Thread.sleep(5);
-						}
-					}catch(Exception e) {
-						e.printStackTrace();
-					}
-				}
-				
-			}).start();
+			new ScriptProcessor(stage , script).start();;
 			
 		}
 	}
