@@ -2,4 +2,4 @@
 
 A gamification project.
 
-Play game while practicing code!
+Play RPG game while practicing code!
