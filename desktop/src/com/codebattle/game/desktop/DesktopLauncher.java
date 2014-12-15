@@ -5,9 +5,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.codebattle.game.CodeBattle;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		
-		new LwjglApplication(new CodeBattle(), config);
-	}
+    public static void main(final String[] arg) {
+        final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
+        new LwjglApplication(new CodeBattle(), config);
+    }
 }
