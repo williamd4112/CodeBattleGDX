@@ -1,4 +1,4 @@
-# CodeBattleGDX
+# Code Battle
 
 A gamification project.
 
