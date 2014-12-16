@@ -4,131 +4,122 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-public class DemoUI implements Screen{
-	
-	final private Stage stage;
-	private Table table;
-	private ShapeRenderer shapeRenderer;
-	private Skin skin;
-	
-	TextArea txtArea;
-	ScrollPane pane;
-	DemoObject obj;
-	
-	public DemoUI()
-	{
-		skin = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
-		txtArea = new TextArea("String" , skin);
-		
-		stage = new Stage();
-		ScrollPane pane2 = new ScrollPane(new Image(new Texture("badlogic.jpg")), skin);
-		pane2.setScrollingDisabled(false, true);
-		// pane2.setCancelTouchFocus(false);
-		pane2.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.stop();
-				return true;
-			}
-		});
+public class DemoUi implements Screen {
+    private final Stage stage;
+    private Table table;
+    private ShapeRenderer shapeRenderer;
+    private Skin skin;
 
-		table = new Table();
-		table.debug();
-		//table.add(txtArea).expand().fill();
-		//table.add(new Image(new Texture("badlogic.jpg")));
-		//table.row();
-		//table.add(new Image(new Texture("badlogic.jpg")));
-		//table.row();
-		//table.add(pane2).size(100);
-	    //table.row();
-		//table.add(new Image(new Texture("badlogic.jpg")));
-		//table.row();
-		//table.add(new Image(new Texture("badlogic.jpg")));
+    private TextArea txtArea;
+    private ScrollPane pane;
+    private DemoObject obj;
 
-		ScrollPane pane = new ScrollPane(txtArea, skin);
-		pane.setScrollingDisabled(true, false);
-		// pane.setCancelTouchFocus(false);
-		if (false) {
-			// This sizes the pane to the size of it's contents.
-			pane.pack();
-			// Then the height is hardcoded, leaving the pane the width of it's contents.
-			pane.setHeight(Gdx.graphics.getHeight());
-		} else {
-			// This shows a hardcoded size.
-			pane.setWidth(300);
-			pane.setHeight(Gdx.graphics.getHeight());
-		}
+    public DemoUi() {
+        this.skin = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
+        this.txtArea = new TextArea("String", this.skin);
 
-		stage.addActor(pane);
-		
-		Gdx.input.setInputProcessor(stage);
-	}
-	
-	@Override
-	public void render(float delta) {
-		// TODO Auto-generated method stub
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	    stage.act(delta);
-	    stage.draw();
-	}
+        this.stage = new Stage();
+        // TODO This variable is unused.
+        this.shapeRenderer = new ShapeRenderer();
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		stage.getViewport().update(width, height , true);
-		
-	}
+        final ScrollPane pane2 = new ScrollPane(new Image(new Texture("badlogic.jpg")), this.skin);
+        pane2.setScrollingDisabled(false, true);
+        // pane2.setCancelTouchFocus(false);
+        pane2.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(final InputEvent event, final float x, final float y,
+                    final int pointer, final int button) {
+                event.stop();
+                return true;
+            }
+        });
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
+        this.table = new Table();
+        this.table.debug();
+        // table.add(txtArea).expand().fill();
+        // table.add(new Image(new Texture("badlogic.jpg")));
+        // table.row();
+        // table.add(new Image(new Texture("badlogic.jpg")));
+        // table.row();
+        // table.add(pane2).size(100);
+        // table.row();
+        // table.add(new Image(new Texture("badlogic.jpg")));
+        // table.row();
+        // table.add(new Image(new Texture("badlogic.jpg")));
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
+        final ScrollPane pane = new ScrollPane(this.txtArea, this.skin);
+        pane.setScrollingDisabled(true, false);
+        // pane.setCancelTouchFocus(false);
+        if (false) {
+            // This sizes the pane to the size of it's contents.
+            pane.pack();
+            // Then the height is hardcoded, leaving the pane the width of it's contents.
+            pane.setHeight(Gdx.graphics.getHeight());
+        } else {
+            // This shows a hardcoded size.
+            pane.setWidth(300);
+            pane.setHeight(Gdx.graphics.getHeight());
+        }
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+        this.stage.addActor(pane);
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+        Gdx.input.setInputProcessor(this.stage);
+    }
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		stage.dispose();
-		shapeRenderer.dispose();
-	}
+    @Override
+    public void render(final float delta) {
+        // TODO Auto-generated method stub
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        this.stage.act(delta);
+        this.stage.draw();
+    }
 
+    @Override
+    public void resize(final int width, final int height) {
+        // TODO Auto-generated method stub
+        this.stage.getViewport()
+                .update(width, height, true);
+
+    }
+
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        this.stage.dispose();
+        this.shapeRenderer.dispose();
+    }
 }

@@ -1,7 +1,6 @@
 package com.codebattle.gui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,59 +9,61 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-/*
- * ScriptEditor
- * @skin : the style of the GUI
- * @edtTxt : a textarea which get user's input
- * @edtLabel : a normal label
- * @edtBtn : a submit button
- * */
+public class ScriptEditor extends Table {
+    private final Skin skin;
+    private final TextArea scriptEditor;
+    private final Label scriptEditorLabel;
+    private final TextButton submitButton;
 
-public class ScriptEditor extends Table{
-	
-	final private Skin skin;
-	final private TextArea edtTxt;
-	final private Label edtLabel;
-	final private TextButton edtBtn;
-	
-	/*
-	 * ScriptEditor Constructor
-	 * 
-	 * */
-	public ScriptEditor(ClickListener submitHandler)
-	{
-		skin = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
-		edtLabel = new Label("Script Editor" , skin);
-		edtTxt = new TextArea("Enter your script here..." , skin);
-		edtBtn = new TextButton("submit" , skin);
-		edtBtn.addListener(submitHandler);
-	}
-	
-	/*Called by game scene recursively
-	 *@param - width : new screen width
-	 *@param - height : new screen height*/
-	public void resize(int width , int height)
-	{
-		setSize(width, height);
-		reset();
-		set();
-	}
-	
-	/*get the user's input*/
-	public String getScript()
-	{
-		return edtTxt.getText();
-	}
-	
-	/*set the position for all GUI components*/
-	private void set()
-	{
-		add(edtLabel).expandX().align(Align.right).width(this.getWidth() * 0.3f);
-		row();
-		add(edtTxt).expand().fillY().align(Align.right).width(this.getWidth() * 0.3f);
-		row();
-		add(edtBtn).expandX().align(Align.right).width(this.getWidth() * 0.3f);
-	}
-	
+    public ScriptEditor(final ClickListener submitHandler) {
+        this.skin = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
+        this.scriptEditorLabel = new Label("Script Editor", this.skin);
+        this.scriptEditor = new TextArea("Enter your script here...", this.skin);
+        this.submitButton = new TextButton("submit", this.skin);
+        this.submitButton.addListener(submitHandler);
+    }
 
+    /**
+     * Called by game scene recursively.
+     *
+     * @param width
+     *            New screen width
+     * @param height
+     *            New screen height
+     */
+    public void resize(final int width, final int height) {
+        this.setSize(width, height);
+        this.reset();
+        this.set();
+    }
+
+    /**
+     * Get user's input.
+     *
+     * @return User's input.
+     */
+    public String getScript() {
+        return this.scriptEditor.getText();
+    }
+
+    /**
+     * Set the position for all GUI components.
+     */
+    private void set() {
+        this.add(this.scriptEditorLabel)
+                .expandX()
+                .align(Align.right)
+                .width(this.getWidth() * 0.3f);
+        this.row();
+        this.add(this.scriptEditor)
+                .expand()
+                .fillY()
+                .align(Align.right)
+                .width(this.getWidth() * 0.3f);
+        this.row();
+        this.add(this.submitButton)
+                .expandX()
+                .align(Align.right)
+                .width(this.getWidth() * 0.3f);
+    }
 }
