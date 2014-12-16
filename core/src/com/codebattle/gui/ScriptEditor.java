@@ -26,10 +26,8 @@ public class ScriptEditor extends Table {
     /**
      * Called by game scene recursively.
      *
-     * @param width
-     *            New screen width
-     * @param height
-     *            New screen height
+     * @param width     New screen width
+     * @param height    New screen height
      */
     public void resize(final int width, final int height) {
         this.setSize(width, height);
