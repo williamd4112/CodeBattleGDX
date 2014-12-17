@@ -3,10 +3,6 @@ package com.codebattle.model;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.codebattle.utility.GameUnits;
-import com.codebattle.utility.GameUnits.Direction;
-import com.codebattle.utility.GameUnits.Interval;
-import com.codebattle.utility.GameUnits.Speed;
 import com.codebattle.utility.TextureFactory;
 
 /*
@@ -103,19 +99,19 @@ public class GameActor extends Actor
 	{
 		try {
 			this.setDirection(dir);
-			for(float diff = pace * GameUnits.CELL_SIZE ; diff > 0 ; diff -= speed.Val()) {
+			for(float diff = pace * GameUnits.CELL_SIZE ; diff > 0 ; diff -= speed.val) {
 				switch(dir) {
 				case DOWN:
-					this.moveBy(0 , -speed.Val());
+					this.moveBy(0 , -speed.val);
 					break;
 				case LEFT:
-					this.moveBy(-speed.Val() , 0);
+					this.moveBy(-speed.val , 0);
 					break;
 				case RIGHT:
-					this.moveBy(speed.Val() , 0);
+					this.moveBy(speed.val , 0);
 					break;
 				case UP:
-					this.moveBy(0 , speed.Val());
+					this.moveBy(0 , speed.val);
 					break;
 				default:
 					break;
@@ -132,9 +128,9 @@ public class GameActor extends Actor
 	public void moveBy(float x, float y) {
 		// TODO Auto-generated method stub
 		super.moveBy(x, y);
-		frameCount = (frameCount < interval.Val()) ? frameCount + 1 : 0;
+		frameCount = (frameCount < interval.val) ? frameCount + 1 : 0;
 		
-		if(frameCount >= interval.Val())
+		if(frameCount >= interval.val)
 			frameIndex = (frameIndex < GameUnits.ANI_CYCLE) ? frameIndex + 1 : 0;
 	}
 

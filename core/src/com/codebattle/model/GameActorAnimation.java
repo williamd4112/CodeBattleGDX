@@ -1,7 +1,6 @@
 package com.codebattle.model;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.codebattle.utility.GameUnits.Direction;
 
 public class GameActorAnimation extends Animation{
 	
