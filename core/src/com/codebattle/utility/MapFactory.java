@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 /**
  * Map factory.
  *
- * A utility of map, obtain a series of function to process the map.
+ * A utility of map, used to obtain a series of function to process the map.
  */
 public class MapFactory {
     /**
