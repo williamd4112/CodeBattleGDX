@@ -4,9 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.codebattle.utility.GameUnits;
-import com.codebattle.utility.GameUnits.Direction;
-import com.codebattle.utility.GameUnits.Interval;
-import com.codebattle.utility.GameUnits.Speed;
 import com.codebattle.utility.TextureFactory;
 
 public class GameActor extends Actor {
@@ -111,22 +108,22 @@ public class GameActor extends Actor {
         try {
             this.setDirection(dir);
 
-            for (float diff = pace * GameUnits.CELL_SIZE; diff > 0; diff -= this.speed.getValue()) {
+            for (float diff = pace * GameUnits.CELL_SIZE; diff > 0; diff -= this.speed.value) {
                 switch (dir) {
                 case DOWN: {
-                    this.moveBy(0, -this.speed.getValue());
+                    this.moveBy(0, -this.speed.value);
                     break;
                 }
                 case LEFT: {
-                    this.moveBy(-this.speed.getValue(), 0);
+                    this.moveBy(-this.speed.value, 0);
                     break;
                 }
                 case RIGHT: {
-                    this.moveBy(this.speed.getValue(), 0);
+                    this.moveBy(this.speed.value, 0);
                     break;
                 }
                 case UP: {
-                    this.moveBy(0, this.speed.getValue());
+                    this.moveBy(0, this.speed.value);
                     break;
                 }
                 default:
@@ -146,9 +143,9 @@ public class GameActor extends Actor {
     public void moveBy(final float x, final float y) {
         // TODO Auto-generated method stub
         super.moveBy(x, y);
-        this.frameCount = this.frameCount < this.interval.getValue() ? this.frameCount + 1 : 0;
+        this.frameCount = this.frameCount < this.interval.value ? this.frameCount + 1 : 0;
 
-        if (this.frameCount >= this.interval.getValue()) {
+        if (this.frameCount >= this.interval.value) {
             this.frameIndex = this.frameIndex < GameUnits.ANI_CYCLE ? this.frameIndex + 1 : 0;
         }
     }
@@ -156,8 +153,7 @@ public class GameActor extends Actor {
     @Override
     public void draw(final Batch batch, final float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(this.frames[this.direction.getValue()][this.frameIndex], this.getX(),
-                this.getY());
+        batch.draw(this.frames[this.direction.value][this.frameIndex], this.getX(), this.getY());
     }
 
     @Override
@@ -172,10 +168,10 @@ public class GameActor extends Actor {
      * @return texture region
      */
     public TextureRegion[] getDirectionFrames(final Direction dir) {
-        return this.frames[dir.getValue()];
+        return this.frames[dir.value];
     }
 
     public TextureRegion[] getCurrentDirectionFrames() {
-        return this.frames[this.direction.getValue()];
+        return this.frames[this.direction.value];
     }
 }

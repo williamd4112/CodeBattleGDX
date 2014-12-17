@@ -5,14 +5,12 @@ package com.codebattle.model;
  * @author williamd
  *
  */
-public enum Interval
-{
-	NORMAL(30),
-	HIGH(20),
-	VERYHIGH(10);
-	
-	final public int val;
-	Interval(int val){
-		this.val = val;
-	}
+public enum Interval {
+    NORMAL(30), HIGH(20), VERYHIGH(10);
+
+    final public int value;
+
+    Interval(final int value) {
+        this.value = value;
+    }
 }
