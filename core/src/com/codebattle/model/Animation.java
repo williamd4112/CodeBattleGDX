@@ -1,7 +1,7 @@
 package com.codebattle.model;
 
-public abstract class Animation {
-    public abstract void update(float delta);
 
-    public abstract void render(float delta);
+abstract public class Animation {
+	abstract public void update();
+	abstract public boolean isFinished();
 }

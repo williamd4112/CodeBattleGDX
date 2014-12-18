@@ -1,6 +1,7 @@
 package com.codebattle.model;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.codebattle.model.GameStage.GameState;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -24,11 +25,12 @@ public class ScriptProcessor extends Thread {
         this.stage = stage;
         this.manager = new ScriptEngineManager();
         this.engine = this.manager.getEngineByExtension("js");
-
+        
+        System.out.println("ScriptProcessor put object : ");
         for (final Actor actor : this.stage.getGameActors()
                 .getChildren()) {
             if (actor instanceof GameActor) {
-                System.out.println("ScriptProcessor put object : " + actor.getName());
+                System.out.println(actor.getName());
                 this.engine.put(actor.getName(), actor);
             }
         }
@@ -37,7 +39,13 @@ public class ScriptProcessor extends Thread {
     @Override
     public void run() {
         try {
+        	this.stage.initActorsMap();
+        	//Processing script (put animation object into queue
             this.engine.eval(this.script);
+            
+            //Processing animation (start processing animation)
+            this.stage.printAllAnimation();
+            this.stage.setState(GameState.ANIM);
         } catch (final ScriptException e) {
             e.printStackTrace();
         }
