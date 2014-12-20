@@ -1,4 +1,4 @@
-package com.codebattle.model;
+package com.codebattle.model.units;
 
 /**
  * Enumeration of Interval(Animation Frame switch interval , not translation interval)

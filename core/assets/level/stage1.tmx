@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="22" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="003-Forest01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/003-Forest01.png" trans="ffffff" width="256" height="608"/>
+ </tileset>
+ <tileset firstgid="153" name="004-Mountain01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/004-Mountain01.png" trans="ffffff" width="256" height="896"/>
+  <tile id="7">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="128">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="129">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="130">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="131">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="136">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="137">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="138">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="139">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="144">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="145">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="146">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="147">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="152">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="153">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="154">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="155">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="160">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="161">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="162">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="163">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="ground 1" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJzt06EBACAMA7Aa/tf9dg8MjSAiJ6RJCvChA1y9/gnAbgCpvJpg
+  </data>
+ </layer>
+ <layer name="forest1" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztVjkSwkAMWz+DQAOhgdAQaDgem5JnomYbj1g7e0wKohkVPsbWbmOFYGMjIXTgFtwJz7GemkjN3yM+gD14FJ5jPZbmOW9i8yNOiM/gAF6E51iPnqn1WHVLQ8QV8QjewLvwHOvRM7Ueq25piHggfoIv8C08x3r0TK3HqlsaSqFnaj1WvTWGmX/Q4o9W5GFaWoCBj7NvaimiArzvWFGGmre6hZbUbfPUS3Z7dqVu26+6x+PleBK2y7ptrO7xeDmehO3KuX0ej5fjSWrdWY/HW9KTeDzev3uSL1ZPOR0=
+  </data>
+ </layer>
+ <layer name="forest2" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJzNlrcOAjEQRO3PAK4hNISG0BD+/7sYOjRsFBy3I03h05O18s2u3ZquZW9tBa/hTTfAibRFTTt4Dx8K1ndETSf4DF+K1DdDHXN4AV/hG3yHH/DQP5lBqdtjIntIHGdOymAklx4TzTZznDkpg5Fcekw028xx5qQMRnLpMdFsM8eZ4/VL0jeWx0T2yHBTK9pPY++tsWPeFZm9Ndbrp2/OIHMPaSz3iTcXrZqZzdxDGst94s1FqQ7tDDI9GGW9uZj5F2PIm4tWHf+YWb+YwVFxjt/XFWS9SSrIepNUkPUmqSDrTVJdT94UNKQ=
+  </data>
+ </layer>
+ <layer name="forest3" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztljkOQjEMRD/HYGk+0LA0fGhY7n8uxp01sjIjJKQUedIocmxnUVLMvJqmPXSAjtBMcabK8RzHa2gDbaFdEQcnjGfoAl2phnMcZ6qc6lfnD24YF+gOPaiGcxxnqpzqd+7/xPiC3tCHajjHcabKqX7n/vzmuebfOPfnN881PdD68z3Q+vM90Przg8FgMOgTxz86Nb+s7azj+EenpjqP6lNeO3D8o+uxeT/Vp7x24PhH12PzfqpPee3A8Y+ux+b9VJ/y2sEX4FE6tA==
+  </data>
+ </layer>
+ <layer name="forest4" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztlbkOAjEQQ5PP4GhgaTgajmaB//8upkOxBvmttNJSxFIaOx45Kcal/Dc2tZRtXTrFbwyR7ZDkWwW3rm1+yrk5U3AOzyXx7YLb1zY/4TSP09177nEeyb1jcKfa5iec5nG6+5dXnHdy7xrcTfITTvM4nfxLhjG0p+QnnOZxOvmXOZG9YU69o6PjC93XpMOm9Jzzulm6r0mH0e4jXjdL9zXpMNp9xOtm6b4mHUa7j3jdLN3XpMNo9xGvm9XRsSQ+S0k3PQ==
+  </data>
+ </layer>
+</map>

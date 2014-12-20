@@ -1,0 +1,9 @@
+{
+  "source": "Knight.png",
+  "hp": "100",
+  "mp": "50",
+  "atk": "10",
+  "def": "5",
+  "range": "1",
+  "maxsteps": "10"
+}

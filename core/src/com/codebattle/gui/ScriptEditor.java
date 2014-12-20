@@ -21,6 +21,7 @@ public class ScriptEditor extends Table {
         this.scriptEditor = new TextArea("Enter your script here...", this.skin);
         this.submitButton = new TextButton("submit", this.skin);
         this.submitButton.addListener(submitHandler);
+        this.setDebug(true);
     }
 
     /**
@@ -33,6 +34,7 @@ public class ScriptEditor extends Table {
         this.setSize(width, height);
         this.reset();
         this.set();
+        this.setDebug(true);
     }
 
     /**

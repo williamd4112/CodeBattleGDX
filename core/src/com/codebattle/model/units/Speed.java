@@ -1,4 +1,4 @@
-package com.codebattle.model;
+package com.codebattle.model.units;
 
 /**
  * Enumeration of speed
@@ -8,7 +8,7 @@ package com.codebattle.model;
  * @author williamd
  */
 public enum Speed {
-    NORMAL(0.2f), FAST(0.4f), VERYFAST(0.8f);
+    NORMAL(0.2f), FAST(0.4f), VERYFAST(2.0f);
 
     final public float value;
 

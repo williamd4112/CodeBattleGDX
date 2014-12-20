@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.codebattle.gui.ScriptEditor;
 import com.codebattle.model.GameActor;
 import com.codebattle.model.GameStage;
-import com.codebattle.model.ScriptProcessor;
+import com.codebattle.model.scriptprocessor.ScriptProcessor;
 import com.codebattle.utility.GameActorFactory;
 
 /*
@@ -29,14 +29,20 @@ public class GameScene implements Screen{
 		this.stage.addGUI(this.scriptEditor);
 		
 		//TODO : After test completed , remove this
-		GameActor a,b;
-		a = GameActorFactory.getInstance().createGameActor(stage, "Knight", 96, 96);
-		b = GameActorFactory.getInstance().createGameActor(stage, "Knight", 160, 96);
-		
-		this.stage.addGameActor(a);
-		this.stage.addGameActor(b);
+		try {
+			GameActor a,b;
+			a = GameActorFactory.getInstance().createGameActor(stage, "Knight", 96, 96);
+			b = GameActorFactory.getInstance().createGameActor(stage, "Knight", 160, 96);
+			
+			this.stage.addGameActor(a);
+			this.stage.addGameActor(b);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		Gdx.input.setInputProcessor(this.stage);
+		
+		this.stage.getVirtualMap().resetVirtualMap();
 	}
 	
 	@Override

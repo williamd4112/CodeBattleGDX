@@ -2,7 +2,12 @@ package com.codebattle.model;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.codebattle.model.animation.GameActorMovementAnimation;
+import com.codebattle.model.animation.GameActorTurnAnimation;
+import com.codebattle.model.units.Direction;
+import com.codebattle.model.units.Interval;
+import com.codebattle.model.units.Speed;
+import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.TextureFactory;
 
 /**
@@ -13,100 +18,128 @@ import com.codebattle.utility.TextureFactory;
  * @frameIndex : animation frame index
  * @frameCount : animation frame count
  * @frames : texture's regions
- *
  */
 
-public class GameActor extends Actor
+public class GameActor extends GameObject
 {	
-	final GameStage stage;
-	final int id;
+	final private GameActorProperties properties;	
+	
 	private Direction direction;
 	private TextureRegion[][] frames;
 	private Interval interval;
 	private Speed speed;
 	
 	private int frame = 0;
+	private int culmuSteps = 0;
 	
-	//Virtual Coordinate , used to calculate in actorsmap
-	private int vx;
-	private int vy;
-	
-	public GameActor(GameStage stage, int id, String name, float sx, float sy)
+	public GameActor(GameStage stage, int id, String name, GameActorProperties properties, float sx, float sy) throws Exception
 	{
-		super();
-		this.id = id;
-		this.stage = stage;
-		this.setName(name);
-		this.frames = TextureFactory.getInstance().loadTextureRegionFromFile(name, 
-				GameUnits.CHR_HSLICES, GameUnits.CHR_VSLICES, GameUnits.CHR_WIDTH, GameUnits.CHR_HEIGHT);
-		this.direction = Direction.LEFT;
-		this.interval = Interval.NORMAL; 
+		super(stage, name, id, sx, sy);
+		this.properties = new GameActorProperties(properties);
+		this.frames = TextureFactory.getInstance().loadCharacterFramesFromFile(name, 
+				GameConstants.CHR_HSLICES, GameConstants.CHR_VSLICES, GameConstants.CHR_WIDTH, GameConstants.CHR_HEIGHT);
+		this.direction = Direction.HOLD_DEF;
+		this.interval = Interval.HIGH; 
 		this.speed = Speed.VERYFAST;
-		this.setX(sx);
-		this.setY(sy);
-		this.vx = (int) (sx / GameUnits.CELL_SIZE);
-		this.vy = (int) (sy / GameUnits.CELL_SIZE);
+	}
+
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+		batch.draw(this.frames[this.direction.val][this.frame / this.interval.val], this.getX(), this.getY());
+	}
+
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		this.frame = (this.frame < this.interval.val * GameConstants.CHR_HSLICES - 1) ? this.frame + 1 : 0;
+	}
+
+
+	@Override
+	public void onAttacked(GameObject attacker) {
+		if(attacker instanceof GameActor) {
+			GameActor actor = (GameActor)attacker;
+			this.decreaseHP(actor.getATK());
+			System.out.println("onAttacked("+ actor.properties.atk  +"): " + this.getName() + " : " + this.getHP());
+		}
+	}
+
+	@Override
+	public boolean onInteract(GameObject contacter) {
+		System.out.printf("%s contact to %s\n",contacter.getName() ,this.getName());
+		return false;
+	}
+	
+	@Override
+	public void attack(int x , int y)
+	{
+		//Suicide avoiding
+		if(this.vx == x && this.vy == y) return;
+		
+		//Check in-range
+		if(this.isInRange(x, y)) {
+			this.stage.emitAttackEvent(this, x, y);
+		}
+	}
+	
+	@Override
+	public void interact(int x , int y)
+	{
+		if(this.isInRange(1, x, y)) {
+			this.stage.emitInteractEvent(this, x, y);
+		}
 	}
 	
 	/**
 	 * User interface
 	 */
-	public void turnDown()
-	{
-		this.stage.addAnimation(new GameActorTurnAnimation(this , Direction.DOWN));
-	}
-	
-	public void turnLeft()
-	{
-		this.stage.addAnimation(new GameActorTurnAnimation(this , Direction.LEFT));
-	}
-	
-	public void turnRight()
-	{
-		this.stage.addAnimation(new GameActorTurnAnimation(this , Direction.RIGHT));
-	}
-	
-	public void turnUp()
-	{
-		this.stage.addAnimation(new GameActorTurnAnimation(this , Direction.UP));
-	}
-	
 	public void moveDown(int pace)
 	{
-		this.turnDown();
+		this.turn(Direction.DOWN);
 		this.move(Direction.DOWN, pace);
 	}
 	
 	public void moveLeft(int pace)
 	{
-		this.turnLeft();
+		this.turn(Direction.LEFT);;
 		this.move(Direction.LEFT, pace);
 	}
 	
 	public void moveRight(int pace)
 	{
-		this.turnRight();
+		this.turn(Direction.RIGHT);
 		this.move(Direction.RIGHT, pace);
 	}
 	
 	public void moveUp(int pace)
 	{
-		this.turnUp();
+		this.turn(Direction.UP);
 		this.move(Direction.UP, pace);
 	}
 	
 	public void move(Direction direction , int pace)
 	{
+		//Check steps
 		int checkedPace = this.pathCheck(direction, pace);
+		this.culmuSteps += checkedPace;
+		if(this.culmuSteps >= this.properties.maxsteps) {
+			checkedPace -= this.culmuSteps - this.properties.maxsteps;
+		}
+				
 		int nx = (int) (this.vx + direction.udx * checkedPace);
 		int ny = (int) (this.vy + direction.udy * checkedPace);
-
-		this.updateActorsMap(this.vx, this.vy, nx, ny);
-		this.updateVirtualCoordinate(nx, ny);
 		
-		this.stage.addAnimation(new GameActorMovementAnimation(this, direction, checkedPace));
+		this.updateVirtualMap(this, nx, ny);
+		
+		this.stage.addAnimation(new GameActorMovementAnimation(this.stage, this, direction, checkedPace));
 	}
-		
+	
+	private void turn(Direction direction)
+	{
+		this.stage.addAnimation(new GameActorTurnAnimation(this , direction));
+	}	
+	
 	/**
 	 * Check the path along a specific direction and return how far this actor can move until blocked
 	 * @param direction
@@ -122,12 +155,13 @@ public class GameActor extends Actor
 		return step;
 	}
 	
-	private boolean isPassiable(int x , int y)
+	public boolean isPassiable(int x , int y)
 	{
-		return (this.stage.getActorsMap()[y][x]) ? false : true;
+		if(!this.isInbounding(x, y)) return false; 
+		return this.stage.getVirtualMap().getVirtualCells()[y][x].isPassible();
 	}
 	
-	private boolean isPassiable(Direction direction , int step)
+	public boolean isPassiable(Direction direction , int step)
 	{
 		int x = (int) (this.vx + direction.udx * step);
 		int y = (int) (this.vy + direction.udy * step);
@@ -135,50 +169,15 @@ public class GameActor extends Actor
 		return isPassiable(x , y);
 	}
 	
-	/**
-	 * Update stage's actors map
-	 */
-	private void updateActorsMap(int lastX , int lastY , int newX , int newY)
+	public boolean isInRange(int x, int y)
 	{
-		this.stage.updateActorsMap(lastX, lastY, newX, newY);
+		return isInRange(this.properties.range, x, y);
 	}
 	
-	private void updateVirtualCoordinate(int nx , int ny)
+	public boolean isInRange(int range, int x , int y)
 	{
-		this.vx = nx;
-		this.vy = ny;
-	}
-	
-	/*Set a new direction for this actor*/
-	public void setDirection(Direction dir)
-	{
-		this.direction = dir;
-	}
-
-	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
-		batch.draw(this.frames[this.direction.val][this.frame], this.getX(), this.getY());
-	}
-
-	@Override
-	public void act(float delta) {
-		super.act(delta);
-	}
-	
-	/**
-	 * Get a row (specific direction) frames
-	 * @param dir
-	 * @return
-	 */
-	public TextureRegion[] getDirectionFrames(Direction dir)
-	{
-		return this.frames[dir.val];
-	}
-	
-	public TextureRegion[] getCurrentDirectionFrames()
-	{
-		return this.frames[this.direction.val];
+		int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
+		return (distance <= range) ? true : false;
 	}
 	
 	/**
@@ -204,27 +203,58 @@ public class GameActor extends Actor
 		return this.frame;
 	}
 	
-	public float getVX()
+	public int getHP()
 	{
-		return this.vx;
+		return this.properties.hp;
 	}
 	
-	public float getVY()
+	public int getMP()
 	{
-		return this.vy;
+		return this.properties.mp;
 	}
 	
-	@Override
-	public String getName()
+	public int getATK()
 	{
-		return (this.id == 0) ? super.getName() : super.getName() + String.valueOf(id);
+		return this.properties.atk;
 	}
 	
+	public int getDEF()
+	{
+		return this.properties.def;
+	}
+		
 	/**
 	 * Setters
 	 */
 	public void setFrame(int frame)
 	{
-		this.frame = (frame < GameUnits.CHR_HSLICES) ? frame : 0;
+		this.frame = (frame < GameConstants.CHR_HSLICES) ? frame : 0;
+	}
+	
+	public void setDirection(Direction dir)
+	{
+		this.direction = dir;
+	}
+	
+	public void setCulmuSteps(int steps)
+	{
+		this.culmuSteps = steps;
+	}
+	
+	public void resetCulmuSteps()
+	{
+		this.setCulmuSteps(0);
+	}
+	
+	public int decreaseHP(int diff)
+	{
+		int newValue = this.properties.hp - diff;
+		this.properties.hp = (newValue >= 0) ? newValue : 0;
+		if(this.properties.hp == 0) {
+			this.state = GameObjectState.DEATH;
+			System.out.println(this.getName() + " is dead.");
+		}
+		
+		return this.properties.hp;
 	}
 }

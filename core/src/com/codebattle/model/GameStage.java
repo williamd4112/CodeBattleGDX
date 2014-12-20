@@ -6,15 +6,23 @@ import java.util.Queue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.SnapshotArray;
+import com.codebattle.gui.ScriptEditor;
+import com.codebattle.model.animation.Animation;
+import com.codebattle.model.animation.GameActorAttackAnimation;
+import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
+import com.codebattle.utility.ShaderLoader;
 
 /*
  * GameStage
@@ -22,14 +30,8 @@ import com.codebattle.utility.MapFactory;
  * 2. @camera: to control the viewport of the stage 
  * */
 
-public class GameStage extends Stage{
-	
-	public enum GameState
-	{
-		ANIM,
-		PAUSE,
-	}
-	
+public class GameStage extends Stage
+{	
 	private GameState state;
 	private int width , height;
 	
@@ -39,8 +41,8 @@ public class GameStage extends Stage{
 	final private OrthogonalTiledMapRenderer mapRenderer;
 	final private OrthographicCamera camera;
 	
-	final Group gameActors;
-	final Group guiLayer;
+	final private Group gameActors;
+	final private Group guiLayer;
 	
 	/*Debug shape render*/
 	final ShapeRenderer debugRender;
@@ -50,7 +52,10 @@ public class GameStage extends Stage{
 	private Queue<Animation> animQueue;
 	
 	//Used to detect blocking, when actor use its move series function
-	private boolean actorsMap[][];
+	private VirtualMap virtualMap;
+	
+	//Camera sliding direction
+	private int camDirection = GameConstants.CAMERA_HOLD;
 	
 	/*
 	 * GameStage Constructor
@@ -59,17 +64,21 @@ public class GameStage extends Stage{
 	public GameStage(String mapName)
 	{
 		super();
+		
+		ShaderProgram shader = new ShaderProgram(ShaderLoader.loadVertexShader("invert"), ShaderLoader.loadFragShader("invert"));
+		
 		this.map = MapFactory.loadMapFromFile(mapName);
 		this.mapProperties = this.map.getProperties();
 		this.camera = new OrthographicCamera();
-		this.mapRenderer = new OrthogonalTiledMapRenderer(map , this.getBatch());
+		this.mapRenderer = new OrthogonalTiledMapRenderer(map);
 		this.mapRenderer.setView(this.camera);
+		this.mapRenderer.getSpriteBatch().setShader(shader);
 		this.getViewport().setCamera(camera);
 		
 		this.gameActors = new Group();
 		this.guiLayer = new Group();
 		this.animQueue = new LinkedList<Animation>();
-		this.actorsMap = new boolean[this.mapProperties.get("width", Integer.class)][this.mapProperties.get("height", Integer.class)];
+		this.virtualMap = new VirtualMap(this , map);
 		
 		this.addActor(this.gameActors);
 		this.addActor(this.guiLayer);
@@ -85,8 +94,11 @@ public class GameStage extends Stage{
 	{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		
-		this.mapRenderer.setView(camera);
+		this.moveCamera();
+		this.mapRenderer.setView(this.camera);
 		this.mapRenderer.render();	
 		this.renderDebug(delta);
 		
@@ -107,28 +119,30 @@ public class GameStage extends Stage{
 	{
 		this.debugRender.setProjectionMatrix(camera.combined);
 		this.debugRender.begin(ShapeType.Line);
-		this.debugRender.setAutoShapeType(true);
-		this.debugRender.setColor(1 , 0 , 0 , 1);
-		for(int i = 0 ; i < width ; i += GameUnits.CELL_SIZE) {
-			this.debugRender.line(i, 0, i, height);
-		}
-		this.debugRender.setColor(1 , 0 , 0 , 1);
-		for(int i = 0 ; i < height ; i += GameUnits.CELL_SIZE) {
-			this.debugRender.line(0, i , width, i);
-		}
 		
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		
+		this.debugRender.setAutoShapeType(true);
+		this.debugRender.setColor(1 , 0 , 0 , 0.2f);
+		
+		for(int i = 0 ; i < this.getMapWidth() * GameConstants.CELL_SIZE ; i += GameConstants.CELL_SIZE) 
+			this.debugRender.line(i, 0, i, this.getMapHeight() * GameConstants.CELL_SIZE  );
+		for(int i = 0 ; i < this.getMapHeight() * GameConstants.CELL_SIZE ; i += GameConstants.CELL_SIZE) 
+			this.debugRender.line(0, i ,  this.getMapWidth() * GameConstants.CELL_SIZE , i);
+		
+
 		this.debugRender.set(ShapeType.Filled);
-		this.debugRender.setColor(1.0f , 0.0f , 0.0f , 0.3f);
+		this.debugRender.setColor(1.0f , 0.0f , 0.0f , 0.3f);	
+		
 		int mapWidth = this.mapProperties.get("width", Integer.class);
 		int mapHeight = this.mapProperties.get("height", Integer.class);
 		for(int row = 0 ; row < mapHeight ; row++) {
 			for(int col = 0 ; col < mapWidth ; col++) {
-				if(this.actorsMap[row][col]) {  
-					float x = col * GameUnits.CELL_SIZE;
-					float y = row * GameUnits.CELL_SIZE;
-					this.debugRender.rect(x, y, GameUnits.CELL_SIZE, GameUnits.CELL_SIZE);
+				if(!this.virtualMap.isPassiable(col , row)) {  
+					float x = col * GameConstants.CELL_SIZE;
+					float y = row * GameConstants.CELL_SIZE;
+					this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
 				}
 			}
 		}
@@ -158,57 +172,70 @@ public class GameStage extends Stage{
 		this.mapRenderer.dispose();
 	}
 	
-	/**
-	 * Initialize actors map when start to process actor's movement (must be called before process script
-	 */
-	public void initActorsMap()
+	@Override
+	public boolean mouseMoved(int screenX, int screenY)
 	{
-		int mapWidth = this.mapProperties.get("width", Integer.class);
-		int mapHeight = this.mapProperties.get("height", Integer.class);
-		for(int row = 0 ; row < mapHeight ; row++) {
-			for(int col = 0 ; col < mapWidth ; col++) {
-				this.actorsMap[row][col] = false;
-			}
-		}
+		Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+		camera.unproject(worldCoordinates);
 		
-		for(Actor actor : this.gameActors.getChildren()) {
-			int cellRow = (int) (actor.getY() / GameUnits.CELL_SIZE);
-			int cellCol = (int) (actor.getX() / GameUnits.CELL_SIZE);
-			this.actorsMap[cellRow][cellCol] = true;
-		}
-	}
-	
-	/**
-	 * Update actors map when each 1-cell movement
-	 * @param lastX
-	 * @param lastY
-	 * @param newX
-	 * @param newY
-	 */
-	public void updateActorsMap(int lastX , int lastY , int newX , int newY)
-	{
-		this.actorsMap[lastY][lastX] = false;
-		this.actorsMap[newY][newX] = true;
+		this.isMouseOutBound(worldCoordinates.x, worldCoordinates.y);
+		
+		return super.mouseMoved(screenX, screenY);
 	}
 	
 	/**
 	 * When in State Anim , call processAnimation
+	 * execute the animation's action every frame until reaching its ending condition
+	 * when completed, call this animation's finished method once to finish the final stage
+	 * poll out this animation from queue 
 	 */
 	public void processAnimation()
 	{
+		//No animation in the queue
 		if(this.animQueue.isEmpty()) {
 			this.setState(GameState.PAUSE);
+			this.setGUIVisiable(true);
 			return;
 		}
 		
+		//Hide the GUI
+		this.setGUIVisiable(false);
+		
+		//Process the top animation
 		Animation anim = this.animQueue.peek();
 		if(anim.isFinished()) {
 			this.animQueue.poll();
+			anim.finished();
+			this.resetGUILayerPosition();
 		}else {
 			anim.update();
 		}
 	}
 	
+	public void resetAnimQueue()
+	{
+		this.animQueue.clear();
+	}
+	
+	/**
+	 * Event handling
+	 */	
+	public void emitAttackEvent(GameObject attacker , int x , int y)
+	{
+		GameObject target = this.virtualMap.getCell(x, y).getObject();
+		if(target != null) {
+			target.onAttacked(attacker);
+			if (target instanceof GameActor)
+				this.addAnimation(new GameActorAttackAnimation(this, (GameActor) attacker, target));
+		}
+	}
+	
+	public void emitInteractEvent(GameObject contacter , int x , int y)
+	{
+		GameObject target = this.virtualMap.getCell(x, y).getObject();
+		if(target != null)
+			target.onInteract(contacter);
+	}
 	
 	/**
 	 * Add elements of stage
@@ -232,15 +259,32 @@ public class GameStage extends Stage{
 	
 	/**
 	 * Getters
-	 */
-	public Group getGameActors()
+	 */	
+	@SuppressWarnings("unchecked")
+	public <T> SnapshotArray<T> getGroupByType(Class<T> type)
 	{
-		return this.gameActors;
+		SnapshotArray<T> objs = new SnapshotArray<T>();
+		for(Actor actor : this.gameActors.getChildren()) {
+			if(type.isInstance(actor))
+				objs.add((T)actor);
+		}
+		
+		return objs;
 	}
 	
-	public boolean[][] getActorsMap()
+	public int getMapWidth()
 	{
-		return this.actorsMap;
+		return this.mapProperties.get("width", Integer.class);
+	}
+	
+	public int getMapHeight()
+	{
+		return this.mapProperties.get("height", Integer.class);
+	}
+	
+	public VirtualMap getVirtualMap()
+	{
+		return this.virtualMap;
 	}
 	
 	/**
@@ -249,6 +293,78 @@ public class GameStage extends Stage{
 	public void setState(GameState state)
 	{
 		this.state = state;
+	}
+	
+	public void setCameraTarget(GameObject target)
+	{
+		this.camera.position.set(target.getX() , target.getY() , 0);
+		this.camera.update();
+	}
+	
+	public void setGUIVisiable(boolean flag)
+	{
+		this.guiLayer.setVisible(flag);
+	}
+		
+	public void setGUILayerPosition(float x , float y)
+	{
+		this.guiLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
+	}
+	
+	public void resetGUILayerPosition()
+	{
+		this.setGUILayerPosition(this.camera.position.x, this.camera.position.y);
+	}
+	
+	public void moveCamera()
+	{
+		switch (this.camDirection) {
+		case GameConstants.CAMERA_UP:// up
+			this.camera.position.y += GameConstants.CAMERA_SPEED;
+			break;
+		case GameConstants.CAMERA_DOWN:// down
+			this.camera.position.y -= GameConstants.CAMERA_SPEED;
+			break;
+		case GameConstants.CAMERA_LEFT:// left
+			this.camera.position.x -= GameConstants.CAMERA_SPEED;
+			break;
+		case GameConstants.CAMERA_RIGHT:// right
+			this.camera.position.x += GameConstants.CAMERA_SPEED;
+			break;
+		default:
+			break;
+		}
+		this.setGUILayerPosition(this.camera.position.x, this.camera.position.y);
+	}
+	
+	public void removeGameObject(GameObject obj)
+	{
+		this.gameActors.removeActor(obj);
+	}
+	
+	/**
+	 * Condition checkingS
+	 */
+	public void isMouseOutBound(float x , float y)
+	{
+		int cx = (int) this.camera.position.x;
+		int cy = (int) this.camera.position.y;
+
+		// Up
+		if (y >= cy + (height / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+			this.camDirection = GameConstants.CAMERA_UP;
+		// Down
+		else if (y <= cy - (height / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+			this.camDirection = GameConstants.CAMERA_DOWN;
+		// Left
+		else if (x <= cx - (width / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+			this.camDirection = GameConstants.CAMERA_LEFT;
+		// Right
+		else if (x >= cx + (width / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+			this.camDirection = GameConstants.CAMERA_RIGHT;
+		else
+			this.camDirection = GameConstants.CAMERA_HOLD;
+		
 	}
 	
 	/**
@@ -260,4 +376,18 @@ public class GameStage extends Stage{
 			System.out.println(anim);
 		}
 	}
+	
+	public void printAllVirtualObjects()
+	{
+		int mapWidth = this.mapProperties.get("width", Integer.class);
+		int mapHeight = this.mapProperties.get("height", Integer.class);
+		for(int row = 0 ; row < mapHeight ; row++) {
+			for(int col = 0 ; col < mapWidth ; col++) {
+				if(this.virtualMap.getCell(col, row).getObject() != null) {
+					System.out.printf("(%d , %d) is %s\n", col,row,this.virtualMap.getCell(col, row).getObject().getName());
+				}
+			}
+		}
+	}
+	
 }
