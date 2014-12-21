@@ -1,20 +1,313 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="22" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="003-Forest01" tilewidth="32" tileheight="32">
-  <image source="../graphics/tilesets/003-Forest01.png" trans="ffffff" width="256" height="608"/>
+ <tileset firstgid="1" name="051-Water01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/051-Water01.png" trans="ffffff" width="512" height="384"/>
  </tileset>
- <tileset firstgid="153" name="004-Mountain01" tilewidth="32" tileheight="32">
+ <tileset firstgid="193" name="034-Bridge01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/034-Bridge01.png" trans="ffffff" width="256" height="960"/>
+  <tile id="72">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="74">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="75">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="76">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="78">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="80">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="82">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="83">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="84">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="86">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="87">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="88">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="89">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="90">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="94">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="95">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="176">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="178">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="179">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="180">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="181">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="182">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="183">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="184">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="186">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="192">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="194">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="195">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="196">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="197">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="198">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="199">
+   <properties>
+    <property name="overlap" value="1"/>
+   </properties>
+  </tile>
+  <tile id="200">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="202">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="203">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="204">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="205">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="206">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="207">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="211">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="212">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="213">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="214">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="215">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="219">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="220">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="221">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="222">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="223">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="227">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="228">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="229">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="230">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="231">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="235">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="236">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="237">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="238">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="239">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="433" name="004-Mountain01" tilewidth="32" tileheight="32">
   <image source="../graphics/tilesets/004-Mountain01.png" trans="ffffff" width="256" height="896"/>
-  <tile id="7">
-   <properties>
-    <property name="passible" value="0"/>
-   </properties>
-  </tile>
-  <tile id="15">
-   <properties>
-    <property name="passible" value="0"/>
-   </properties>
-  </tile>
   <tile id="128">
    <properties>
     <property name="overlap" value="1"/>
@@ -40,32 +333,12 @@
     <property name="overlap" value="1"/>
    </properties>
   </tile>
-  <tile id="137">
-   <properties>
-    <property name="overlap" value="1"/>
-   </properties>
-  </tile>
-  <tile id="138">
-   <properties>
-    <property name="overlap" value="1"/>
-   </properties>
-  </tile>
   <tile id="139">
    <properties>
     <property name="overlap" value="1"/>
    </properties>
   </tile>
   <tile id="144">
-   <properties>
-    <property name="overlap" value="1"/>
-   </properties>
-  </tile>
-  <tile id="145">
-   <properties>
-    <property name="overlap" value="1"/>
-   </properties>
-  </tile>
-  <tile id="146">
    <properties>
     <property name="overlap" value="1"/>
    </properties>
@@ -116,29 +389,369 @@
    </properties>
   </tile>
  </tileset>
- <layer name="ground 1" width="40" height="22">
+ <tileset firstgid="657" name="009-CastleTown01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/009-CastleTown01.png" trans="ffffff" width="256" height="960"/>
+ </tileset>
+ <tileset firstgid="897" name="052-Water02" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/052-Water02.png" trans="ffffff" width="512" height="384"/>
+ </tileset>
+ <tileset firstgid="1089" name="035-Ruins01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/035-Ruins01.png" trans="ffffff" width="256" height="896"/>
+  <tile id="112">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="113">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="120">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="121">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="136">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="138">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="192">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="193">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="200">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="201">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="202">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="1313" name="003-Forest01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/003-Forest01.png" trans="ffffff" width="256" height="608"/>
+  <tile id="24">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="1465" name="045-Cave03" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/045-Cave03.png" width="256" height="1056"/>
+  <tile id="19">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="passible" value="1"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="40">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="43">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="44">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="48">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="51">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="52">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="61">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="62">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="80">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="81">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="82">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="83">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="104">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="105">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="106">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="112">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="113">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="114">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="120">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="121">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="122">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="128">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="129">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="130">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="133">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="135">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="136">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="137">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="138">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="141">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="143">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="144">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="145">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+  <tile id="146">
+   <properties>
+    <property name="passible" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="圖塊層 1" width="40" height="22">
   <data encoding="base64" compression="zlib">
-   eJzt06EBACAMA7Aa/tf9dg8MjSAiJ6RJCvChA1y9/gnAbgCpvJpg
+   eJw7yMDAcJDO+DQLA8MjVuIwvd2GzX1abKiYkPtOYcHUdt9OVsIYl/uOM6Lymxhpi0FueU6C+9AxvdyH7kZi3Edrt5HqPgYovZERgvvp5D5scYzNfVysEAxz3zRG6udfYvIGIffBwnDeIHMfJ5r7lg0y9yGHHwgPRvdxDnL3Debw40Rz37pB5j708Bso91mzjbqPFu4DYRVW7OxR9yGw86j7hrX7YOUfAMsBaPw=
   </data>
  </layer>
- <layer name="forest1" width="40" height="22">
+ <layer name="圖塊層 2" width="40" height="22">
   <data encoding="base64" compression="zlib">
-   eJztVjkSwkAMWz+DQAOhgdAQaDgem5JnomYbj1g7e0wKohkVPsbWbmOFYGMjIXTgFtwJz7GemkjN3yM+gD14FJ5jPZbmOW9i8yNOiM/gAF6E51iPnqn1WHVLQ8QV8QjewLvwHOvRM7Ueq25piHggfoIv8C08x3r0TK3HqlsaSqFnaj1WvTWGmX/Q4o9W5GFaWoCBj7NvaimiArzvWFGGmre6hZbUbfPUS3Z7dqVu26+6x+PleBK2y7ptrO7xeDmehO3KuX0ej5fjSWrdWY/HW9KTeDzev3uSL1ZPOR0=
+   eJzV1rtOwzAUBuATSDLxEhQxNFtblgYklMCSlKXAu8CAhMTA6yD1LWBhYgjlKhYuC7xBj8mJOHUd1wEnwC/9SlKpyVfXsQwA0FkA6GJ72DUsz7kLkC0CXFvq0IeZvHgAr9Q37+vzjM77aAqx69iNmn2iBw7AHT77XtMH7CP5IjTF2C3stuT7/B2WfcfoO2JV5dnLx1UkQVOKHWB3yDfE4y52D3vi5P1pLqgmEb4Pb9ayrxg/W6nqayvmap3htlMn76Hm/zXxXVocT9OxExG+juH42Xw3RHx87jK2he3ScZNVXL+Tr4/H0GvON5J8rRLfiv874yd8jp/PrXaJLyBfZMG35Fa7HtE9C1/wD3yBwtfDJn/cZ5oq80v2qOafSOhPG+f5dO9xleeb+jr0fgpfqPCJZHPWle/4zhz9deGL/Gkj94XkGzOfbg84Zve/ofJzk/LvF76YGbkvJt8T88l7wFUvr+yzUe6LDX3yHrBuX8J8cYnvlvnkPWATvrTElyrWFnkP2JQvLfENFEa+xhS+K7d+X6rxTQCp2X+i
   </data>
  </layer>
- <layer name="forest2" width="40" height="22">
+ <layer name="圖塊層 6" width="40" height="22" opacity="0.4">
   <data encoding="base64" compression="zlib">
-   eJzNlrcOAjEQRO3PAK4hNISG0BD+/7sYOjRsFBy3I03h05O18s2u3ZquZW9tBa/hTTfAibRFTTt4Dx8K1ndETSf4DF+K1DdDHXN4AV/hG3yHH/DQP5lBqdtjIntIHGdOymAklx4TzTZznDkpg5Fcekw028xx5qQMRnLpMdFsM8eZ4/VL0jeWx0T2yHBTK9pPY++tsWPeFZm9Ndbrp2/OIHMPaSz3iTcXrZqZzdxDGst94s1FqQ7tDDI9GGW9uZj5F2PIm4tWHf+YWb+YwVFxjt/XFWS9SSrIepNUkPUmqSDrTVJdT94UNKQ=
+   eJxjYCAeNDKj4i0M+DG6ehCmJSDWXehuRHbrQANC4TgKRgEtwRYsbHqlvy1INKmYXuXLcHMfTP1gdd9o+OF3HyH30tt9pMYrPd0HA9uYUcs5dD66+0CAXu4jFFbY3HeMju0DH6h9MPuR+fjkYe7zoaHbSGmbDlT5MlTcR047eiS67yoLbvcR60ZK2lcA7Ca0fQ==
   </data>
  </layer>
- <layer name="forest3" width="40" height="22">
+ <layer name="圖塊層 3" width="40" height="22">
   <data encoding="base64" compression="zlib">
-   eJztljkOQjEMRD/HYGk+0LA0fGhY7n8uxp01sjIjJKQUedIocmxnUVLMvJqmPXSAjtBMcabK8RzHa2gDbaFdEQcnjGfoAl2phnMcZ6qc6lfnD24YF+gOPaiGcxxnqpzqd+7/xPiC3tCHajjHcabKqX7n/vzmuebfOPfnN881PdD68z3Q+vM90Przg8FgMOgTxz86Nb+s7azj+EenpjqP6lNeO3D8o+uxeT/Vp7x24PhH12PzfqpPee3A8Y+ux+b9VJ/y2sEX4FE6tA==
+   eJzNlrtKBDEUhpNBBO0srfYZvDReEG94b7w8iqsW2ohoI27juo24zeI2iyJY+gQWbmXj0/gfJjJnD5lJzEjGHz6Sf8lk/j1MDlEq00Si1CSYAtOJiqbekN+6GWSaBXNgnuU71EodGepsHupJxzrlBLx65ltCphGs/8L6GsZRnY6njLM/8FJvnvk2kzTPi+DcULV2kW+M5Yol3++PVLPU6gL+0lBn8zx/xbB5Kd/vjzSO598xfiQpfXCtMxpmvDE02NzXk/hvvt8f108+0i32aII70NLlPampM1yy9T2e797s8WD2L+ulFoYH/aLwtr7H83XMno8Y23rQtwK81JrIsyE89b1lsAJWK8jnqh/1vS2wDXYc+brsfU8mb0/4ov/TDqgf9b09sA8OLPn4+59Fnq6H7wgv5aqfTTHzFdUv787yX+qXd2cJzSfXk8rUz3Z2eb5+hHtgUf1sZze2iupnO7uxFXJ+Y8rV/6pWmfp9Btx9fiuq3zqD1+8bDSK86g==
   </data>
  </layer>
- <layer name="forest4" width="40" height="22">
+ <layer name="圖塊層 7" width="40" height="22" opacity="0.37">
   <data encoding="base64" compression="zlib">
-   eJztlbkOAjEQQ5PP4GhgaTgajmaB//8upkOxBvmttNJSxFIaOx45Kcal/Dc2tZRtXTrFbwyR7ZDkWwW3rm1+yrk5U3AOzyXx7YLb1zY/4TSP09177nEeyb1jcKfa5iec5nG6+5dXnHdy7xrcTfITTvM4nfxLhjG0p+QnnOZxOvmXOZG9YU69o6PjC93XpMOm9Jzzulm6r0mH0e4jXjdL9zXpMNp9xOtm6b4mHUa7j3jdLN3XpMNo9xGvm9XRsSQ+S0k3PQ==
+   eJxjYCANbEHCo2AUjILBBwoZB9oFlIMtROKBAvjcM5jdN9jDb9R91HPbqPtwA1LcSC93TmFmYJjEDKG3YOHD2DD+NGYEZmBAZdMCbASavQSIj0HtR+dvReMfROIzIPFpBb4Czf4CxGwsEPs/A9lXgPgRM2E+AxKfluAr1PzBkuYIgcHsNhgYau6jJgAA02lzSA==
+  </data>
+ </layer>
+ <layer name="圖塊層 4" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJztlDkOwkAQBIcRfhDghCMBk3AkHC/ifWyG/0OvQALGE5gATwu5pEpGG5S0Uov0/DMjFRnDCSz1cbsMPo1kiqYZnMMFYd8STStYwbW+7l23XQuRVDTvGzRt4Q7un31Jm+9+zQ1ttdN3QMsRnuA5sO8b+r722G3JMPXZbckw9XnbwtRntyXj9ZVBzXZbMknjetrA9L8e7H1MePvHhLd/lsh2b/+Y8PbvnXrYbY/lDs1KH0Y=
+  </data>
+ </layer>
+ <layer name="圖塊層 5" width="40" height="22" opacity="0.29">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFAw12slKGB7v7aOlGariNFu6jlrvoFcejYBSMglEwnEEjMwJTwh913+B03ygYBfQGV1kG1n4ADlhLNA==
+  </data>
+ </layer>
+ <layer name="圖塊層 8" width="40" height="22">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAv2MlKZwtHwSgYYqCNcaBdgB/0UOC+Iyyo/PNMlLkFGzjNQlgNsWDUfZSBUfdRBkbdRxkYdR9l4CoVzYKBUfdRBkbdRz4A9T8Gq/tAbiPVfQD9lR1l
+  </data>
+ </layer>
+ <layer name="圖塊層 9" width="40" height="22" opacity="0.5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBj64D4LJh9dDAau4xAHgRt45AYS7GTFjwez24aC+wa7GykFz1mog2kFnhEwGyYPyrswDAIP6JRfr7Hg5yO7H+S2a2h8WgNC7iOkntaAVPcNNEB334tR95IN7mFxy0C5D9YuQG4bYGs7vMAjj80/gwkMdveNglEwCqgHAIDmSvY=
   </data>
  </layer>
 </map>
