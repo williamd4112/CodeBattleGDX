@@ -1,8 +1,8 @@
 package com.codebattle.model.animation;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.codebattle.model.GameActor;
 import com.codebattle.model.GameStage;
+import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Speed;
 import com.codebattle.utility.GameConstants;

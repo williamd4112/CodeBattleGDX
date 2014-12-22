@@ -1,4 +1,4 @@
-package com.codebattle.model;
+package com.codebattle.model.gameactor;
 
 public class GameActorProperties{
 	public String source;
@@ -8,10 +8,10 @@ public class GameActorProperties{
 	public int def;
 	public int range;
 	public int maxsteps;
-	
-	public GameActorProperties()
-	{
 		
+	public GameActorProperties(GameActorDescription desc)
+	{
+		this(desc.source, desc.hp, desc.mp, desc.atk, desc.def, desc.range, desc.maxsteps);
 	}
 	
 	public GameActorProperties(String source, int hp, int mp, int atk, int def, int range, int maxsteps)

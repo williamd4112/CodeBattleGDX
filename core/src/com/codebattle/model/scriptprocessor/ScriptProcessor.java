@@ -4,9 +4,11 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.codebattle.model.GameActor;
+import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.GameState;
+import com.codebattle.model.Owner;
+import com.codebattle.model.gameactor.GameActor;
 
 /**
  * Script processor.
@@ -15,23 +17,25 @@ import com.codebattle.model.GameState;
  * 2. Create a new thread to run all commands.
  */
 public class ScriptProcessor extends Thread {
+	
     private final ScriptEngineManager manager;
     private final ScriptEngine engine;
     private final GameStage stage;
+    private final Owner currentPlayer;
     private final String script;
 
-    public ScriptProcessor(final GameStage stage, final String script) {
+    public ScriptProcessor(final GameStage stage, final Owner currentPlayer, final String script) {
         this.setDaemon(true);
         this.script = script;
         this.stage = stage;
+        this.currentPlayer = currentPlayer;
         this.manager = new ScriptEngineManager();
         this.engine = this.manager.getEngineByExtension("js");
         
         System.out.println("ScriptProcessor put object : ");
-        for (GameActor actor : this.stage.getGroupByType(GameActor.class)) {
-             System.out.println(actor.getName());
-             this.engine.put(actor.getName(), actor);
-            
+        for (GameObject obj : this.stage.getGameObjectsByOwner(currentPlayer)) {
+             System.out.println(obj.getName());
+             this.engine.put(obj.getName(), obj);
         }
     }
 

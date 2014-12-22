@@ -1,0 +1,8 @@
+<xml>
+<map time="noon">demo2</map>
+<init>
+	<gameobject class="GameActor" owner="Red" name="Saber" type="light" x="96" y="96" />
+	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="128" y="96" />
+	<gameobject class="GameActor" owner="Green" name="Saber" type="heavy" x="320" y="32" />
+</init>
+</xml>

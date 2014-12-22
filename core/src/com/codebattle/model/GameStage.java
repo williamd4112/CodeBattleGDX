@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -17,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.codebattle.gui.ScriptEditor;
 import com.codebattle.model.animation.Animation;
 import com.codebattle.model.animation.GameActorAttackAnimation;
+import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
 import com.codebattle.utility.ShaderLoader;
@@ -41,7 +42,7 @@ public class GameStage extends Stage
 	final private OrthogonalTiledMapRenderer mapRenderer;
 	final private OrthographicCamera camera;
 	
-	final private Group gameActors;
+	final private Group gameObjects;
 	final private Group guiLayer;
 	
 	/*Debug shape render*/
@@ -72,15 +73,15 @@ public class GameStage extends Stage
 		this.camera = new OrthographicCamera();
 		this.mapRenderer = new OrthogonalTiledMapRenderer(map);
 		this.mapRenderer.setView(this.camera);
-		this.mapRenderer.getSpriteBatch().setShader(shader);
+		//this.mapRenderer.getSpriteBatch().setShader(shader);
 		this.getViewport().setCamera(camera);
 		
-		this.gameActors = new Group();
+		this.gameObjects = new Group();
 		this.guiLayer = new Group();
 		this.animQueue = new LinkedList<Animation>();
 		this.virtualMap = new VirtualMap(this , map);
 		
-		this.addActor(this.gameActors);
+		this.addActor(this.gameObjects);
 		this.addActor(this.guiLayer);
 		
 		this.debugRender = new ShapeRenderer();
@@ -102,6 +103,9 @@ public class GameStage extends Stage
 		this.mapRenderer.render();	
 		this.renderDebug(delta);
 		
+	    act(delta);
+	    draw();
+	    
 		switch(this.state) {
 		case ANIM:
 			this.processAnimation();
@@ -109,9 +113,6 @@ public class GameStage extends Stage
 		default:
 			break;
 		}
-		
-	    act(delta);
-	    draw();
 	}
 	
 	/*Debug shape render*/
@@ -133,13 +134,29 @@ public class GameStage extends Stage
 		
 
 		this.debugRender.set(ShapeType.Filled);
-		this.debugRender.setColor(1.0f , 0.0f , 0.0f , 0.3f);	
 		
 		int mapWidth = this.mapProperties.get("width", Integer.class);
 		int mapHeight = this.mapProperties.get("height", Integer.class);
 		for(int row = 0 ; row < mapHeight ; row++) {
 			for(int col = 0 ; col < mapWidth ; col++) {
-				if(!this.virtualMap.isPassiable(col , row)) {  
+				if(!this.virtualMap.isPassiable(col , row)) {
+					this.debugRender.setColor(Color.ORANGE.r , Color.ORANGE.g , Color.ORANGE.b , 0.4f);
+					if(this.virtualMap.getCell(col, row).getObject() != null) {
+						GameObject obj = this.virtualMap.getCell(col, row).getObject();
+						switch(obj.getOwner()) {
+						case RED:
+							this.debugRender.setColor(1.0f , 0.0f , 0.0f , 0.3f);
+							break;
+						case BLUE:
+							this.debugRender.setColor(0.0f , 0.0f , 1.0f , 0.3f);
+							break;
+						case GREEN:
+							this.debugRender.setColor(0.0f , 1.0f , 0.0f , 0.3f);
+							break;
+						default:
+							break;
+						}
+					}
 					float x = col * GameConstants.CELL_SIZE;
 					float y = row * GameConstants.CELL_SIZE;
 					this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
@@ -195,6 +212,7 @@ public class GameStage extends Stage
 		if(this.animQueue.isEmpty()) {
 			this.setState(GameState.PAUSE);
 			this.setGUIVisiable(true);
+			this.resetGUILayerPosition();
 			return;
 		}
 		
@@ -206,7 +224,6 @@ public class GameStage extends Stage
 		if(anim.isFinished()) {
 			this.animQueue.poll();
 			anim.finished();
-			this.resetGUILayerPosition();
 		}else {
 			anim.update();
 		}
@@ -242,7 +259,13 @@ public class GameStage extends Stage
 	 */
 	public GameStage addGameActor(GameActor actor)
 	{
-		this.gameActors.addActor(actor);
+		this.gameObjects.addActor(actor);
+		return this;
+	}
+	
+	public GameStage addGameObject(GameObject obj)
+	{
+		this.gameObjects.addActor(obj);
 		return this;
 	}
 	
@@ -264,11 +287,24 @@ public class GameStage extends Stage
 	public <T> SnapshotArray<T> getGroupByType(Class<T> type)
 	{
 		SnapshotArray<T> objs = new SnapshotArray<T>();
-		for(Actor actor : this.gameActors.getChildren()) {
+		for(Actor actor : this.gameObjects.getChildren()) {
 			if(type.isInstance(actor))
 				objs.add((T)actor);
 		}
 		
+		return objs;
+	}
+	
+	public SnapshotArray<GameObject> getGameObjectsByOwner(Owner owner)
+	{
+		SnapshotArray<GameObject> objs = new SnapshotArray<GameObject>();
+		for(Actor actor : this.gameObjects.getChildren()) {
+			if(actor instanceof GameObject) {
+				GameObject obj = (GameObject)actor;
+				if(obj.getOwner() == owner) 
+					objs.add(obj);
+			}
+		}
 		return objs;
 	}
 	
@@ -339,7 +375,7 @@ public class GameStage extends Stage
 	
 	public void removeGameObject(GameObject obj)
 	{
-		this.gameActors.removeActor(obj);
+		this.gameObjects.removeActor(obj);
 	}
 	
 	/**

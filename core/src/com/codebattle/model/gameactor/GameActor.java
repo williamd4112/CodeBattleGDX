@@ -1,7 +1,11 @@
-package com.codebattle.model;
+package com.codebattle.model.gameactor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.codebattle.model.GameObject;
+import com.codebattle.model.GameObjectState;
+import com.codebattle.model.GameStage;
+import com.codebattle.model.Owner;
 import com.codebattle.model.animation.GameActorMovementAnimation;
 import com.codebattle.model.animation.GameActorTurnAnimation;
 import com.codebattle.model.units.Direction;
@@ -32,12 +36,11 @@ public class GameActor extends GameObject
 	private int frame = 0;
 	private int culmuSteps = 0;
 	
-	public GameActor(GameStage stage, int id, String name, GameActorProperties properties, float sx, float sy) throws Exception
+	public GameActor(GameStage stage, Owner owner, int id, String name, GameActorDescription desc, TextureRegion[][] frames, float sx, float sy) throws Exception
 	{
-		super(stage, name, id, sx, sy);
-		this.properties = new GameActorProperties(properties);
-		this.frames = TextureFactory.getInstance().loadCharacterFramesFromFile(name, 
-				GameConstants.CHR_HSLICES, GameConstants.CHR_VSLICES, GameConstants.CHR_WIDTH, GameConstants.CHR_HEIGHT);
+		super(stage, owner, name, id, sx, sy);
+		this.properties = new GameActorProperties(desc);
+		this.frames = frames;
 		this.direction = Direction.HOLD_DEF;
 		this.interval = Interval.HIGH; 
 		this.speed = Speed.VERYFAST;

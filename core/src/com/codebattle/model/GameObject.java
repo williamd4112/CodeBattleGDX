@@ -23,11 +23,15 @@ abstract public class GameObject extends Actor{
 	//Store actor's state, different state may cause some effect
 	//Note: Death state used in virtual map (temporary removing actor
 	protected GameObjectState state;
+
+	//Controller  
+	final protected Owner owner;
 	
-	public GameObject(GameStage stage, String name, int id, float sx, float sy)
+	public GameObject(GameStage stage, Owner owner, String name, int id, float sx, float sy)
 	{
 		super();
 		this.stage = stage;
+		this.owner = owner;
 		this.setName(name);
 		this.id = id;
 		this.state = GameObjectState.ALIVE;
@@ -73,6 +77,11 @@ abstract public class GameObject extends Actor{
 	public int getVY()
 	{
 		return this.vy;
+	}
+	
+	public Owner getOwner()
+	{
+		return this.owner;
 	}
 	
 	public void setVirtualCoordinate(int x, int y)

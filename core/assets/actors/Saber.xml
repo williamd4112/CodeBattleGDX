@@ -1,0 +1,13 @@
+<xml>
+	<source>Saber</source>
+	<hp>100</hp>
+	<mp>100</mp>
+	<atk>10</atk>
+	<def>5</def>
+	<range>1</range>
+	<maxsteps>10</maxsteps>
+	<region name="light" x="0" y="0" width="128" height="320"/>
+	<region name="heavy" x="0" y="3072" width="128" height="320"/>
+	<skill>
+	</skill>
+</xml>
