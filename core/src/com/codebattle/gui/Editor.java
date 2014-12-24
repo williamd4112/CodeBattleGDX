@@ -8,67 +8,72 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class Editor extends Table{
-	
-	private boolean isShow = true;
-	private EditorBar bar;
-	private TextArea editText;
-	private TextButton button;
-	
-	public Editor(ClickListener handler, Skin skin)
-	{
-		super();
-		this.bar = new EditorBar(skin);
-		
-		this.editText = new TextArea("Editor" , skin);
-		this.button = new TextButton("Submit" , skin);
-		this.button.addListener(handler);
-	}
-	
-	public String getText()
-	{
-		return this.editText.getText();
-	}
-	
-	public void resize(int width, int height)
-	{
-		this.reset();
-		this.bar.resize(width, height);
-		this.add(bar).expandX().fillX().row();
-		this.add(editText).expand().fill();
-		this.row();
-		this.add(button).fill();
-	}
-	
-	private class EditorBar extends BasePanel
-	{
-		private TextButton minBtn;
-		private Label title;
-		
-		public EditorBar(Skin skin) 
-		{
-			super(skin);
-			this.minBtn = new TextButton("-" , skin);
-			this.minBtn.addListener(new ClickListener() {
+public class Editor extends Table {
 
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					super.clicked(event, x, y);
-					isShow = !isShow;
-					editText.setVisible(isShow);
-					button.setVisible(isShow);
-				}
-				
-			});
-			this.title = new Label("Editor" , skin);
-		}
-		
-		public void resize(int width , int height)
-		{
-			this.reset();
-			this.add(title).padLeft(10).expandX().left();
-			this.add(minBtn).fill().right();
-		}
-		
-	}
+    private boolean isShow = true;
+    private final EditorBar bar;
+    private final TextArea editText;
+    private final TextButton button;
+
+    public Editor(final ClickListener handler, final Skin skin) {
+        super();
+        this.bar = new EditorBar(skin);
+
+        this.editText = new TextArea("Editor", skin);
+        this.button = new TextButton("Submit", skin);
+        this.button.addListener(handler);
+    }
+
+    public String getText() {
+        return this.editText.getText();
+    }
+
+    public void resize(final int width, final int height) {
+        this.reset();
+        this.bar.resize(width, height);
+        this.add(this.bar)
+                .expandX()
+                .fillX()
+                .row();
+        this.add(this.editText)
+                .expand()
+                .fill();
+        this.row();
+        this.add(this.button)
+                .fill();
+    }
+
+    private class EditorBar extends BasePanel {
+        private final TextButton minBtn;
+        private final Label title;
+
+        public EditorBar(final Skin skin) {
+            super(skin);
+            this.minBtn = new TextButton("-", skin);
+            this.minBtn.addListener(new ClickListener() {
+
+                @Override
+                public void clicked(final InputEvent event, final float x, final float y) {
+                    super.clicked(event, x, y);
+                    Editor.this.isShow = !Editor.this.isShow;
+                    Editor.this.editText.setVisible(Editor.this.isShow);
+                    Editor.this.button.setVisible(Editor.this.isShow);
+                }
+
+            });
+            this.title = new Label("Editor", skin);
+        }
+
+        public void resize(final int width, final int height) {
+            this.reset();
+            this.add(this.title)
+                    .padLeft(10)
+                    .expandX()
+                    .left();
+            this.add(this.minBtn)
+                    .fill()
+                    .right();
+        }
+
+    }
 }

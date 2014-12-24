@@ -1,7 +1,5 @@
 package com.codebattle.model;
 
-public enum GameState
-{
-	ANIM,
-	PAUSE
+public enum GameState {
+    ANIM, PAUSE
 }

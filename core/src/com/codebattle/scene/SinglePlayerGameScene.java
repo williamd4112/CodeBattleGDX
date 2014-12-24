@@ -13,88 +13,88 @@ import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.SoundUtil;
 
-public class SinglePlayerGameScene extends GameScene{
+public class SinglePlayerGameScene extends GameScene {
 
-	//private ScriptEditor scriptEditor;
-	private GameSceneGUI gui;
-	
-	public SinglePlayerGameScene(String sceneName) throws Exception 
-	{
-		super(sceneName);
-	}
-	
-	@Override
-	public void setupGUI() 
-	{
-		this.gui = new GameSceneGUI(new Handler());
-		this.stage.addGUI(this.gui);
-	}
-	
-	public void setupGameObjects(XmlReader.Element context) throws Exception
-	{
-		for(XmlReader.Element element : context.getChildrenByNameRecursively("gameobject")) {
-			String clazz = element.getAttribute("class");
-			Owner owner = GameUtil.toOwner(element.getAttribute("owner"));
-			String name = element.getAttribute("name");
-			String type = element.getAttribute("type");
-			float x = Float.parseFloat(element.getAttribute("x"));
-			float y = Float.parseFloat(element.getAttribute("y"));
-			
-			GameObject obj = this.generateGameObject(clazz, owner, name, type, x, y);
-			this.stage.addGameObject(obj);
-		}
-	}
-	
-	public GameObject generateGameObject(String clazz, Owner owner, String name, String type, float x, float y) throws Exception
-	{
-		if(clazz.equals("GameActor")) {
-			return GameActorFactory.getInstance().createGameActor(this.stage, owner, name, type, x, y);
-		}else {
-			return null;
-		}
-	}
+    // private ScriptEditor scriptEditor;
+    private GameSceneGUI gui;
 
-	@Override
-	public void setupInput() 
-	{
-		Gdx.input.setInputProcessor(this.stage);
-	}
+    public SinglePlayerGameScene(final String sceneName) throws Exception {
+        super(sceneName);
+    }
 
-	@Override
-	public void setupBGS(Element context) throws Exception 
-	{
-		XmlReader.Element bgsElement = context.getChildByName("bgs");
-		String bgsName = bgsElement.getText();
-		if(bgsName == null) return; //Default no bgs
-		SoundUtil.playBGS(bgsName);
-	}
+    @Override
+    public void setupGUI() {
+        this.gui = new GameSceneGUI(new Handler());
+        this.stage.addGUI(this.gui);
+    }
 
-	@Override
-	public void setupBGM(Element context) throws Exception 
-	{
-		XmlReader.Element bgmElement = context.getChildByName("bgm");
-		String bgmName = bgmElement.getText();
-		if(bgmName == null) return; //Default no bgs
-		SoundUtil.playBGM(bgmName);
-	}
+    @Override
+    public void setupGameObjects(final XmlReader.Element context) throws Exception {
+        for (final XmlReader.Element element : context.getChildrenByNameRecursively("gameobject")) {
+            final String clazz = element.getAttribute("class");
+            final Owner owner = GameUtil.toOwner(element.getAttribute("owner"));
+            final String name = element.getAttribute("name");
+            final String type = element.getAttribute("type");
+            final float x = Float.parseFloat(element.getAttribute("x"));
+            final float y = Float.parseFloat(element.getAttribute("y"));
 
-	/*Handling script interpretation*/
-	private class Handler extends ClickListener
-	{
-		@Override
-		public void clicked(InputEvent event, float x, float y) {
-			super.clicked(event, x, y);
-			String script = gui.getEditor().getText();
-			new ScriptProcessor(stage, currentPlayer, script).start();
-			
-		}
-	}
+            final GameObject obj = this.generateGameObject(clazz, owner, name, type, x, y);
+            this.stage.addGameObject(obj);
+        }
+    }
 
-	@Override
-	public void resizeGUI(int width, int height) 
-	{
-		this.gui.resize(width, height);
-		this.gui.invalidateHierarchy();
-	}
+    public GameObject generateGameObject(final String clazz, final Owner owner, final String name,
+            final String type, final float x, final float y) throws Exception {
+        if (clazz.equals("GameActor")) {
+            return GameActorFactory.getInstance()
+                    .createGameActor(this.stage, owner, name, type, x, y);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setupInput() {
+        Gdx.input.setInputProcessor(this.stage);
+    }
+
+    @Override
+    public void setupBGS(final Element context) throws Exception {
+        final XmlReader.Element bgsElement = context.getChildByName("bgs");
+        final String bgsName = bgsElement.getText();
+        if (bgsName == null) {
+            return; // Default no bgs
+        }
+        SoundUtil.playBGS(bgsName);
+    }
+
+    @Override
+    public void setupBGM(final Element context) throws Exception {
+        final XmlReader.Element bgmElement = context.getChildByName("bgm");
+        final String bgmName = bgmElement.getText();
+        if (bgmName == null) {
+            return; // Default no bgs
+        }
+        SoundUtil.playBGM(bgmName);
+    }
+
+    /* Handling script interpretation */
+    private class Handler extends ClickListener {
+        @Override
+        public void clicked(final InputEvent event, final float x, final float y) {
+            super.clicked(event, x, y);
+            final String script = SinglePlayerGameScene.this.gui.getEditor()
+                    .getText();
+            new ScriptProcessor(SinglePlayerGameScene.this.stage,
+                    SinglePlayerGameScene.this.currentPlayer, script).start();
+
+        }
+    }
+
+    @Override
+    public void resizeGUI(final int width, final int height) {
+        this.gui.resize(width, height);
+        this.gui.invalidateHierarchy();
+    }
 
 }
