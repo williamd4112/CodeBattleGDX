@@ -62,12 +62,31 @@ public class TextureFactory {
     {
     	int x = region.x;
     	int y = region.y;
-    	int horizontal = region.width / GameConstants.CELL_SIZE;
-    	int vertical = region.height / GameConstants.CELL_SIZE;
-    	int hTileSize = GameConstants.CELL_SIZE;
-    	int vTileSize = GameConstants.CELL_SIZE;
+    	int horizontal = region.width / region.hTile;
+    	int vertical = region.height / region.vTile;
+    	int hTileSize = region.hTile;
+    	int vTileSize = region.vTile;
     	
     	return loadCharacterFramesFromFile(resName, x, y, horizontal, vertical, hTileSize, vTileSize);
+    }
+    
+    public TextureRegion[] loadAnimationFramesFromFile(String resName, Region region) throws Exception
+    {
+       	int x = region.x;
+    	int y = region.y;
+    	int horizontal = region.width / region.hTile;
+    	int vertical = region.height / region.vTile;
+    	int hTileSize = region.hTile;
+    	int vTileSize = region.vTile;
+    	
+    	TextureRegion[] regions;
+		regions = new TextureRegion[horizontal];
+		final Texture texture = this.loadTextureFromFile(resName , ResourceType.ANIMATION);
+	    for (int h = 0; h < horizontal; h++) {
+	        regions[h] = new TextureRegion(texture, x + h * hTileSize, y, hTileSize, vTileSize);
+	    }
+		
+		return regions;
     }
 
     public Texture loadTextureFromFile(final String resName , ResourceType type) throws Exception
@@ -82,6 +101,9 @@ public class TextureFactory {
     		break;
     	case ANIMATION:
     		resPath = GameConstants.GAMEACTOR_ANIMATION_TEXTURE_DIR + resName + GameConstants.DEFAULT_TEXTURE_EXTENSION;
+    		break;
+    	case IMAGE:
+    		resPath = GameConstants.IMAGE_TEXTURE_DIR + resName + GameConstants.DEFAULT_TEXTURE_EXTENSION;
     		break;
     	default:
     		throw new Exception("not supported resource type");

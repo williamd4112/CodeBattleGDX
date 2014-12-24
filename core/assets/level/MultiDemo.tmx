@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="44" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="048-Sewer01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/048-Sewer01.png" width="256" height="768"/>
+  <terraintypes>
+   <terrain name="新地形" tile="-1"/>
+  </terraintypes>
+ </tileset>
+ <tileset firstgid="193" name="047-Mine01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/047-Mine01.png" width="256" height="864"/>
+ </tileset>
+ <tileset firstgid="409" name="033-Heaven02" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/033-Heaven02.png" width="256" height="928"/>
+ </tileset>
+ <tileset firstgid="641" name="032-Heaven01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/032-Heaven01.png" width="256" height="1024"/>
+ </tileset>
+ <tileset firstgid="897" name="051-Water01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/051-Water01.png" width="512" height="384"/>
+ </tileset>
+ <tileset firstgid="1089" name="009-CastleTown01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/009-CastleTown01.png" width="256" height="960"/>
+ </tileset>
+ <layer name="圖塊層 1" width="40" height="44">
+  <data encoding="base64" compression="zlib">
+   eJzt2MEJwDAIBVA7UJfosTNk/zm6QglYxb7DO0ngSyJIVkQsaOpKVt0fTLY7h1/Nb/d8WXfx9sy9WQMAgAp/2u9hmu7/f/L1eB/VObKcB5M9T8VSkQ==
+  </data>
+ </layer>
+ <layer name="圖塊層 5" width="40" height="44" opacity="0.27">
+  <data encoding="base64" compression="zlib">
+   eJzt1tEKgCAMQFEf/Grz43saSqxpkHPFPSAkEl0ow5JTKoEHAAB/dGR77GY1RGm00Nf056nZsxV9jdZXcxtC5t77467vepaWuVebdp7v51VZ8+yy1kfXK42eE7lPe98z973py32eHdbzrT2yu08aRv+XKHZ8Y0/QBwAAsN4JYiM7rw==
+  </data>
+ </layer>
+ <layer name="圖塊層 3" width="40" height="44">
+  <data encoding="base64" compression="zlib">
+   eJztmDtPwzAQgK3mFxSmBpbSDXWhgITCxMoGTG2m0gmY2gISz9/OWYrF6RrbV9t1otQnfarlxndfHh58QqTocvSBAw2HLag/AHINRxH8bPVN/+eGewuFqTbHr0k4fidMQq2jfkPD2hFwyWRA8nLX4frUT9Y/tVBUXKFxUTNP/WzXK3AtmkPOjREqlsAKWAt+0NzcwLVojjG5FxUfwCfwFcEP16I5pNNtIGjuUDmmmRAzDWXWvN9cuvTqWWT89+T6fnHgvTyq5trkVxfJzy+ewOFZw0sL/EJFV/3u4Du61/DQa95vqvn2JWXyC+aHzyku56Jd+/nuP9f1c3B41LAw+N1E8nPNn/z88rfFT+1benbadh+7+vn0N3LDWlsfYJ/6B8ca5DXcPoArPn7b9AFcsfWvhsinrr9RiM1zf6jxtdjsr2A/Tn9j12GrfwZMKi6q31fgDXiP4IdrTQjnQCn+n7cafwM/wG8EP1yrIMxEuP7GvpKi2/EHuW+k+A==
+  </data>
+ </layer>
+ <layer name="圖塊層 2" width="40" height="44">
+  <data encoding="base64" compression="zlib">
+   eJztmDsOwjAMhqOqAyPn4ihwBuAcvCZgACZgAi6Ho6ZSMH1ZAfxX+JP+IZHVfJVqS41zhmEY/82asgmZZM21A+GzpfVVLCjLkFVL7VD4bGl9Fd5vnBVp89Ngmjs3C5nn2jbvoPshEPco4jeG7ieZIRqg90Cf/RDc0f2aML80ytmIOnvQZ/eOsg/ZKruggt4D6H7Wo2lYjxpdqLsPkO5/i7r7AOl+F8p/Et/Pv35Pjj8/9nFs/Yl7khT8+dzvQDlSTlpSDO5zplwoV8pISyoi9qlaa8N9bpQ75aFm9AqaT995AkZjThw=
+  </data>
+ </layer>
+ <layer name="圖塊層 4" width="40" height="44" opacity="0.3">
+  <data encoding="base64" compression="zlib">
+   eJztmO8NQDAQxYkOYAQLCDMYyxRGMIqRjCA++RPVnueqqfdL7oPmvPeaInFZRhA6j4rZWzvfGxqaRUhqjIVuP0pr3D37d9OnPzT8dqTD1VnGdL7Mh8F8GMyH6WvnQ/WZD9NnPkyf+TB9zXy2/2R0xuB7352HVEMyB+D8gPyVwTIPkK5r0VjmAdJ1KaH3KfWfPs43O/zLr+c4F/51vlVljtehq3T4v/UcP6U95VvpDQupBS3qVlA=
+  </data>
+ </layer>
+ <layer name="dye" width="40" height="44" visible="0" opacity="0.44">
+  <data encoding="base64" compression="zlib">
+   eJztlsERABAQxPRfompUYBi7hyOZydNenkqBl6kDT9/P3oeIfWdxvcvW58KxG9Xm2qYvZtsBfRr0adCn8Xufuk8ffQr0ebpu+98j4rrRZOpb6d3Zd+I+QGYaKy0nFQ==
+  </data>
+ </layer>
+</map>

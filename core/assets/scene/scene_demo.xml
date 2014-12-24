@@ -1,8 +1,10 @@
 <xml>
 <map time="noon">demo2</map>
+<bgm>scene_demo_bgm.ogg</bgm>
+<bgs></bgs>
 <init>
-	<gameobject class="GameActor" owner="Red" name="Saber" type="light" x="96" y="96" />
+	<gameobject class="GameActor" owner="Red" name="Saber" type="light" x="96" y="224" />
 	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="128" y="96" />
-	<gameobject class="GameActor" owner="Green" name="Saber" type="heavy" x="320" y="32" />
+	<gameobject class="GameActor" owner="Blue" name="Saber" type="light" x="320" y="64" />
 </init>
 </xml>

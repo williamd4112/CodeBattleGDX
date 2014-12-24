@@ -12,7 +12,6 @@ import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Interval;
 import com.codebattle.model.units.Speed;
 import com.codebattle.utility.GameConstants;
-import com.codebattle.utility.TextureFactory;
 
 /**
  * GameActor
@@ -28,7 +27,7 @@ public class GameActor extends GameObject
 {	
 	final private GameActorProperties properties;	
 	
-	private Direction direction;
+	private Direction direction;	
 	private TextureRegion[][] frames;
 	private Interval interval;
 	private Speed speed;
@@ -36,10 +35,10 @@ public class GameActor extends GameObject
 	private int frame = 0;
 	private int culmuSteps = 0;
 	
-	public GameActor(GameStage stage, Owner owner, int id, String name, GameActorDescription desc, TextureRegion[][] frames, float sx, float sy) throws Exception
+	public GameActor(GameStage stage, Owner owner, int id, String source, String name, GameActorProperties prop, TextureRegion[][] frames, float sx, float sy) throws Exception
 	{
-		super(stage, owner, name, id, sx, sy);
-		this.properties = new GameActorProperties(desc);
+		super(stage, owner, source, name, id, sx, sy);
+		this.properties = prop;
 		this.frames = frames;
 		this.direction = Direction.HOLD_DEF;
 		this.interval = Interval.HIGH; 
@@ -224,6 +223,11 @@ public class GameActor extends GameObject
 	public int getDEF()
 	{
 		return this.properties.def;
+	}
+	
+	public String getType()
+	{
+		return this.properties.name;
 	}
 		
 	/**

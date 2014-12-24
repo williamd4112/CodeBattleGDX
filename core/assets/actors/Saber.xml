@@ -1,13 +1,34 @@
 <xml>
-	<source>Saber</source>
-	<hp>100</hp>
-	<mp>100</mp>
-	<atk>10</atk>
-	<def>5</def>
-	<range>1</range>
-	<maxsteps>10</maxsteps>
-	<region name="light" x="0" y="0" width="128" height="320"/>
-	<region name="heavy" x="0" y="3072" width="128" height="320"/>
-	<skill>
-	</skill>
+	<source>Saber</source>	
+	<type name="light">
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>80</hp>
+		<mp>100</mp>
+		<atk>12</atk>
+		<def>10</def>
+		<range>1</range>
+		<maxsteps>10</maxsteps>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="006-Weapon01">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>096-Attack08.ogg</sound>
+		</attack>
+	</type>
+	
+	<type name="heavy">
+		<region x="0" y="3072" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>200</hp>
+		<mp>100</mp>
+		<atk>40</atk>
+		<def>50</def>
+		<range>1</range>
+		<maxsteps>10</maxsteps>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="006-Weapon01">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>096-Attack08.ogg</sound>
+		</attack>
+	</type>
 </xml>

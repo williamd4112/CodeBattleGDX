@@ -14,7 +14,9 @@ abstract public class GameObject extends Actor{
 	//Where is this object
 	//Repeated object avoidance
 	final public GameStage stage;
-	final protected int id;
+	final public int id;
+	
+	final public String source;
 	
 	//Virtual Coordinate , used to calculate in actorsmap
 	protected int vx;
@@ -27,9 +29,10 @@ abstract public class GameObject extends Actor{
 	//Controller  
 	final protected Owner owner;
 	
-	public GameObject(GameStage stage, Owner owner, String name, int id, float sx, float sy)
+	public GameObject(GameStage stage, Owner owner, String source, String name, int id, float sx, float sy)
 	{
 		super();
+		this.source = source;
 		this.stage = stage;
 		this.owner = owner;
 		this.setName(name);

@@ -1,6 +1,7 @@
 package com.codebattle.model.animation;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
  * @update: change some properties in a fix period
@@ -16,7 +17,7 @@ abstract public class Animation {
 	boolean isSetup = false;
 	
 	abstract public void update();
-	abstract public void draw(SpriteBatch batch , float delta);
+	abstract public void draw(Batch batch , Camera camera, float delta);
 	abstract public boolean isFinished();
 	abstract public void finished();
 	
@@ -24,6 +25,5 @@ abstract public class Animation {
 	{
 		if(this.isSetup) return;
 		this.isSetup = true;
-			
 	}
 }

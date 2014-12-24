@@ -1,5 +1,7 @@
 package com.codebattle.model.animation;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.gameactor.GameActor;
@@ -67,7 +69,7 @@ public class GameActorMovementAnimation extends Animation{
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, float delta) 
+	public void draw(Batch batch, Camera camera,  float delta) 
 	{
 		
 	}
