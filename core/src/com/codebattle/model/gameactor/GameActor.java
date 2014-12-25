@@ -12,6 +12,7 @@ import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Interval;
 import com.codebattle.model.units.Speed;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.SoundUtil;
 
 /**
  * GameActor
@@ -71,6 +72,12 @@ public class GameActor extends GameObject
 	public boolean onInteract(GameObject contacter) {
 		System.out.printf("%s contact to %s\n",contacter.getName() ,this.getName());
 		return false;
+	}
+	
+	@Override
+	public void onSelected(Owner owner) 
+	{
+		SoundUtil.playSE(GameConstants.ONSELECT_SE);
 	}
 	
 	@Override
@@ -228,6 +235,11 @@ public class GameActor extends GameObject
 	public String getType()
 	{
 		return this.properties.name;
+	}
+	
+	public GameActorProperties getProp()
+	{
+		return this.properties;
 	}
 		
 	/**

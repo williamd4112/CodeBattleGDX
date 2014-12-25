@@ -1,5 +1,8 @@
 package com.codebattle.model.gameactor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.Region;
 
@@ -12,10 +15,14 @@ public class GameActorType
 	public Region attackAnimationRegion;
 	public String attackSoundSource;
 	
-	public GameActorType(XmlReader.Element type)
+	public Map<String , String> apis;
+	
+	public GameActorType(String source , XmlReader.Element type)
 	{
+		this.apis = new HashMap<String , String>();
+		
 		//Read basic info
-		this.prop = new GameActorProperties(type);
+		this.prop = new GameActorProperties(source , type);
 		
 		//Read actors movement animation region
 		XmlReader.Element regionElement = type.getChildByName("region");
@@ -27,5 +34,12 @@ public class GameActorType
 		this.attackAnimationRegion = new Region(attackAnimationRegionElement);
 		this.attackSoundSource = type.getChildByName("attack").getChildByName("sound").getText();
 		
+		//Read api element
+		XmlReader.Element apiElement = type.getChildByName("api");
+		for(XmlReader.Element item : apiElement.getChildrenByName("item")) {
+			String name = item.getAttribute("name");
+			String content = item.getText();
+			this.apis.put(name, content);
+		}
 	}
 }

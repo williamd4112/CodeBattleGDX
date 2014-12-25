@@ -3,7 +3,10 @@ package com.codebattle.model.gameactor;
 import com.badlogic.gdx.utils.XmlReader;
 
 public class GameActorProperties{
+	
+	final public String source;
 	final public String name;
+	
 	public int hp;
 	public int mp;
 	public int atk;
@@ -11,8 +14,9 @@ public class GameActorProperties{
 	public int range;
 	public int maxsteps;
 			
-	public GameActorProperties(String type, int hp, int mp, int atk, int def, int range, int maxsteps)
+	public GameActorProperties(String source , String type, int hp, int mp, int atk, int def, int range, int maxsteps)
 	{
+		this.source = source;
 		this.name = type;
 		this.hp = hp;
 		this.mp = mp;
@@ -22,8 +26,9 @@ public class GameActorProperties{
 		this.maxsteps = maxsteps;
 	}
 	
-	public GameActorProperties(XmlReader.Element type)
+	public GameActorProperties(String source , XmlReader.Element type)
 	{
+		this.source = source;
 		this.name = type.getAttribute("name");
 		this.hp = Integer.parseInt(type.getChildByName("hp").getText());
 		this.mp = Integer.parseInt(type.getChildByName("mp").getText());
@@ -35,7 +40,11 @@ public class GameActorProperties{
 	
 	public GameActorProperties(GameActorProperties prop)
 	{
-		this(prop.name, prop.hp, prop.mp, prop.atk, prop.def, prop.range, prop.maxsteps);
+		this(prop.source, prop.name, prop.hp, prop.mp, prop.atk, prop.def, prop.range, prop.maxsteps);
 	}
 	
+	public String[] getPropertyArray()
+	{
+		return new String[] {String.valueOf(hp),String.valueOf(mp),String.valueOf(atk),String.valueOf(def),String.valueOf(range)};
+	}
 }

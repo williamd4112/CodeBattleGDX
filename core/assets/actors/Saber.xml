@@ -4,7 +4,7 @@
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>80</hp>
 		<mp>100</mp>
-		<atk>12</atk>
+		<atk>100</atk>
 		<def>10</def>
 		<range>1</range>
 		<maxsteps>10</maxsteps>
@@ -14,6 +14,12 @@
 			</animation>
 			<sound>096-Attack08.ogg</sound>
 		</attack>
+		<api>
+		    <item name="moveRight">
+		        @param: step
+		        move along a direction
+		    </item>
+		</api>
 	</type>
 	
 	<type name="heavy">
@@ -30,5 +36,11 @@
 			</animation>
 			<sound>096-Attack08.ogg</sound>
 		</attack>
+		<api>
+		    <item name="moveRight">
+		        @param: step
+		        move along a direction
+		    </item>
+		</api>
 	</type>
 </xml>

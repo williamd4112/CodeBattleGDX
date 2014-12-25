@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.Owner;
+import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
 import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameUtil;
@@ -97,4 +98,21 @@ public class SinglePlayerGameScene extends GameScene {
         this.gui.invalidateHierarchy();
     }
 
+	@Override
+	public void onGUIChange() 
+	{
+		GameObject selectObject = this.stage.getSelectedObject();
+		if(selectObject != null) {
+			this.gui.getControlGroup().getPanel().setImage(selectObject.source);
+			if(selectObject instanceof GameActor)
+				this.gui.getControlGroup().getPanel().setProperties(((GameActor)selectObject).getProp());
+			else
+				this.gui.getControlGroup().getPanel().resetProperties();
+		}
+		else {
+			this.gui.getControlGroup().getPanel().resetImage();
+			this.gui.getControlGroup().getPanel().resetProperties();
+		}
+	}
+	
 }

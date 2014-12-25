@@ -41,10 +41,7 @@ public class ScriptProcessor extends Thread {
 
     @Override
     public void run() {
-        try {        	
-        	//Reset the virtual map
-        	this.stage.getVirtualMap().resetVirtualMap();
-        	
+        try {        	        	
         	//Processing script (put animation object into queue
             this.engine.eval(this.script);
           

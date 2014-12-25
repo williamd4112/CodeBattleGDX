@@ -49,7 +49,7 @@ public class GameActorDescription implements Readable
 	{
 		this.source = context.getChildByName("source").getText();
 		for(XmlReader.Element type : context.getChildrenByNameRecursively("type")) {
-			GameActorType gameActorType = new GameActorType(type);
+			GameActorType gameActorType = new GameActorType(this.source , type);
 			this.types.put(gameActorType.prop.name, gameActorType);
 		}
 	}
