@@ -15,11 +15,8 @@ public class GameActorType
 	public Region attackAnimationRegion;
 	public String attackSoundSource;
 	
-	public Map<String , String> apis;
-	
 	public GameActorType(String source , XmlReader.Element type)
 	{
-		this.apis = new HashMap<String , String>();
 		
 		//Read basic info
 		this.prop = new GameActorProperties(source , type);
@@ -33,13 +30,5 @@ public class GameActorType
 		this.attackAnimationSource = type.getChildByName("attack").getChildByName("animation").getAttribute("source");
 		this.attackAnimationRegion = new Region(attackAnimationRegionElement);
 		this.attackSoundSource = type.getChildByName("attack").getChildByName("sound").getText();
-		
-		//Read api element
-		XmlReader.Element apiElement = type.getChildByName("api");
-		for(XmlReader.Element item : apiElement.getChildrenByName("item")) {
-			String name = item.getAttribute("name");
-			String content = item.getText();
-			this.apis.put(name, content);
-		}
 	}
 }

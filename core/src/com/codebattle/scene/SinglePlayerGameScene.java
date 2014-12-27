@@ -104,6 +104,7 @@ public class SinglePlayerGameScene extends GameScene {
 		GameObject selectObject = this.stage.getSelectedObject();
 		if(selectObject != null) {
 			this.gui.getControlGroup().getPanel().setImage(selectObject.source);
+			this.gui.getControlGroup().getPanel().setAPI(selectObject.getClass());
 			if(selectObject instanceof GameActor)
 				this.gui.getControlGroup().getPanel().setProperties(((GameActor)selectObject).getProp());
 			else
@@ -112,6 +113,7 @@ public class SinglePlayerGameScene extends GameScene {
 		else {
 			this.gui.getControlGroup().getPanel().resetImage();
 			this.gui.getControlGroup().getPanel().resetProperties();
+			this.gui.getControlGroup().getPanel().resetAPI();
 		}
 	}
 	

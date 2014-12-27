@@ -41,10 +41,10 @@ public class StateTable extends Table
 		for(int i = 0 ; i < this.keyLabels.size() ; i++) {
 			Label key = keyLabels.get(i);
 			Label val = valLabels.get(i);
-			key.setSize(width * 0.02f, width * 0.02f);
-			val.setSize(width * 0.02f, width * 0.02f);
-			this.add(key).spaceRight(width * 0.025f).left();
-			this.add(val).left();
+			key.setFontScale(width * 0.0009f);
+			val.setFontScale(width * 0.0009f);
+			this.add(key).prefSize(width * 0.01f).spaceRight(width * 0.025f).left();
+			this.add(val).prefSize(width * 0.01f).left();
 			this.row();
 		}
 	}

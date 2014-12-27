@@ -1,5 +1,6 @@
 package com.codebattle.model.gameactor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.codebattle.model.GameObject;
@@ -49,7 +50,10 @@ public class GameActor extends GameObject
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
+		Color color = batch.getColor();
+		batch.setColor(this.getColor().r,this.getColor().g,this.getColor().b,parentAlpha * this.getColor().a);
 		batch.draw(this.frames[this.direction.val][this.frame / this.interval.val], this.getX(), this.getY());
+		batch.setColor(color);
 	}
 
 	@Override

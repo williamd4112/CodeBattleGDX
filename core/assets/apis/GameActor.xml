@@ -1,0 +1,27 @@
+<xml>
+	<method name="moveRight">
+	    moveRight(int steps)
+		@param: steps
+	</method>
+	
+	<method name="moveLeft">
+	    moveLeft(int steps)
+		@param: steps
+	</method>
+	
+	<method name="moveUp">
+	    moveUp(int steps)
+		@param: steps
+	</method>
+	
+	<method name="moveDown">
+	    moveDown(int steps)
+		@param: steps
+	</method>
+	
+	<method name="attack">
+	    attack(int x , int y)
+		@param: x coordinate
+		@param: y coordinate 
+	</method>
+</xml>

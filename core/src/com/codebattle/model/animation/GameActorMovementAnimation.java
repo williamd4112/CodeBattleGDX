@@ -37,7 +37,7 @@ public class GameActorMovementAnimation extends Animation{
 	@Override
 	public void setup() 
 	{
-		super.setup();
+
 	}
 	
 	@Override

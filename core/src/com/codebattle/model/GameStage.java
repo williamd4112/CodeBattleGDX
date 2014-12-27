@@ -1,5 +1,8 @@
 package com.codebattle.model;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
@@ -23,18 +26,19 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.codebattle.model.animation.Animation;
 import com.codebattle.model.animation.CursorAnimation;
 import com.codebattle.model.animation.GameActorAttackAnimation;
+import com.codebattle.model.animation.GameObjectOnAttackAnimation;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.scene.GameScene;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.ShaderLoader;
-
 import com.codebattle.utility.TextureFactory;
 
 /*
@@ -159,7 +163,7 @@ public class GameStage extends Stage
 
 		//Draw lighting
 		this.rayHandler.setCombinedMatrix(camera.combined);
-		this.rayHandler.updateAndRender();
+		//this.rayHandler.updateAndRender();
 		this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 		
 		//Draw GUI
@@ -181,8 +185,10 @@ public class GameStage extends Stage
 	public void act(float delta) 
 	{
 		super.act(delta);
-		this.gameObjects.act(delta);
-		this.guiLayer.act(delta);
+		//this.gameObjects.act(delta);
+		for(Actor actor : this.gameObjects.getChildren())
+			actor.act(delta);
+		//this.guiLayer.act(delta);
 	}
 
 	/**
@@ -312,12 +318,13 @@ public class GameStage extends Stage
 		//No animation in the queue
 		if(this.animQueue.isEmpty()) {
 			this.setState(GameState.PAUSE);
-			this.setGUIVisiable(true);
+			this.guiLayer.addAction(Actions.sequence(Actions.fadeIn(0.3f)));
 			this.resetGUILayerPosition();
 			this.currentAnimation = null;
 			
         	//Reset the virtual map (Update new state to enter the next state
         	this.virtualMap.resetVirtualMap();
+        	this.emitGUIChangeEvent();
         	
         	return;
 		}
@@ -326,7 +333,7 @@ public class GameStage extends Stage
 		batch.begin();
 		
 		//Hide the GUI
-		this.setGUIVisiable(false);
+		this.guiLayer.addAction(Actions.sequence(Actions.fadeOut(0.3f)));
 		
 		//Process the top animation
 		Animation anim = this.animQueue.peek();
@@ -365,6 +372,7 @@ public class GameStage extends Stage
 			if (target instanceof GameActor) {
 				try {
 					this.addAnimation(new GameActorAttackAnimation(this, (GameActor) attacker, target));
+					this.addAnimation(new GameObjectOnAttackAnimation(target));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

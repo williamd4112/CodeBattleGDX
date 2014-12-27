@@ -1,5 +1,9 @@
 package com.codebattle.utility;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.codebattle.model.Region;
 import com.codebattle.model.units.Interval;
 
@@ -31,6 +35,7 @@ public class GameConstants {
 	public final static String IMAGE_TEXTURE_DIR = "graphics/texture/";
 	public final static String GUI_TEXTURE_DIR = "graphics/gui/";
 	public final static String GAMEACTOR_PROP_DIR = "actors/";
+	public final static String API_DIR = "apis/";
 	public final static String SCENE_DIR = "scene/";
 	public final static String SHADER_DIR = "shaders/";
 	public final static String BGM_DIR = "audio/BGM/";
@@ -47,5 +52,16 @@ public class GameConstants {
 	public final static Region ONSELECT_CURSOR_REGION = new Region(160 , 64 , 32 , 32 , 16 , 16);
 	public final static Interval ONSELECT_CURSOR_INTERVAL = Interval.VERYHIGH;
 	public final static String ONSELECT_SE = "002-System02.ogg";
+	
+	public static Map<String , String> API_GAMEACTOR = new HashMap<String , String>();
+	
+	public static void init()
+	{
+		try {
+			API_GAMEACTOR = XMLUtil.readAPIFromFile(API_DIR + "GameActor.xml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

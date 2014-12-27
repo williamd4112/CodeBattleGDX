@@ -12,6 +12,7 @@ import com.codebattle.model.gameactor.GameActorType;
 import com.codebattle.model.units.Direction;
 import com.codebattle.utility.AnimationUtil;
 import com.codebattle.utility.GameActorFactory;
+import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.SoundUtil;
 import com.codebattle.utility.TextureFactory;
@@ -42,7 +43,6 @@ public class GameActorAttackAnimation extends Animation{
 	@Override
 	public void setup() 
 	{
-		super.setup();
 		try {
 			GameActorType type = GameActorFactory.getInstance().getGameActorType(attacker.source, attacker.getType());
 			this.texture = TextureFactory.getInstance().loadTextureFromFile(attacker.source, ResourceType.ANIMATION);
@@ -85,7 +85,7 @@ public class GameActorAttackAnimation extends Animation{
 		int step = (int) (camera.viewportWidth / this.duration);
 		Vector3 screen = camera.unproject(new Vector3(x += step, camera.viewportHeight - (camera.viewportHeight - texture.getHeight()) / 2 ,0));
 
-		batch.draw(this.anim[frame], attacker.getX() + 16 - frameWidth / 2, attacker.getY() + 16 - frameHeight / 2);
+		batch.draw(this.anim[frame], target.getX() + GameConstants.CELL_SIZE / 2 - frameWidth / 2, target.getY() + GameConstants.CELL_SIZE / 2 - frameHeight / 2);
 		batch.draw(texture, screen.x, screen.y);
 	}
 

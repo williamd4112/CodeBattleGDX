@@ -41,20 +41,21 @@ public class Menu extends Table {
 
     public void resize(final int width, final int height) {
         this.reset();
-        this.setDebug(true);
+        //this.setDebug(true);
         this.add(this.menuBtn)
                 .left()
                 .row()
                 .fillX();
         for (final TextButton btn : this.btnList) {
             this.add(btn)
-                    .left()
-                    .row()
-                    .fillX();
+                 .left()
+                 .row()
+                 .fillX();
         }
     }
 
-    public void setShow(final boolean flag) {
+    public void setShow(final boolean flag)
+    {
         this.isShow = flag;
     }
 

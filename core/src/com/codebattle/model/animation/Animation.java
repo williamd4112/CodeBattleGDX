@@ -20,10 +20,5 @@ abstract public class Animation {
 	abstract public void draw(Batch batch , Camera camera, float delta);
 	abstract public boolean isFinished();
 	abstract public void finished();
-	
-	public void setup()
-	{
-		if(this.isSetup) return;
-		this.isSetup = true;
-	}
+	abstract public void setup();
 }
