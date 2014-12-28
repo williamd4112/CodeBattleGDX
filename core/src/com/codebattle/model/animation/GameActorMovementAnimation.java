@@ -9,7 +9,7 @@ import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Speed;
 import com.codebattle.utility.GameConstants;
 
-public class GameActorMovementAnimation extends Animation{
+public class GameActorMovementAnimation extends BaseAnimation{
 	
 	final public GameStage stage;
 	

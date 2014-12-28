@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  *
  */
 
-abstract public class Animation {
+abstract public class BaseAnimation {
 	
 	boolean isSetup = false;
 	

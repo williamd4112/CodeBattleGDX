@@ -201,3 +201,7 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Resource file
+*.png
+*.ogg

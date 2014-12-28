@@ -6,7 +6,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.codebattle.model.Region;
+import com.codebattle.model.structure.Region;
 
 public class TextureFactory {
     private static TextureFactory instance = null;

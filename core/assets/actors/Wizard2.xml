@@ -1,0 +1,51 @@
+<xml>
+	<source>Wizard2</source>	
+	<type name="light">
+		<cost>9</cost>
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>50</hp>
+		<mp>150</mp>
+		<atk>15</atk>
+		<def>5</def>
+		<range>7</range>
+		<maxsteps>5</maxsteps>
+		<maxoperation>2</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="016-Ice01" duration="1" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>120-Ice01.ogg</sound>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="Wizard2Skill_ice_eff_001" duration="1" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>120-Ice01.ogg</sound>
+		</skill>
+	</type>
+	
+	<type name="heavy">
+		<cost>18</cost>
+		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>100</hp>
+		<mp>350</mp>
+		<atk>45</atk>
+		<def>30</def>
+		<range>14</range>
+		<maxsteps>8</maxsteps>
+		<maxoperation>1</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="016-Ice01" duration="1" interval="10">
+				<region x="0" y="384" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>121-Ice02.ogg</sound>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="Wizard2Skill_ice_eff_001" duration="2" interval="10" >
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>122-Ice03.ogg</sound>
+		</skill>
+	</type>
+	
+</xml>

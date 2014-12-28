@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.codebattle.model.GameObject;
 
-public class GameObjectOnAttackAnimation extends Animation{
+public class GameObjectOnAttackAnimation extends BaseAnimation{
 
 	final public GameObject obj;
 	final public SequenceAction action;

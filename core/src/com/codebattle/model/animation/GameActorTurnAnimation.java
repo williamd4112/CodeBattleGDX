@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.units.Direction;
 
-public class GameActorTurnAnimation extends Animation{
+public class GameActorTurnAnimation extends BaseAnimation{
 	
 	final Direction direction;
 	final GameActor actor;

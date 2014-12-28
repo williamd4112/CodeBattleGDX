@@ -1,23 +1,51 @@
 <xml>
 	<source>Archer</source>	
 	<type name="light">
-		<region name="light" x="0" y="0" width="128" height="320"/>
+		<cost>6</cost>
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>80</hp>
 		<mp>100</mp>
 		<atk>15</atk>
 		<def>5</def>
-		<range>3</range>
+		<range>8</range>
 		<maxsteps>8</maxsteps>
+		<maxoperation>2</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="003-Attack01" duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>096-Attack08.ogg</sound>
+		</attack>
+		<skill range="10">
+			<animation class="GameActorAttackAnimation" source="ArcherSkill_wind_eff_001" duration="1" interval="10" >
+				<region x="0" y="768" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>132-Wind01.ogg</sound>
+		</skill>
 	</type>
 	
 	<type name="heavy">
-		<region name="heavy" x="0" y="1024" width="128" height="320"/>
+		<cost>12</cost>
+		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>200</hp>
 		<mp>100</mp>
 		<atk>32</atk>
 		<def>50</def>
-		<range>5</range>
-		<maxsteps>8</maxsteps>
+		<range>15</range>
+		<maxsteps>6</maxsteps>
+		<maxoperation>1</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="003-Attack01" duration="1" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>096-Attack08.ogg</sound>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="ArcherSkill_wind_eff_001" duration="2" interval="10" >
+				<region x="0" y="384" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>133-Wind02.ogg</sound>
+		</skill>
 	</type>
 	
 </xml>

@@ -1,0 +1,51 @@
+<xml>
+	<source>Lancer</source>	
+	<type name="light">
+		<cost>10</cost>
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>120</hp>
+		<mp>100</mp>
+		<atk>15</atk>
+		<def>15</def>
+		<range>5</range>
+		<maxsteps>12</maxsteps>
+		<maxoperation>2</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>096-Attack08.ogg</sound>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="009-Weapon04" duration="1" interval="10">
+				<region x="0" y="384" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>166-Skill10.ogg</sound>
+		</skill>
+	</type>
+	
+	<type name="heavy">
+		<cost>20</cost>
+		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>200</hp>
+		<mp>250</mp>
+		<atk>30</atk>
+		<def>20</def>
+		<range>8</range>
+		<maxsteps>10</maxsteps>
+		<maxoperation>1</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="LancerSkill_022-Darkness01" duration="1" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>168-Skill12.ogg</sound>
+		</attack>
+		<skill range="7">
+			<animation class="GameActorAttackAnimation" source="LancerSkill_022-Darkness01" duration="2" interval="20">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>176-Skill20.ogg</sound>
+		</skill>
+	</type>
+	
+</xml>

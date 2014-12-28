@@ -2,7 +2,7 @@ package com.codebattle.model.animation;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.codebattle.model.Region;
+import com.codebattle.model.structure.Region;
 import com.codebattle.model.units.Interval;
 import com.codebattle.utility.AnimationUtil;
 import com.codebattle.utility.GameConstants;

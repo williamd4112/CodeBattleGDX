@@ -1,0 +1,51 @@
+<xml>
+	<source>Assassin</source>	
+	<type name="light">
+		<cost>8</cost>
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>80</hp>
+		<mp>100</mp>
+		<atk>10</atk>
+		<def>10</def>
+		<range>3</range>
+		<maxsteps>8</maxsteps>
+		<maxoperation>2</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>089-Attack01.ogg</sound>
+		</attack>
+		<skill range="5">
+			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001" duration="1" interval="10">
+				<region x="0" y="576" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>123-Thunder01.ogg</sound>
+		</skill>
+	</type>
+	
+	<type name="heavy">
+		<cost>16</cost>
+		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
+		<hp>300</hp>
+		<mp>100</mp>
+		<atk>48</atk>
+		<def>56</def>
+		<range>5</range>
+		<maxsteps>8</maxsteps>
+		<maxoperation>1</maxoperation>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="007-Weapon02" duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>124-Thunder02.ogg</sound>
+		</attack>
+		<skill range="4">
+			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001" duration="2" interval="10" >
+				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			</animation>
+			<sound>125-Thunder03.ogg</sound>
+		</skill>
+	</type>
+	
+</xml>

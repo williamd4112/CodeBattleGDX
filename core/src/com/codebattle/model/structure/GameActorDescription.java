@@ -1,4 +1,4 @@
-package com.codebattle.model.gameactor;
+package com.codebattle.model.structure;
 
 import java.util.HashMap;
 import java.util.Map;

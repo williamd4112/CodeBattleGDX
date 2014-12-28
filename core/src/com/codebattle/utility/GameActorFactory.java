@@ -1,18 +1,17 @@
 package com.codebattle.utility;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.codebattle.model.GameStage;
-import com.codebattle.model.Owner;
-import com.codebattle.model.Region;
-import com.codebattle.model.gameactor.GameActor;
-import com.codebattle.model.gameactor.GameActorDescription;
-import com.codebattle.model.gameactor.GameActorProperties;
-import com.codebattle.model.gameactor.GameActorType;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.codebattle.model.GameStage;
+import com.codebattle.model.Owner;
+import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.structure.GameActorDescription;
+import com.codebattle.model.structure.GameActorType;
+import com.codebattle.model.structure.Region;
 
 public class GameActorFactory {
 
@@ -26,8 +25,8 @@ public class GameActorFactory {
             this.count = new int[GameConstants.OWNER_COUNT];
             Arrays.fill(this.count, 0);
 
-            this.desc = XMLUtil.readGameActorDescFromFile(GameConstants.GAMEACTOR_PROP_DIR + name
-                    + GameConstants.DEFAULT_GAMEACTORDESC_EXTENSION);
+            this.desc = XMLUtil.readGameActorDescFromFile(GameConstants.GAMEACTOR_PROP_DIR
+                    + name + GameConstants.DEFAULT_GAMEACTORDESC_EXTENSION);
         }
 
         public void addCount(final Owner owner) {
@@ -50,8 +49,9 @@ public class GameActorFactory {
         return instance;
     }
 
-    public GameActor createGameActor(final GameStage stage, final Owner owner, final String name,
-            final String type, final float sx, final float sy) throws Exception {
+    public GameActor createGameActor(final GameStage stage, final Owner owner,
+            final String name, final String type, final float sx, final float sy)
+            throws Exception {
         if (!this.pool.containsKey(name)) {
             this.pool.put(name, new Record(name));
         }
@@ -63,14 +63,18 @@ public class GameActorFactory {
 
         final String source = record.desc.source;
         final Region region = record.desc.types.get(type).region;
-        final GameActorProperties prop = new GameActorProperties(record.desc.types.get(type).prop);
+        final GameActorType actorType = record.desc.types.get(type);
         final TextureRegion[][] frames = TextureFactory.getInstance()
                 .loadCharacterFramesFromFile(source, region);
 
-        return new GameActor(stage, owner, id, source, name, prop, frames, sx, sy);
+        return new GameActor(stage, owner, id, source, name, actorType, frames, sx, sy);
     }
 
     public GameActorType getGameActorType(final String source, final String type) {
         return this.pool.get(source).desc.types.get(type);
+    }
+
+    public GameActorType getGameActorType(GameActor actor) {
+        return getGameActorType(actor.source, actor.getProp().name);
     }
 }
