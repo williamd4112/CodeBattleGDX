@@ -1,4 +1,4 @@
-package com.codebattle.model.structure;
+package com.codebattle.model.meta;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.gameactor.GameActorProperties;
@@ -9,10 +9,10 @@ public class GameActorType {
     private Attack attack;
     private Skill skill;
 
-    public GameActorType(String source, XmlReader.Element type) {
+    public GameActorType(XmlReader.Element type) {
 
         // Read basic info
-        this.prop = new GameActorProperties(source, type);
+        this.prop = new GameActorProperties(type);
 
         // Read actors movement animation region
         XmlReader.Element regionElement = type.getChildByName("region");

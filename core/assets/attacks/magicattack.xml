@@ -1,0 +1,12 @@
+<xml>
+	<attack>
+		<animation class="GameActorAttackAnimation" source="006-Weapon01"
+			duration="1" interval="5">
+			<region x="0" y="192" width="960" height="192" hTile="192"
+				vTile="192" />
+		</animation>
+		<sound>096-Attack08.ogg</sound>
+		<atk>12</atk>
+		<range>3</range>
+	</attack>
+</xml>

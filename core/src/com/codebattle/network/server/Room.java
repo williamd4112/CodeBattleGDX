@@ -17,6 +17,10 @@ package com.codebattle.network.server;
  * Opt: Close
  * Data: <Timeout/Disconnect/Exit>
  *
+ * Type: Room
+ * Opt: Join
+ * Data: <Null>
+ *
  * @author williamd
  *
  */
@@ -39,10 +43,12 @@ public class Room implements ConnectionListener {
         if (this.connection_red == null) {
             this.connection_red = connection;
             // Add to blue
-        } else if (this.connection_blue == null) {
+        }
+        else if (this.connection_blue == null) {
             this.connection_blue = connection;
             // Full
-        } else {
+        }
+        else {
             return false;
         }
 
@@ -60,13 +66,48 @@ public class Room implements ConnectionListener {
         // Extract data
         Message msg = new Message(rawMessage);
         if (msg.type.equals("Room")) {
-            if (msg.opt.equals("Assign")) {
+        	if (msg.opt.equals("Join")){
+        		// TODOL Join Room
+        		this.addConnection(connection);
+        	}
+        	else if (msg.opt.equals("Assign")) {
                 this.sceneName = msg.data;
-            } else if (msg.opt.equals("Close")) {
-                // TODO: send close message to client through connection (if data field is "Exit")
-                // TODO: remove connection if data is timeout or disconnect
             }
+            else if (msg.opt.equals("Close")) {
+                // TODO: send close message to client through connection (if data field is "Exit")
+                if (msg.data.equals("Exit")) {
+                	
+                }
+            	// TODO: remove connection if data is timeout or disconnect
+            	else if (msg.data.equals("Timeout") || msg.data.equals("Disconnect")) {
+            		this.removeConnection(connection);
+            	}
+            }
+            
         }
+        else if (msg.type.equals("Game")){
+        	if (msg.opt.equals("Script")){
+        		this.getDestination(connection).send(rawMessage);
+        	}
+        }
+    }
+    
+    private void removeConnection(Connection connection){
+    	if (connection.equals(this.connection_red)) {
+    		this.connection_red = null;
+    	}
+    	else {
+    		this.connection_blue = null;
+    	}
+    }
+    
+    private Connection getDestination(Connection connection){
+    	if (connection.equals(this.connection_red)) {
+    		return this.connection_blue;
+    	}
+    	else {
+    		return this.connection_red;
+    	}
     }
 
     @Override

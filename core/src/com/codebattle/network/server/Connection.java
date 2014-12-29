@@ -21,10 +21,10 @@ public class Connection extends Thread {
     private final Socket clientSocket;
     private final BufferedReader reader;
     private final BufferedWriter writer;
-    private final Timer timer;
 
     // EventListener
-    private Room room;
+    private ConnectionListener server = null;
+    private ConnectionListener room = null;
 
     // Client Player Info
     private Player player;
@@ -35,21 +35,24 @@ public class Connection extends Thread {
                 this.clientSocket.getInputStream()));
         this.writer = new BufferedWriter(new OutputStreamWriter(
                 this.clientSocket.getOutputStream()));
-        this.timer = new Timer(NetworkConfig.DEFAULT_TIMEOUT);
-        this.timer.setCallback(new TimerCallBack() {
+    }
 
-            @Override
-            public void onTimeout() {
-
+    public void connect(ConnectionListener listener, String type) {
+        if (type.equals("Server")) {
+            if (this.server == null) {
+                this.server = listener;
             }
-
-        });
+        } else if (type.equals("Room")) {
+            this.room = listener;
+            if (this.room == null) {
+                this.room = listener;
+            }
+        }
     }
 
     @Override
     public void run() {
         this.listen();
-        this.timer.start();
     }
 
     /**
@@ -60,10 +63,10 @@ public class Connection extends Thread {
             String msg;
             while (!this.clientSocket.isClosed()) {
                 if ((msg = this.reader.readLine()) != null) {
-                    // TODO: emitReceiveMessageEvent
+                    this.emitReceiveMessage(this, msg);
                 }
             }
-            // TODO: emitDisconnectEvent
+            this.emitDisconnect(this);
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -76,6 +79,7 @@ public class Connection extends Thread {
     public void send(final String msg) {
         try {
             this.writer.write(msg);
+            this.writer.flush();
         } catch (final IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +89,11 @@ public class Connection extends Thread {
      * Event handling
      */
     public void emitReceiveMessage(final Connection connection, final String msg) {
-
+        if (this.room != null) {
+            this.room.onReceiveMessage(connection, msg);
+        } else {
+            this.server.onReceiveMessage(connection, msg);
+        }
     }
 
     public void emitDisconnect(final Connection connection) {
@@ -99,8 +107,10 @@ public class Connection extends Thread {
         return this.player;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
-    }
+    /*
+     * public void setRoom(Room room) {
+     * this.room = room;
+     * }
+     */
 
 }

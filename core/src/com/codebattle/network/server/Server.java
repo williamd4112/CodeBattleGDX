@@ -5,8 +5,11 @@ import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import com.codebattle.network.PeerListener;
 
 /**
  *
@@ -18,6 +21,10 @@ import java.util.Map;
  * Type: Server
  * Opt: Login
  * Data: <Username>
+ *
+ * Type: Server
+ * Opt: RoomList
+ * Data: <Room Array>
  *
  * Type: Room
  * Opt: Create
@@ -44,11 +51,15 @@ public class Server implements ConnectionListener {
     // Message Receiving routing
     private Map<String, Method> routingTable;
 
+    // Interface with Agent
+    private List<PeerListener> peerListeners;
+
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.rooms = new ArrayList<Room>();
         this.idleConnections = new ArrayList<Connection>();
         this.listenThread = new ListenThread();
+        this.peerListeners = new LinkedList<PeerListener>();
     }
 
     public void start() {
@@ -59,8 +70,15 @@ public class Server implements ConnectionListener {
 
     }
 
-    public void addRoom(String name) {
-        this.rooms.add(new Room(name));
+    public Room addRoom(String name) {
+        Room room = new Room(name);
+
+        this.rooms.add(room);
+        return room;
+    }
+
+    public void addPeerListener(PeerListener listener) {
+        this.peerListeners.add(listener);
     }
 
     /**
@@ -70,21 +88,34 @@ public class Server implements ConnectionListener {
     public void onReceiveMessage(Connection connection, String rawMessage) {
         // TODO : handling message (Advise to enclose this block with try/catch
 
-        // Extract data
-        Message msg = new Message(rawMessage);
-        // Routing (will be replaced with routing table if there is enough time
-        if (msg.type.equals("Server")) {
-            // TODO: Login the server (Although connection has been created, but its player data
-            // hasn't been set
-            if (msg.opt.equals("Login")) {
-                connection.getPlayer()
-                        .setName(msg.data);
+        // Emit rawMessage to peer listener
+        this.emitReceiveMessage(rawMessage);
+
+        try {
+            // Extract data
+            Message msg = new Message(rawMessage);
+            // Routing (will be replaced with routing table if there is enough time
+            if (msg.type.equals("Server")) {
+                // TODO: Login the server (Although connection has been created, but its player
+                // data
+                // hasn't been set
+                if (msg.opt.equals("Login")) {
+                    connection.getPlayer()
+                            .setName(msg.data);
+                } else if (msg.opt.equals("RoomList")) {
+                    // TODOL Send RoomList
+                }
+            } else if (msg.type.equals("Room")) {
+                if (msg.opt.equals("Create")) {
+                    // TODO: Create Room
+                    Room room = this.addRoom(msg.data);
+                    connection.connect(room, "Room");
+                    room.addConnection(connection);
+                    this.idleConnections.remove(connection);
+                }
             }
-        } else if (msg.type.equals("Room")) {
-            if (msg.opt.equals("Create")) {
-                // TODO: Create Room
-                this.addRoom(msg.data);
-            }
+        } catch (Exception e) {
+            // e.printStackTrace();
         }
     }
 
@@ -92,6 +123,16 @@ public class Server implements ConnectionListener {
     public void onDisconnect(Connection connection) {
         // TODO : remove this connection from idle connection
         this.idleConnections.remove(connection);
+    }
+
+    public void emitReceiveMessage(String msg) {
+        for (PeerListener p : this.peerListeners)
+            p.onReceivedMessage(msg);
+    }
+
+    public void emitConnectEvent(Socket socket) {
+        for (PeerListener p : this.peerListeners)
+            p.onConnected(socket);
     }
 
     /**
@@ -109,6 +150,10 @@ public class Server implements ConnectionListener {
                     // Create connection
                     Connection connection = new Connection(clientSocket);
                     idleConnections.add(connection);
+                    connection.connect(Server.this, "Server");
+                    connection.start();
+
+                    emitConnectEvent(clientSocket);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

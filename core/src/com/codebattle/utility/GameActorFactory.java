@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
-import com.codebattle.model.structure.GameActorDescription;
-import com.codebattle.model.structure.GameActorType;
-import com.codebattle.model.structure.Region;
+import com.codebattle.model.meta.GameActorDescription;
+import com.codebattle.model.meta.GameActorType;
+import com.codebattle.model.meta.Region;
 
 public class GameActorFactory {
 
@@ -75,6 +75,6 @@ public class GameActorFactory {
     }
 
     public GameActorType getGameActorType(GameActor actor) {
-        return getGameActorType(actor.source, actor.getProp().name);
+        return getGameActorType(actor.source, actor.getProp().typeName);
     }
 }

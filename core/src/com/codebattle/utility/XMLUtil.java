@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
-import com.codebattle.model.structure.GameActorDescription;
+import com.codebattle.model.meta.GameActorDescription;
 
 public class XMLUtil {
 

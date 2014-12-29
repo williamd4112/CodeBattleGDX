@@ -18,11 +18,14 @@
 			<atk>12</atk>
 			<range>3</range>
 		</attack>
-		<skill range="3">
+		<skill range="1">
 			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002" duration="1" interval="5">
 				<region x="0" y="960" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>100-Attack12.ogg</sound>
+			<method name="skillAttack">
+			    <arg key="atk" value="60"/>
+			</method>
 		</skill>
 	</type>
 	
@@ -37,18 +40,21 @@
 		<maxsteps>10</maxsteps>
 		<maxoperation>1</maxoperation>
 		<attack>
-			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="10">
+			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="5">
 				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>096-Attack08.ogg</sound>
 			<atk>40</atk>
 			<range>2</range>
 		</attack>
-		<skill range="7">
-			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002" duration="2" interval="20">
+		<skill range="2">
+			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002" duration="1" interval="2">
 				<region x="0" y="768" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>098-Attack10.ogg</sound>
+			<method name="areaAttack">
+			    <arg key="atk" value="100"/>
+			</method>
 		</skill>
 	</type>
 </xml>

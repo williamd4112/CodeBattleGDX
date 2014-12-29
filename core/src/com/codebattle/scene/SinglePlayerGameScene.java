@@ -9,8 +9,10 @@ import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
 import com.codebattle.utility.GameActorFactory;
+import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.SoundUtil;
 
@@ -36,21 +38,33 @@ public class SinglePlayerGameScene extends GameScene {
             final Owner owner = GameUtil.toOwner(element.getAttribute("owner"));
             final String name = element.getAttribute("name");
             final String type = element.getAttribute("type");
-            final float x = Float.parseFloat(element.getAttribute("x"));
-            final float y = Float.parseFloat(element.getAttribute("y"));
+            final float x = Float.parseFloat(element.getAttribute("x"))
+                    * GameConstants.CELL_SIZE;
+            final float y = Float.parseFloat(element.getAttribute("y"))
+                    * GameConstants.CELL_SIZE;
 
             final GameObject obj = this.generateGameObject(clazz, owner, name, type, x, y);
             this.stage.addGameObject(obj);
         }
     }
 
-    public GameObject generateGameObject(final String clazz, final Owner owner, final String name,
-            final String type, final float x, final float y) throws Exception {
+    public GameObject generateGameObject(final String clazz, final Owner owner,
+            final String name, final String type, final float x, final float y) throws Exception {
         if (clazz.equals("GameActor")) {
             return GameActorFactory.getInstance()
                     .createGameActor(this.stage, owner, name, type, x, y);
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public void setupPointLight(Element context) {
+        XmlReader.Element initElement = context.getChildByName("init");
+        for (XmlReader.Element lightElement : initElement.getChildrenByName("pointlight")) {
+            PointLightMeta light = new PointLightMeta(lightElement);
+            System.out.println("Scene init: " + light.x + " , " + light.y);
+            this.stage.addPointLight(light);
         }
     }
 
@@ -98,23 +112,35 @@ public class SinglePlayerGameScene extends GameScene {
         this.gui.invalidateHierarchy();
     }
 
-	@Override
-	public void onGUIChange() 
-	{
-		GameObject selectObject = this.stage.getSelectedObject();
-		if(selectObject != null) {
-			this.gui.getControlGroup().getPanel().setImage(selectObject.source);
-			this.gui.getControlGroup().getPanel().setAPI(selectObject.getClass());
-			if(selectObject instanceof GameActor)
-				this.gui.getControlGroup().getPanel().setProperties(((GameActor)selectObject).getProp());
-			else
-				this.gui.getControlGroup().getPanel().resetProperties();
-		}
-		else {
-			this.gui.getControlGroup().getPanel().resetImage();
-			this.gui.getControlGroup().getPanel().resetProperties();
-			this.gui.getControlGroup().getPanel().resetAPI();
-		}
-	}
-	
+    @Override
+    public void onGUIChange() {
+        GameObject selectObject = this.stage.getSelectedObject();
+        if (selectObject != null) {
+            this.gui.getControlGroup()
+                    .getPanel()
+                    .setImage(selectObject.source);
+            this.gui.getControlGroup()
+                    .getPanel()
+                    .setAPI(selectObject.getClass());
+            if (selectObject instanceof GameActor)
+                this.gui.getControlGroup()
+                        .getPanel()
+                        .setProperties(((GameActor) selectObject).getProp());
+            else
+                this.gui.getControlGroup()
+                        .getPanel()
+                        .resetProperties();
+        } else {
+            this.gui.getControlGroup()
+                    .getPanel()
+                    .resetImage();
+            this.gui.getControlGroup()
+                    .getPanel()
+                    .resetProperties();
+            this.gui.getControlGroup()
+                    .getPanel()
+                    .resetAPI();
+        }
+    }
+
 }

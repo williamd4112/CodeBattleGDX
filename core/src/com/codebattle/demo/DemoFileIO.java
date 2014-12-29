@@ -2,7 +2,7 @@ package com.codebattle.demo;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.XmlReader;
-import com.codebattle.model.structure.GameActorDescription;
+import com.codebattle.model.meta.GameActorDescription;
 import com.codebattle.utility.XMLUtil;
 
 import java.io.IOException;

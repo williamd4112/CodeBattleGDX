@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
-import com.codebattle.model.structure.Attack;
+import com.codebattle.model.meta.Attack;
 import com.codebattle.utility.AnimationUtil;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.SoundUtil;
@@ -37,8 +37,8 @@ public class AttackAnimation extends TargetBasedAnimation {
 
     @Override
     public void finished() {
-        if (!this.target.isAlive())
-            this.stage.removeGameObject(target);
+        // if (!this.target.isAlive())
+        // this.stage.removeGameObject(target);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
-import com.codebattle.model.structure.Animation;
+import com.codebattle.model.meta.Animation;
 import com.codebattle.utility.AnimationUtil;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.TextureFactory;

@@ -8,12 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.codebattle.model.GameObject;
 
-public class GameObjectOnAttackAnimation extends BaseAnimation{
+public class OnAttackAnimation extends BaseAnimation{
 
 	final public GameObject obj;
 	final public SequenceAction action;
 	
-	public GameObjectOnAttackAnimation(GameObject obj)
+	public OnAttackAnimation(GameObject obj)
 	{
 		this.obj = obj;
 		this.action = Actions.sequence(Actions.repeat(8, Actions.sequence(Actions.fadeOut(0.02f) , Actions.fadeIn(0.02f))) , Actions.color(Color.WHITE));

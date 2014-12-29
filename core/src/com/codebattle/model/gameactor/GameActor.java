@@ -9,9 +9,9 @@ import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.model.animation.GameActorMovementAnimation;
 import com.codebattle.model.animation.GameActorTurnAnimation;
-import com.codebattle.model.structure.Attack;
-import com.codebattle.model.structure.GameActorType;
-import com.codebattle.model.structure.Skill;
+import com.codebattle.model.meta.Attack;
+import com.codebattle.model.meta.GameActorType;
+import com.codebattle.model.meta.Skill;
 import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Interval;
 import com.codebattle.model.units.Speed;
@@ -74,6 +74,14 @@ public class GameActor extends GameObject {
     public void onAttacked(Attack attack) {
         this.decreaseHP(attack.getATK());
         System.out.println("onAttacked(" + attack.getATK() + "): " + this.getName() + " : "
+                + this.getProp().hp);
+
+    }
+
+    @Override
+    public void onSkillAttacked(int atk) {
+        this.decreaseHP(atk);
+        System.out.println("onSkillAttacked(" + atk + "): " + this.getName() + " : "
                 + this.getProp().hp);
 
     }
@@ -272,4 +280,5 @@ public class GameActor extends GameObject {
     public boolean isBlock() {
         return (this.state == GameObjectState.DEATH) ? true : false;
     }
+
 }

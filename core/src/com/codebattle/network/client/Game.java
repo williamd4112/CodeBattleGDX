@@ -21,7 +21,7 @@ public class Game implements GameAgent{
 		}
 	}
 	@Override
-	public void MessageReceived(String msg) {
+	public void onReceiveMessage(String msg) {
 		System.out.println("Got msg from server");
 	}
 

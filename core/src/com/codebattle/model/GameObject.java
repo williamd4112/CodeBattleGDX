@@ -1,8 +1,8 @@
 package com.codebattle.model;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.codebattle.model.structure.Attack;
-import com.codebattle.model.structure.Skill;
+import com.codebattle.model.meta.Attack;
+import com.codebattle.model.meta.Skill;
 import com.codebattle.utility.GameConstants;
 
 /**
@@ -27,7 +27,6 @@ abstract public class GameObject extends Actor {
     // Store actor's state, different state may cause some effect
     // Note: Death state used in virtual map (temporary removing actor
     protected GameObjectState state;
-    protected Attack attack;
 
     // Controller
     final protected Owner owner;
@@ -118,6 +117,8 @@ abstract public class GameObject extends Actor {
     abstract public boolean isBlock();
 
     abstract public void onAttacked(Attack attack);
+
+    abstract public void onSkillAttacked(int atk);
 
     abstract public void attack(int x, int y);
 

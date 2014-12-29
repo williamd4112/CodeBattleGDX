@@ -1,4 +1,4 @@
-package com.codebattle.model.structure;
+package com.codebattle.model.meta;
 
 import com.badlogic.gdx.utils.XmlReader;
 

@@ -29,11 +29,11 @@ import com.codebattle.model.animation.AttackAnimation;
 import com.codebattle.model.animation.BaseAnimation;
 import com.codebattle.model.animation.CursorAnimation;
 import com.codebattle.model.animation.GameActorAttackAnimation;
-import com.codebattle.model.animation.GameObjectOnAttackAnimation;
-import com.codebattle.model.animation.SkillAnimation;
+import com.codebattle.model.animation.OnAttackAnimation;
 import com.codebattle.model.gameactor.GameActor;
-import com.codebattle.model.structure.Attack;
-import com.codebattle.model.structure.Skill;
+import com.codebattle.model.meta.Attack;
+import com.codebattle.model.meta.PointLightMeta;
+import com.codebattle.model.meta.Skill;
 import com.codebattle.scene.GameScene;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
@@ -86,7 +86,7 @@ public class GameStage extends Stage {
 
     /*
      * GameStage Constructor
-     *
+     * 
      * @param - mapName : used to create map and map renderer , camera
      */
     public GameStage(GameScene parent, String mapName) throws Exception {
@@ -110,7 +110,9 @@ public class GameStage extends Stage {
         // Create Lighting
         this.world = new World(new Vector2(0, -10), true);
         this.rayHandler = new RayHandler(world);
-        this.rayHandler.setAmbientLight(0.3f, 0.3f, 0.7f, 0.15f);
+        this.rayHandler.setAmbientLight(0.5f, 0.3f, 0.7f, 0.15f);
+        // this.rayHandler.setAmbientLight(139 * 1.0f / 255, 69 * 1.0f / 255, 19 * 1.0f / 255,
+        // 0.1f);
         this.rayHandler.setBlur(true);
 
         // Create all data structure
@@ -163,7 +165,7 @@ public class GameStage extends Stage {
 
         // Draw lighting
         this.rayHandler.setCombinedMatrix(camera.combined);
-        // this.rayHandler.updateAndRender();
+        this.rayHandler.updateAndRender();
         this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
         // Draw GUI
@@ -187,66 +189,7 @@ public class GameStage extends Stage {
     @Override
     public void act(float delta) {
         super.act(delta);
-        // this.gameObjects.act(delta);
-        for (Actor actor : this.gameObjects.getChildren())
-            actor.act(delta);
-        // this.guiLayer.act(delta);
-    }
-
-    /**
-     * Render debugging shape
-     * @param delta
-     */
-    public void renderDebug() {
-        this.debugRender.setProjectionMatrix(camera.combined);
-        this.debugRender.begin(ShapeType.Line);
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        this.debugRender.setAutoShapeType(true);
-        this.debugRender.setColor(1, 0, 0, 0.2f);
-
-        for (int i = 0; i < this.getMapWidth() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
-            this.debugRender.line(i, 0, i, this.getMapHeight() * GameConstants.CELL_SIZE);
-        for (int i = 0; i < this.getMapHeight() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
-            this.debugRender.line(0, i, this.getMapWidth() * GameConstants.CELL_SIZE, i);
-
-        this.debugRender.set(ShapeType.Filled);
-
-        int mapWidth = this.mapProperties.get("width", Integer.class);
-        int mapHeight = this.mapProperties.get("height", Integer.class);
-        for (int row = 0; row < mapHeight; row++) {
-            for (int col = 0; col < mapWidth; col++) {
-                if (!this.virtualMap.isPassiable(col, row)) {
-                    this.debugRender.setColor(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
-                            0.2f);
-                    if (this.virtualMap.getCell(col, row)
-                            .getObject() != null) {
-                        GameObject obj = this.virtualMap.getCell(col, row)
-                                .getObject();
-                        switch (obj.getOwner()) {
-                        case RED:
-                            this.debugRender.setColor(1.0f, 0.0f, 0.0f, 0.2f);
-                            break;
-                        case BLUE:
-                            this.debugRender.setColor(0.0f, 0.0f, 1.0f, 0.2f);
-                            break;
-                        case GREEN:
-                            this.debugRender.setColor(0.0f, 1.0f, 0.0f, 0.2f);
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                    float x = col * GameConstants.CELL_SIZE;
-                    float y = row * GameConstants.CELL_SIZE;
-                    this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
-                }
-            }
-        }
-
-        this.debugRender.end();
+        this.gameObjects.act(delta);
     }
 
     /**
@@ -296,7 +239,7 @@ public class GameStage extends Stage {
         int vx = (int) (worldCoord.x / 32);
         int vy = (int) (worldCoord.y / 32);
 
-        System.out.printf("touch down(%d , %d)\n", vx, vy);
+        System.out.printf("left down(%d , %d)\n", vx, vy);
         if (!isOutBoundInVirtualMap(vx, vy)) {
             VirtualCell cell = this.virtualMap.getCell(vx, vy);
             this.emitSelectEvent(cell);
@@ -375,7 +318,7 @@ public class GameStage extends Stage {
                             (GameActor) attacker, target));
                 else
                     this.addAnimation(new AttackAnimation(this, attack, target));
-                this.addAnimation(new GameObjectOnAttackAnimation(target));
+                this.addAnimation(new OnAttackAnimation(target));
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -392,17 +335,11 @@ public class GameStage extends Stage {
 
     public void emitSkillEvent(GameObject emitter, Skill skill, int x, int y) {
         try {
-            GameObject target = this.virtualMap.getCell(x, y)
-                    .getObject();
-            if (target != null) {
-                target.onSkill(skill);
-                this.addAnimation(new SkillAnimation(this, skill, target));
-            }
+            skill.execute(this, emitter, x, y);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     public void emitSelectEvent(VirtualCell cell) {
@@ -430,7 +367,6 @@ public class GameStage extends Stage {
      */
     public GameStage addGameObject(GameObject obj) {
         this.gameObjects.addActor(obj);
-        this.addPointLight(obj.getX() + 16, obj.getY() + 16);
         return this;
     }
 
@@ -445,11 +381,15 @@ public class GameStage extends Stage {
 
     public void addPointLight(float x, float y) {
         Color color = new Color(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b, 0.85f);
-        this.addPointLight(color, x, y);
+        this.addPointLight(color, x, y, 100);
     }
 
-    public void addPointLight(Color color, float x, float y) {
-        new PointLight(rayHandler, 100, color, 160, x, y);
+    public void addPointLight(Color color, float x, float y, int radius) {
+        new PointLight(rayHandler, 1000, color, radius, x, y);
+    }
+
+    public void addPointLight(PointLightMeta light) {
+        this.addPointLight(light.color, light.x, light.y, light.radius);
     }
 
     /**
@@ -603,4 +543,59 @@ public class GameStage extends Stage {
         }
     }
 
+    /**
+     * Render debugging shape
+     * @param delta
+     */
+    public void renderDebug() {
+        this.debugRender.setProjectionMatrix(camera.combined);
+        this.debugRender.begin(ShapeType.Line);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        this.debugRender.setAutoShapeType(true);
+        this.debugRender.setColor(1, 0, 0, 0.2f);
+
+        for (int i = 0; i < this.getMapWidth() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
+            this.debugRender.line(i, 0, i, this.getMapHeight() * GameConstants.CELL_SIZE);
+        for (int i = 0; i < this.getMapHeight() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
+            this.debugRender.line(0, i, this.getMapWidth() * GameConstants.CELL_SIZE, i);
+
+        this.debugRender.set(ShapeType.Filled);
+
+        int mapWidth = this.mapProperties.get("width", Integer.class);
+        int mapHeight = this.mapProperties.get("height", Integer.class);
+        for (int row = 0; row < mapHeight; row++) {
+            for (int col = 0; col < mapWidth; col++) {
+                if (!this.virtualMap.isPassiable(col, row)) {
+                    this.debugRender.setColor(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
+                            0.2f);
+                    if (this.virtualMap.getCell(col, row)
+                            .getObject() != null) {
+                        GameObject obj = this.virtualMap.getCell(col, row)
+                                .getObject();
+                        switch (obj.getOwner()) {
+                        case RED:
+                            this.debugRender.setColor(1.0f, 0.0f, 0.0f, 0.2f);
+                            break;
+                        case BLUE:
+                            this.debugRender.setColor(0.0f, 0.0f, 1.0f, 0.2f);
+                            break;
+                        case GREEN:
+                            this.debugRender.setColor(0.0f, 1.0f, 0.0f, 0.2f);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                    float x = col * GameConstants.CELL_SIZE;
+                    float y = row * GameConstants.CELL_SIZE;
+                    this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
+                }
+            }
+        }
+
+        this.debugRender.end();
+    }
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.codebattle.model.structure.Region;
+import com.codebattle.model.meta.Region;
 import com.codebattle.model.units.Interval;
 
 public class GameConstants {
