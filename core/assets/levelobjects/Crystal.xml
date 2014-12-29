@@ -1,0 +1,7 @@
+<xml>
+	<source>Crystal</source>
+	<type name="normal">
+		<region x="0" y="0" width="128" height="256" hTile="32" vTile="64" />
+		<pointlight color="ffd700" radius="100" x="0" y="0" />
+	</type>
+</xml>

@@ -7,13 +7,10 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.model.GameObject;
-import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
-import com.codebattle.utility.GameActorFactory;
-import com.codebattle.utility.GameConstants;
-import com.codebattle.utility.GameUtil;
+import com.codebattle.utility.GameObjects;
 import com.codebattle.utility.SoundUtil;
 
 public class SinglePlayerGameScene extends GameScene {
@@ -34,27 +31,8 @@ public class SinglePlayerGameScene extends GameScene {
     @Override
     public void setupGameObjects(final XmlReader.Element context) throws Exception {
         for (final XmlReader.Element element : context.getChildrenByNameRecursively("gameobject")) {
-            final String clazz = element.getAttribute("class");
-            final Owner owner = GameUtil.toOwner(element.getAttribute("owner"));
-            final String name = element.getAttribute("name");
-            final String type = element.getAttribute("type");
-            final float x = Float.parseFloat(element.getAttribute("x"))
-                    * GameConstants.CELL_SIZE;
-            final float y = Float.parseFloat(element.getAttribute("y"))
-                    * GameConstants.CELL_SIZE;
-
-            final GameObject obj = this.generateGameObject(clazz, owner, name, type, x, y);
+            final GameObject obj = GameObjects.create(stage, element);
             this.stage.addGameObject(obj);
-        }
-    }
-
-    public GameObject generateGameObject(final String clazz, final Owner owner,
-            final String name, final String type, final float x, final float y) throws Exception {
-        if (clazz.equals("GameActor")) {
-            return GameActorFactory.getInstance()
-                    .createGameActor(this.stage, owner, name, type, x, y);
-        } else {
-            return null;
         }
     }
 

@@ -68,9 +68,9 @@ public class VirtualMap {
     public void resetVirtualMap() {
         this.clearVirtualMap();
         // Reset the object on the cell
-        for (GameActor actor : this.stage.getGroupByType(GameActor.class)) {
-            int cellRow = ((GameObject) actor).getVY();
-            int cellCol = ((GameObject) actor).getVX();
+        for (GameObject actor : this.stage.getGroupByType(GameObject.class)) {
+            int cellRow = actor.getVY();
+            int cellCol = actor.getVX();
 
             // Clear the dead objects
             if (actor.isAlive())

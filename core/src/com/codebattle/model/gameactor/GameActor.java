@@ -215,6 +215,11 @@ public class GameActor extends GameObject {
         return (distance <= range) ? true : false;
     }
 
+    @Override
+    public boolean isBlock() {
+        return (this.state == GameObjectState.DEATH) ? false : true;
+    }
+
     /**
      * Getters
      */
@@ -275,10 +280,4 @@ public class GameActor extends GameObject {
 
         return this.properties.hp;
     }
-
-    @Override
-    public boolean isBlock() {
-        return (this.state == GameObjectState.DEATH) ? true : false;
-    }
-
 }

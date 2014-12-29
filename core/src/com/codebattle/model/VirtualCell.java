@@ -63,7 +63,7 @@ public class VirtualCell {
 
     public boolean isPassible() {
         if (this.obj != null)
-            return (obj.isBlock());
+            return (obj.isBlock()) ? false : true;
         return this.passiable;
     }
 }

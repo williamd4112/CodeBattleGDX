@@ -8,6 +8,9 @@
 	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="6" y="10" />
 	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="4" y="10" />
 	<gameobject class="GameActor" owner="Red" name="Saber" type="heavy" x="5" y="10" />
+	
+	<gameobject class="GlowObject" owner="Green" name="Crystal" type="normal" x="7" y="11"/>
+	
 	<pointlight color="ffd700" radius="800" x="15" y="15" />
 	<pointlight color="ffd700" radius="800" x="30" y="30" />
 </init>

@@ -8,7 +8,6 @@ import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.GameState;
 import com.codebattle.model.Owner;
-import com.codebattle.model.gameactor.GameActor;
 
 /**
  * Script processor.
@@ -17,7 +16,7 @@ import com.codebattle.model.gameactor.GameActor;
  * 2. Create a new thread to run all commands.
  */
 public class ScriptProcessor extends Thread {
-	
+
     private final ScriptEngineManager manager;
     private final ScriptEngine engine;
     private final GameStage stage;
@@ -31,30 +30,34 @@ public class ScriptProcessor extends Thread {
         this.currentPlayer = currentPlayer;
         this.manager = new ScriptEngineManager();
         this.engine = this.manager.getEngineByExtension("js");
-        
+
         System.out.println("ScriptProcessor put object : ");
+        this.engine.put("vs", this.stage.getVirtualSystems()[currentPlayer.index]);
         for (GameObject obj : this.stage.getGameObjectsByOwner(currentPlayer)) {
-             System.out.println(obj.getName());
-             this.engine.put(obj.getName(), obj);
+            System.out.println(obj.getName());
+            this.engine.put(obj.getName(), obj);
         }
     }
 
     @Override
     public void run() {
-        try {        	        	
-        	//Processing script (put animation object into queue
+        try {
+            // Processing script (put animation object into queue
             this.engine.eval(this.script);
-          
-            //Processing animation (start processing animation)
+
+            // Processing animation (start processing animation)
             this.stage.printAllVirtualObjects();
             this.stage.setState(GameState.ANIM);
-            this.stage.getVirtualMap().resetActorsCulmuSteps();
-            
+            this.stage.getVirtualMap()
+                    .resetActorsCulmuSteps();
+
         } catch (final ScriptException e) {
-        	System.out.println("------Exception occurred------");
-        	this.stage.resetAnimQueue();
-        	this.stage.getVirtualMap().resetActorsVirtualCoordinate();
-        	this.stage.getVirtualMap().resetVirtualMap();
+            System.out.println("------Exception occurred------");
+            this.stage.resetAnimQueue();
+            this.stage.getVirtualMap()
+                    .resetActorsVirtualCoordinate();
+            this.stage.getVirtualMap()
+                    .resetVirtualMap();
             e.printStackTrace();
         }
     }

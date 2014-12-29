@@ -18,6 +18,7 @@
 			<atk>12</atk>
 			<range>3</range>
 		</attack>
+		
 		<skill range="1">
 			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002" duration="1" interval="5">
 				<region x="0" y="960" width="960" height="192" hTile="192" vTile="192" />

@@ -72,6 +72,7 @@ public class GameStage extends Stage {
 
     // Used to detect blocking, when actor use its move series function
     private VirtualMap virtualMap;
+    private VirtualSystem[] virtualSystems;
 
     // Camera sliding direction
     private int camDirection = GameConstants.CAMERA_HOLD;
@@ -86,7 +87,7 @@ public class GameStage extends Stage {
 
     /*
      * GameStage Constructor
-     * 
+     *
      * @param - mapName : used to create map and map renderer , camera
      */
     public GameStage(GameScene parent, String mapName) throws Exception {
@@ -120,7 +121,10 @@ public class GameStage extends Stage {
         this.guiLayer = new Group();
         this.animQueue = new LinkedList<BaseAnimation>();
 
+        // Virtual world
         this.virtualMap = new VirtualMap(this, map);
+        this.virtualSystems = new VirtualSystem[] { new VirtualSystem(this, Owner.RED),
+                new VirtualSystem(this, Owner.BLUE) };
 
         // Add GUI layer
         this.addActor(this.guiLayer);
@@ -379,17 +383,19 @@ public class GameStage extends Stage {
         this.animQueue.add(animation);
     }
 
-    public void addPointLight(float x, float y) {
+    public PointLight addPointLight(float x, float y) {
         Color color = new Color(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b, 0.85f);
-        this.addPointLight(color, x, y, 100);
+        return this.addPointLight(color, x, y, 100);
     }
 
-    public void addPointLight(Color color, float x, float y, int radius) {
-        new PointLight(rayHandler, 1000, color, radius, x, y);
+    public PointLight addPointLight(Color color, float x, float y, int radius) {
+        return new PointLight(rayHandler, 1000, new Color(color.r, color.g, color.b, 0.6f),
+                radius, x, y);
     }
 
-    public void addPointLight(PointLightMeta light) {
-        this.addPointLight(light.color, light.x, light.y, light.radius);
+    public PointLight addPointLight(PointLightMeta light) {
+        System.out.printf("add light at %d , %d\n", light.x, light.y);
+        return this.addPointLight(light.color, light.x, light.y, light.radius);
     }
 
     /**
@@ -428,6 +434,10 @@ public class GameStage extends Stage {
 
     public VirtualMap getVirtualMap() {
         return this.virtualMap;
+    }
+
+    public VirtualSystem[] getVirtualSystems() {
+        return this.virtualSystems;
     }
 
     public GameObject getSelectedObject() {
