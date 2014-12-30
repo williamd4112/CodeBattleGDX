@@ -5,11 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.codebattle.gui.GameDialog;
 import com.codebattle.gui.GameSceneGUI;
+import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
-import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
+import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameObjects;
 import com.codebattle.utility.SoundUtil;
 
@@ -26,6 +28,12 @@ public class SinglePlayerGameScene extends GameScene {
     public void setupGUI() {
         this.gui = new GameSceneGUI(new Handler());
         this.stage.addGUI(this.gui);
+        this.stage.getVirtualSystems()[this.currentPlayer.index].addSystemListener(this.gui.getControlGroup()
+                .getSystemIndicator());
+        this.stage.putDialog(new GameDialog("Hello World1 !!", GameConstants.DEFAULT_SKIN));
+        this.stage.putDialog(new GameDialog("Hello World2 !!", GameConstants.DEFAULT_SKIN));
+        this.stage.putDialog(new GameDialog("Hello World3 !!", GameConstants.DEFAULT_SKIN));
+
     }
 
     @Override
@@ -86,7 +94,6 @@ public class SinglePlayerGameScene extends GameScene {
 
     @Override
     public void resizeGUI(final int width, final int height) {
-        this.gui.resize(width, height);
         this.gui.invalidateHierarchy();
     }
 
@@ -94,30 +101,15 @@ public class SinglePlayerGameScene extends GameScene {
     public void onGUIChange() {
         GameObject selectObject = this.stage.getSelectedObject();
         if (selectObject != null) {
-            this.gui.getControlGroup()
-                    .getPanel()
-                    .setImage(selectObject.source);
-            this.gui.getControlGroup()
-                    .getPanel()
-                    .setAPI(selectObject.getClass());
-            if (selectObject instanceof GameActor)
+            if (selectObject instanceof StateShowable) {
                 this.gui.getControlGroup()
                         .getPanel()
-                        .setProperties(((GameActor) selectObject).getProp());
-            else
-                this.gui.getControlGroup()
-                        .getPanel()
-                        .resetProperties();
+                        .setShowable((StateShowable) selectObject);
+            } else {
+                this.gui.resetShowable();
+            }
         } else {
-            this.gui.getControlGroup()
-                    .getPanel()
-                    .resetImage();
-            this.gui.getControlGroup()
-                    .getPanel()
-                    .resetProperties();
-            this.gui.getControlGroup()
-                    .getPanel()
-                    .resetAPI();
+            this.gui.resetShowable();
         }
     }
 

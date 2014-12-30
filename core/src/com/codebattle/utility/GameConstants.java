@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.units.Interval;
 
@@ -57,6 +59,8 @@ public class GameConstants {
 
     public final static int INIT_HP = 4000;
     public final static int INIT_RES = 4000;
+
+    public final static Skin DEFAULT_SKIN = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
 
     public static Map<String, String> API_GAMEACTOR = new HashMap<String, String>();
 

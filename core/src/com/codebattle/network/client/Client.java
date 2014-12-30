@@ -9,8 +9,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import com.codebattle.network.PeerListener;
+import com.codebattle.network.dataHandle.DataHandler;
 
 public class Client {
     // private Game game;
@@ -23,6 +27,7 @@ public class Client {
     private BufferedReader reader;
     private PrintWriter writer;
     private ListenThread listenThread;
+    private TimerThread timerThread;
 
     // Event listeners
     private List<PeerListener> listeners;
@@ -30,6 +35,7 @@ public class Client {
     public Client() {
         this.listeners = new LinkedList<PeerListener>();
         this.listenThread = new ListenThread();
+        this.timerThread = new TimerThread();
     }
 
     public void connectToServer(String serverIP, String serverPort) {
@@ -55,12 +61,13 @@ public class Client {
 
     private void start() {
         this.listenThread.start();
+        this.timerThread.start();
     }
 
     /**
      * Event handling
      */
-    private void emitMessageReceiveEvent(String msg) {
+    private void emitReceiveMessage(String msg) {
         // this.game.onReceiveMessage(msg);
         for (PeerListener p : this.listeners)
             p.onReceivedMessage(msg);
@@ -75,9 +82,9 @@ public class Client {
         this.listeners.add(listener);
     }
 
-    public void sendMessage(String msg) {
-        this.writer.println(msg);
-        this.writer.flush();
+    public void send(String msg) {
+    	this.writer.println(msg);
+		this.writer.flush();
     }
 
     private class ListenThread extends Thread {
@@ -87,11 +94,29 @@ public class Client {
                 String rawMessage = null;
                 while (!socket.isClosed()) {
                     rawMessage = Client.this.reader.readLine();
-                    emitMessageReceiveEvent(rawMessage);
+                    emitReceiveMessage(rawMessage);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+    
+	private class TimerThread extends Thread {
+		long interval = 30; // unit: second
+		Timer timer = new Timer();
+
+		@Override
+		public void run() {
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					Client.this.send(DataHandler.report().toString());
+				}
+
+			}, TimeUnit.SECONDS.toMillis(interval),
+					TimeUnit.SECONDS.toMillis(interval));
+		}
+	}
 }

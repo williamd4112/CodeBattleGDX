@@ -25,7 +25,7 @@
 			</animation>
 			<sound>100-Attack12.ogg</sound>
 			<method name="skillAttack">
-			    <arg key="atk" value="60"/>
+			    <arg key="atk">60</arg>
 			</method>
 		</skill>
 	</type>
@@ -54,7 +54,7 @@
 			</animation>
 			<sound>098-Attack10.ogg</sound>
 			<method name="areaAttack">
-			    <arg key="atk" value="100"/>
+			    <arg key="atk">80</arg>
 			</method>
 		</skill>
 	</type>

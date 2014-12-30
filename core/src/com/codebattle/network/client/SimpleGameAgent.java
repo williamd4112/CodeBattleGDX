@@ -85,7 +85,7 @@ public class SimpleGameAgent extends JFrame implements PeerListener {
     }
 
     public void sendMessage(String msg) {
-        this.client.sendMessage(msg);
+        this.client.send(msg);
     }
 
     public static void main(String[] args) {

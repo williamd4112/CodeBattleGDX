@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Room: connection listener
@@ -25,6 +28,7 @@ public class Connection extends Thread {
     // EventListener
     private ConnectionListener server = null;
     private ConnectionListener room = null;
+    private ConnectionTimer timer = null;
 
     // Client Player Info
     private Player player;
@@ -35,17 +39,23 @@ public class Connection extends Thread {
                 this.clientSocket.getInputStream()));
         this.writer = new BufferedWriter(new OutputStreamWriter(
                 this.clientSocket.getOutputStream()));
+        this.timer = new ConnectionTimer();
     }
 
-    public void connect(ConnectionListener listener, String type) {
-        if (type.equals("Server")) {
+    public void bind(ConnectionListener listener) {
+        if (listener.getClass().equals(Server.class)) {
             if (this.server == null) {
                 this.server = listener;
             }
-        } else if (type.equals("Room")) {
-            this.room = listener;
+        }
+        else if (listener.getClass().equals(Room.class)) {
             if (this.room == null) {
                 this.room = listener;
+            }
+        }
+        else if (listener.getClass().equals(ConnectionTimer.class)){
+        	if (this.timer == null) {
+                this.timer = (ConnectionTimer)listener;
             }
         }
     }
@@ -53,6 +63,7 @@ public class Connection extends Thread {
     @Override
     public void run() {
         this.listen();
+        this.timer.start();
     }
 
     /**
@@ -63,12 +74,14 @@ public class Connection extends Thread {
             String msg;
             while (!this.clientSocket.isClosed()) {
                 if ((msg = this.reader.readLine()) != null) {
+                	//System.out.println(msg);
                     this.emitReceiveMessage(this, msg);
                 }
             }
-            this.emitDisconnect(this);
         } catch (final Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        } finally{
+        	this.emitDisconnect(this);
         }
     }
 
@@ -91,13 +104,20 @@ public class Connection extends Thread {
     public void emitReceiveMessage(final Connection connection, final String msg) {
         if (this.room != null) {
             this.room.onReceiveMessage(connection, msg);
-        } else {
+        }
+        else {
             this.server.onReceiveMessage(connection, msg);
         }
     }
 
     public void emitDisconnect(final Connection connection) {
-
+    	System.out.println("Disconnect");
+    	if (this.room != null) {
+            this.room.onDisconnect(connection);
+        }
+        else {
+            this.server.onDisconnect(connection);
+        }
     }
 
     /**
@@ -107,10 +127,35 @@ public class Connection extends Thread {
         return this.player;
     }
 
-    /*
-     * public void setRoom(Room room) {
-     * this.room = room;
-     * }
-     */
+    private class ConnectionTimer extends Thread implements ConnectionListener{
+    	long interval = 45; // unit: second
+		Timer timer = new Timer();
+    	
+    	public ConnectionTimer() {
+    		super();
+    		Connection.this.bind(this);
+    	}
+    	
+    	@Override
+    	public void run(){
+    		timer.schedule(new TimerTask() {
 
+				@Override
+				public void run() {
+					emitDisconnect(Connection.this);
+				}
+
+			}, TimeUnit.SECONDS.toMillis(interval),
+					TimeUnit.SECONDS.toMillis(interval));
+    	}
+    	
+		@Override
+		public void onReceiveMessage(Connection connection, String msg) {
+			this.start();
+		}
+
+		@Override
+		public void onDisconnect(Connection connection) {}
+    	
+    }
 }

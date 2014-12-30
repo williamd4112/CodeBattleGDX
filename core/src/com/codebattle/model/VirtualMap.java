@@ -76,7 +76,7 @@ public class VirtualMap {
             if (actor.isAlive())
                 this.virtualCells[cellRow][cellCol].setObject(actor, cellCol, cellRow);
             else
-                this.stage.removeGameObject(actor);
+                this.stage.emitDestroyedEvent(actor);
 
         }
         System.out.println("------Reset completed------");

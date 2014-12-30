@@ -1,15 +1,17 @@
 package com.codebattle.network.server;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.codebattle.network.PeerListener;
+import com.codebattle.network.dataHandle.DataHandler;
+import com.codebattle.network.dataHandle.Message;
 
 /**
  *
@@ -34,7 +36,7 @@ import com.codebattle.network.PeerListener;
  *
  */
 
-public class Server implements ConnectionListener {
+public class Server implements RoomListener, ConnectionListener {
 
     // Network IO
     private final ServerSocket serverSocket;
@@ -42,21 +44,23 @@ public class Server implements ConnectionListener {
     // Connection management
     // Rooms will store connections (if connection enter the room or create a room
     // Idle connection (no room connections
-    private final List<Room> rooms;
+    private final Map<String, Room> rooms;
+    private final Map<String, String> roomsInfo;
     private final List<Connection> idleConnections;
 
     // Threading
     private final ListenThread listenThread;
 
     // Message Receiving routing
-    private Map<String, Method> routingTable;
+    //private Map<String, Method> routingTable;
 
     // Interface with Agent
     private List<PeerListener> peerListeners;
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
-        this.rooms = new ArrayList<Room>();
+        this.rooms = new HashMap<String, Room>();
+        this.roomsInfo = new HashMap<String, String>();
         this.idleConnections = new ArrayList<Connection>();
         this.listenThread = new ListenThread();
         this.peerListeners = new LinkedList<PeerListener>();
@@ -71,9 +75,9 @@ public class Server implements ConnectionListener {
     }
 
     public Room addRoom(String name) {
-        Room room = new Room(name);
+        Room room = new Room(name, this);
 
-        this.rooms.add(room);
+        this.rooms.put(name, room);
         return room;
     }
 
@@ -86,44 +90,79 @@ public class Server implements ConnectionListener {
      */
     @Override
     public void onReceiveMessage(Connection connection, String rawMessage) {
-        // TODO : handling message (Advise to enclose this block with try/catch
-
+        // handling message (Advise to enclose this block with try/catch
         // Emit rawMessage to peer listener
-        this.emitReceiveMessage(rawMessage);
+        this.emitReceiveMessage(rawMessage); // For Testing
 
         try {
             // Extract data
             Message msg = new Message(rawMessage);
+            emitReceiveMessage(rawMessage);
             // Routing (will be replaced with routing table if there is enough time
             if (msg.type.equals("Server")) {
-                // TODO: Login the server (Although connection has been created, but its player
+                // Login the server (Although connection has been created, but its player
                 // data
                 // hasn't been set
                 if (msg.opt.equals("Login")) {
                     connection.getPlayer()
-                            .setName(msg.data);
-                } else if (msg.opt.equals("RoomList")) {
-                    // TODOL Send RoomList
+                            .setName(msg.data.toString());
                 }
-            } else if (msg.type.equals("Room")) {
-                if (msg.opt.equals("Create")) {
-                    // TODO: Create Room
-                    Room room = this.addRoom(msg.data);
-                    connection.connect(room, "Room");
-                    room.addConnection(connection);
-                    this.idleConnections.remove(connection);
+                else if (msg.opt.equals("RoomList")) {
+                	connection.send(DataHandler.RoomList(roomsInfo).toString());
                 }
             }
-        } catch (Exception e) {
+            else if (msg.type.equals("Room")) {
+                if (msg.opt.equals("Create")) {
+                    Room room = this.addRoom(msg.data.toString()); //Data: Room name
+                    rooms.put(room.getName(), room);
+                    roomsInfo.put(room.getName(), room.getScene());
+                    room.addConnection(connection);
+                    connection.send(DataHandler.accept("").toString());
+                    this.idleConnections.remove(connection);
+                }
+                else if (msg.opt.equals("Join")) {
+                	Room room = this.rooms.get(msg.data.toString());
+                	if (room == null) { // Room is full
+                		connection.send(DataHandler.deny("Fail").toString());
+                	}
+                	else if (room.isFull()){
+                		connection.send(DataHandler.deny("Full").toString());
+                	}
+                	else { // Is able to join
+	                    room.addConnection(connection);
+	                    connection.send(DataHandler.accept("").toString());
+	                    this.idleConnections.remove(connection);
+                	}
+            	}
+            }
+        }
+        catch (Exception e) {
             // e.printStackTrace();
         }
     }
 
     @Override
     public void onDisconnect(Connection connection) {
-        // TODO : remove this connection from idle connection
         this.idleConnections.remove(connection);
     }
+
+    // Trigger by Room
+    @Override
+	public void ChangeScene(String roomName, String sceneName) {
+    	this.roomsInfo.put(roomName, sceneName);
+	}
+
+	@Override
+	public void ChangeName(String newRoomName, String oldRoomName) {
+		Room room = rooms.get(oldRoomName);
+		rooms.put(newRoomName, room);
+	}
+	
+    @Override
+	public void destroyRoom(String roomName) {
+		this.rooms.remove(roomName);
+		this.roomsInfo.remove(roomName);
+	}
 
     public void emitReceiveMessage(String msg) {
         for (PeerListener p : this.peerListeners)
@@ -150,20 +189,15 @@ public class Server implements ConnectionListener {
                     // Create connection
                     Connection connection = new Connection(clientSocket);
                     idleConnections.add(connection);
-                    connection.connect(Server.this, "Server");
+                    connection.bind(Server.this);
                     connection.start();
 
                     emitConnectEvent(clientSocket);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onTimeout(Connection connection) {
-        // TODO Auto-generated method stub
-
     }
 }

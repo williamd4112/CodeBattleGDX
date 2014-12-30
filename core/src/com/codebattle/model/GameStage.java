@@ -23,8 +23,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.codebattle.gui.GameDialog;
+import com.codebattle.gui.Resizeable;
 import com.codebattle.model.animation.AttackAnimation;
 import com.codebattle.model.animation.BaseAnimation;
 import com.codebattle.model.animation.CursorAnimation;
@@ -61,6 +64,10 @@ public class GameStage extends Stage {
     // Layers
     final private Group gameObjects;
     final private Group guiLayer;
+    final private Group popLayer;
+
+    // Dialog queue
+    private GameDialogQueue dialogQueue;
 
     /* Debug shape render */
     final ShapeRenderer debugRender;
@@ -112,14 +119,15 @@ public class GameStage extends Stage {
         this.world = new World(new Vector2(0, -10), true);
         this.rayHandler = new RayHandler(world);
         this.rayHandler.setAmbientLight(0.5f, 0.3f, 0.7f, 0.15f);
-        // this.rayHandler.setAmbientLight(139 * 1.0f / 255, 69 * 1.0f / 255, 19 * 1.0f / 255,
-        // 0.1f);
         this.rayHandler.setBlur(true);
 
         // Create all data structure
         this.gameObjects = new Group();
         this.guiLayer = new Group();
+        this.popLayer = new Group();
+        this.popLayer.setTouchable(Touchable.disabled);
         this.animQueue = new LinkedList<BaseAnimation>();
+        this.dialogQueue = new GameDialogQueue(this);
 
         // Virtual world
         this.virtualMap = new VirtualMap(this, map);
@@ -128,6 +136,7 @@ public class GameStage extends Stage {
 
         // Add GUI layer
         this.addActor(this.guiLayer);
+        this.addActor(this.popLayer);
 
         // Create debug renderer
         this.debugRender = new ShapeRenderer();
@@ -137,6 +146,7 @@ public class GameStage extends Stage {
 
         // Initialize game state
         this.state = GameState.PAUSE;
+
     }
 
     @Override
@@ -172,7 +182,7 @@ public class GameStage extends Stage {
         this.rayHandler.updateAndRender();
         this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
-        // Draw GUI
+        // Draw Cursor
         this.mapRenderer.getSpriteBatch()
                 .begin();
         if (this.selectCell != null) {
@@ -210,10 +220,24 @@ public class GameStage extends Stage {
         this.getViewport()
                 .setScreenBounds(0, 0, (int) (width * zoom), (int) (height * zoom));
 
+        // Resize GUI
+        this.resizeLayer(guiLayer);
+        this.resizeLayer(popLayer);
+
+        this.dialogQueue.resize(width, height);
+
         // Setting shader
         this.shader.begin();
         this.shader.setUniformf("resolution", width, height);
         this.shader.end();
+    }
+
+    public void resizeLayer(Group layer) {
+        for (Actor ui : layer.getChildren()) {
+            if (ui instanceof Resizeable) {
+                ((Resizeable) ui).resize(width, height);
+            }
+        }
     }
 
     @Override
@@ -243,13 +267,18 @@ public class GameStage extends Stage {
         int vx = (int) (worldCoord.x / 32);
         int vy = (int) (worldCoord.y / 32);
 
-        System.out.printf("left down(%d , %d)\n", vx, vy);
         if (!isOutBoundInVirtualMap(vx, vy)) {
             VirtualCell cell = this.virtualMap.getCell(vx, vy);
             this.emitSelectEvent(cell);
         }
 
         return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean keyDown(int keyCode) {
+        this.dialogQueue.keyDown(keyCode);
+        return super.keyDown(keyCode);
     }
 
     /**
@@ -379,6 +408,10 @@ public class GameStage extends Stage {
         return this;
     }
 
+    public void addDialog(GameDialog dlg) {
+        this.popLayer.addActor(dlg);
+    }
+
     public void addAnimation(BaseAnimation animation) {
         this.animQueue.add(animation);
     }
@@ -396,6 +429,10 @@ public class GameStage extends Stage {
     public PointLight addPointLight(PointLightMeta light) {
         System.out.printf("add light at %d , %d\n", light.x, light.y);
         return this.addPointLight(light.color, light.x, light.y, light.radius);
+    }
+
+    public void putDialog(GameDialog dialog) {
+        this.dialogQueue.add(dialog);
     }
 
     /**
@@ -440,8 +477,28 @@ public class GameStage extends Stage {
         return this.virtualSystems;
     }
 
+    public GameObject findGameObjectByNameAndOwner(String name, Owner owner) {
+        for (GameObject obj : this.getGroupByType(GameObject.class)) {
+            if (obj.getName()
+                    .equals(name) && obj.getOwner() == owner)
+                return obj;
+        }
+        return null;
+    }
+
+    public GameObject findGameObject(int vx, int vy) {
+        if (vx < 0 || vx >= this.getMapWidth() || vy < 0 || vy >= this.getMapHeight())
+            return null;
+        return this.virtualMap.getCell(vx, vy)
+                .getObject();
+    }
+
     public GameObject getSelectedObject() {
         return this.selectCell.getObject();
+    }
+
+    public Group getGUILayer() {
+        return this.guiLayer;
     }
 
     /**
@@ -467,10 +524,23 @@ public class GameStage extends Stage {
 
     public void setGUILayerPosition(float x, float y) {
         this.guiLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
+        this.popLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
     }
 
     public void resetGUILayerPosition() {
         this.setGUILayerPosition(this.camera.position.x, this.camera.position.y);
+    }
+
+    public void removeDialog(GameDialog dlg) {
+        this.guiLayer.removeActor(dlg);
+    }
+
+    public void fadeOutLayer(Group layer) {
+        layer.addAction(Actions.sequence(Actions.fadeOut(0.5f), Actions.hide()));
+    }
+
+    public void fadeInLayer(Group layer) {
+        layer.addAction(Actions.sequence(Actions.show(), Actions.fadeIn(0.5f)));
     }
 
     public void moveCamera() {
@@ -496,7 +566,8 @@ public class GameStage extends Stage {
         }
     }
 
-    public void removeGameObject(GameObject obj) {
+    public void emitDestroyedEvent(GameObject obj) {
+        obj.onDestroyed(obj);
         this.gameObjects.removeActor(obj);
     }
 

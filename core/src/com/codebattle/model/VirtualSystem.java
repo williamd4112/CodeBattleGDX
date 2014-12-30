@@ -1,5 +1,8 @@
 package com.codebattle.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameConstants;
@@ -21,7 +24,10 @@ public class VirtualSystem {
     private int hp;
     private int resource;
 
+    private List<SystemListener> listeners;
+
     public VirtualSystem(GameStage stage, Owner owner) {
+        this.listeners = new LinkedList<SystemListener>();
         this.stage = stage;
         this.hp = GameConstants.INIT_HP;
         this.resource = GameConstants.INIT_RES;
@@ -33,6 +39,7 @@ public class VirtualSystem {
         GameActor actor = GameActorFactory.getInstance()
                 .createGameActor(stage, owner, source, type, x, y);
         this.stage.addGameObject(actor);
+        this.decreaseResource(100);
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
     }
 
@@ -42,5 +49,31 @@ public class VirtualSystem {
 
     public int getResource() {
         return this.resource;
+    }
+
+    public void decreaseResource(int diff) {
+        int newValue = (this.resource - diff);
+        this.resource = (newValue <= 0) ? 0 : newValue;
+        this.emitResourceChange();
+    }
+
+    public void decreaseLift(int diff) {
+        int newValue = (this.hp - diff);
+        this.hp = (newValue <= 0) ? 0 : newValue;
+        this.emitLifeChange();
+    }
+
+    public void emitLifeChange() {
+        for (SystemListener listener : this.listeners)
+            listener.onLifeChange(this.hp);
+    }
+
+    public void emitResourceChange() {
+        for (SystemListener listener : this.listeners)
+            listener.onResourceChange(this.resource);
+    }
+
+    public void addSystemListener(SystemListener listener) {
+        this.listeners.add(listener);
     }
 }

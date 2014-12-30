@@ -1,23 +1,26 @@
 package com.codebattle.model.gameactor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
+import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.Owner;
-import com.codebattle.model.animation.GameActorMovementAnimation;
-import com.codebattle.model.animation.GameActorTurnAnimation;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.GameActorType;
 import com.codebattle.model.meta.Skill;
-import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Interval;
-import com.codebattle.model.units.Speed;
 import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.SoundUtil;
+import com.codebattle.utility.TextureFactory;
 
 /**
  * GameActor
@@ -29,27 +32,24 @@ import com.codebattle.utility.SoundUtil;
  * @frames : texture's regions
  */
 
-public class GameActor extends GameObject {
+public class GameActor extends MoveableGameObject implements StateShowable {
     final public GameActorType type;
     final private GameActorProperties properties;
 
-    private Direction direction;
     private TextureRegion[][] frames;
     private Interval interval;
-    private Speed speed;
-
     private int frame = 0;
-    private int culmuSteps = 0;
+
+    private String alias;
 
     public GameActor(GameStage stage, Owner owner, int id, String source, String name,
             GameActorType type, TextureRegion[][] frames, float sx, float sy) throws Exception {
-        super(stage, owner, source, name, id, sx, sy);
+        super(stage, owner, source, name, id, sx, sy, type.prop.maxsteps);
         this.type = type;
         this.properties = new GameActorProperties(type.prop);
         this.frames = frames;
-        this.direction = Direction.HOLD_DEF;
         this.interval = Interval.HIGH;
-        this.speed = Speed.VERYFAST;
+        this.alias = this.getName();
     }
 
     @Override
@@ -131,79 +131,10 @@ public class GameActor extends GameObject {
         System.out.println("onSkill: " + skill.animMeta.source);
     }
 
-    /**
-     * User interface
-     */
-    public void moveDown(int pace) {
-        this.turn(Direction.DOWN);
-        this.move(Direction.DOWN, pace);
-    }
-
-    public void moveLeft(int pace) {
-        this.turn(Direction.LEFT);
-        ;
-        this.move(Direction.LEFT, pace);
-    }
-
-    public void moveRight(int pace) {
-        this.turn(Direction.RIGHT);
-        this.move(Direction.RIGHT, pace);
-    }
-
-    public void moveUp(int pace) {
-        this.turn(Direction.UP);
-        this.move(Direction.UP, pace);
-    }
-
-    public void move(Direction direction, int pace) {
-        // Check steps
-        int checkedPace = this.pathCheck(direction, pace);
-        this.culmuSteps += checkedPace;
-        if (this.culmuSteps >= this.properties.maxsteps) {
-            checkedPace -= this.culmuSteps - this.properties.maxsteps;
-        }
-
-        int nx = (int) (this.vx + direction.udx * checkedPace);
-        int ny = (int) (this.vy + direction.udy * checkedPace);
-
-        this.updateVirtualMap(this, nx, ny);
-
-        this.stage.addAnimation(new GameActorMovementAnimation(this.stage, this, direction,
-                checkedPace));
-    }
-
-    private void turn(Direction direction) {
-        this.stage.addAnimation(new GameActorTurnAnimation(this, direction));
-    }
-
-    /**
-     * Check the path along a specific direction and return how far this actor can move until blocked
-     * @param direction
-     * @param pace
-     * @return
-     */
-    public int pathCheck(Direction direction, int pace) {
-        int step;
-        for (step = 1; step <= pace && isPassiable(direction, step); step++)
-            ;
-        step--;
-
-        return step;
-    }
-
     @Override
-    public boolean isPassiable(int x, int y) {
-        if (!this.isInbounding(x, y))
-            return false;
-        return this.stage.getVirtualMap()
-                .getVirtualCells()[y][x].isPassible();
-    }
+    public void onDestroyed(GameObject obj) {
+        System.out.println(this.getName() + " is dead.");
 
-    public boolean isPassiable(Direction direction, int step) {
-        int x = (int) (this.vx + direction.udx * step);
-        int y = (int) (this.vy + direction.udy * step);
-
-        return isPassiable(x, y);
     }
 
     public boolean isInRange(int x, int y) {
@@ -223,14 +154,6 @@ public class GameActor extends GameObject {
     /**
      * Getters
      */
-    public Direction getDirection() {
-        return this.direction;
-    }
-
-    public Speed getSpeed() {
-        return this.speed;
-    }
-
     public Interval getInterval() {
         return this.interval;
     }
@@ -243,6 +166,10 @@ public class GameActor extends GameObject {
         return this.properties;
     }
 
+    public String getAlias() {
+        return this.alias;
+    }
+
     /**
      * Setters
      */
@@ -250,16 +177,8 @@ public class GameActor extends GameObject {
         this.frame = (frame < GameConstants.CHR_HSLICES) ? frame : 0;
     }
 
-    public void setDirection(Direction dir) {
-        this.direction = dir;
-    }
-
-    public void setCulmuSteps(int steps) {
-        this.culmuSteps = steps;
-    }
-
-    public void resetCulmuSteps() {
-        this.setCulmuSteps(0);
+    public void rename(String alias) {
+        this.alias = alias;
     }
 
     public int increaseHP(int diff) {
@@ -275,9 +194,44 @@ public class GameActor extends GameObject {
         this.properties.hp = (newValue >= 0) ? newValue : 0;
         if (this.properties.hp == 0) {
             this.state = GameObjectState.DEATH;
-            System.out.println(this.getName() + " is dead.");
         }
 
         return this.properties.hp;
+    }
+
+    /**
+     * GUI Interface
+     */
+    @Override
+    public String[] getKeys() {
+
+        return new String[] { "HP", "MP", "ATK", "DEF", "RANGE" };
+    }
+
+    @Override
+    public String[] getValues() {
+
+        return new String[] { String.valueOf(this.properties.hp),
+                String.valueOf(this.properties.mp), String.valueOf(this.properties.atk),
+                String.valueOf(this.properties.def), String.valueOf(this.properties.range) };
+    }
+
+    @Override
+    public Drawable getPortrait() {
+        try {
+            Texture texture = TextureFactory.getInstance()
+                    .loadTextureFromFile(source + "_portrait", ResourceType.PORTRAIT);
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
+            return drawable;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String getNameInfo() {
+        return this.getName();
     }
 }

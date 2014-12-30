@@ -5,7 +5,6 @@ import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
@@ -14,7 +13,7 @@ import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.meta.Skill;
-import com.codebattle.utility.AnimationUtil;
+import com.codebattle.utility.FrameTimer;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.TextureFactory;
 
@@ -22,7 +21,7 @@ public class GlowObject extends GameObject {
 
     private TextureRegion[] frames;
     private PointLight light;
-    private int frame = 0;
+    private FrameTimer timer;
 
     public GlowObject(GameStage stage, XmlReader.Element glowObjectContext, float x, float y)
             throws Exception {
@@ -41,21 +40,13 @@ public class GlowObject extends GameObject {
         this.light = this.stage.addPointLight(lightMeta);
         this.frames = TextureFactory.getInstance()
                 .loadFrameRow(source, region, ResourceType.LEVELOBJECT);
-
-        this.addAction(Actions.forever(Actions.delay(0.15f, Actions.run(new Runnable() {
-
-            @Override
-            public void run() {
-                frame = AnimationUtil.frameOscillate(frame, 0, frames.length - 1);
-            }
-
-        }))));
-
+        this.timer = new FrameTimer(10, this.frames.length - 1);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        this.timer.act();
     }
 
     @Override
@@ -64,7 +55,7 @@ public class GlowObject extends GameObject {
         Color color = batch.getColor();
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, parentAlpha
                 * this.getColor().a);
-        batch.draw(this.frames[frame], this.getX(), this.getY());
+        batch.draw(this.frames[this.timer.getFrame()], this.getX(), this.getY());
         batch.setColor(color);
     }
 
@@ -119,6 +110,11 @@ public class GlowObject extends GameObject {
     @Override
     public void onSkill(Skill skill) {
         // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onDestroyed(GameObject obj) {
 
     }
 

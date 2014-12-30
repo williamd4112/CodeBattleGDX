@@ -4,10 +4,12 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.codebattle.model.GameActorProxy;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.GameState;
 import com.codebattle.model.Owner;
+import com.codebattle.model.gameactor.GameActor;
 
 /**
  * Script processor.
@@ -35,7 +37,12 @@ public class ScriptProcessor extends Thread {
         this.engine.put("vs", this.stage.getVirtualSystems()[currentPlayer.index]);
         for (GameObject obj : this.stage.getGameObjectsByOwner(currentPlayer)) {
             System.out.println(obj.getName());
-            this.engine.put(obj.getName(), obj);
+            if (obj instanceof GameActor) {
+                GameActorProxy proxy = new GameActorProxy((GameActor) obj);
+                this.engine.put(proxy.getAlias(), proxy);
+            } else {
+                this.engine.put(obj.getName(), obj);
+            }
         }
     }
 

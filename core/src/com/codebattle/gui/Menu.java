@@ -1,15 +1,15 @@
 package com.codebattle.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Menu extends Table {
+public class Menu extends Table implements Resizeable {
     private final String[] items = { "Options", "Save", "Load", "Exit" };
     private boolean isShow = false;
 
@@ -39,23 +39,23 @@ public class Menu extends Table {
         }
     }
 
+    @Override
     public void resize(final int width, final int height) {
         this.reset();
-        //this.setDebug(true);
+
         this.add(this.menuBtn)
                 .left()
                 .row()
                 .fillX();
         for (final TextButton btn : this.btnList) {
             this.add(btn)
-                 .left()
-                 .row()
-                 .fillX();
+                    .left()
+                    .row()
+                    .fillX();
         }
     }
 
-    public void setShow(final boolean flag)
-    {
+    public void setShow(final boolean flag) {
         this.isShow = flag;
     }
 

@@ -130,6 +130,8 @@ abstract public class GameObject extends Actor {
 
     abstract public void onSkill(Skill skill);
 
+    abstract public void onDestroyed(GameObject obj);
+
     // Interaction with user
     abstract public void onSelected(Owner owner);
 

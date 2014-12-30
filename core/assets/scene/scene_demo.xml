@@ -1,17 +1,41 @@
 <xml>
-<map time="noon">MultiplayStage</map>
-<bgm>scene_demo_bgm.ogg</bgm>
-<bgs></bgs>
-<init>
-	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="5" y="12" />
-	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="5" y="8" />
-	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="6" y="10" />
-	<gameobject class="GameActor" owner="Blue" name="Saber" type="heavy" x="4" y="10" />
-	<gameobject class="GameActor" owner="Red" name="Saber" type="heavy" x="5" y="10" />
-	
-	<gameobject class="GlowObject" owner="Green" name="Crystal" type="normal" x="7" y="11"/>
-	
-	<pointlight color="ffd700" radius="800" x="15" y="15" />
-	<pointlight color="ffd700" radius="800" x="30" y="30" />
-</init>
+	<map time="noon">stage1</map>
+	<bgm>scene_demo_bgm.ogg</bgm>
+	<bgs></bgs>
+	<init>
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="5" y="12" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="5" y="8" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="6" y="10" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="4" y="10" />
+		<gameobject class="GameActor" owner="Red" name="Saber"
+			type="heavy" x="5" y="10" />
+
+		<gameobject class="GlowObject" owner="Green" name="Crystal"
+			type="normal" x="7" y="11" />
+
+		<pointlight color="ffd700" radius="800" x="15" y="15" />
+		<pointlight color="ffd700" radius="800" x="30" y="30" />
+	</init>
+	<events>
+		<event name="Intro">
+			<condition name="onGameObjectDestroyed">
+			    <arg key="targetName">Saber</arg>
+			    <arg key="owner">Blue</arg>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						This is a basic tutorial course. This course will cover basic
+						programming (e.g. if-else, for-loop,etc).
+						After finished this course, you can advance to data structure course.
+						That will teach you more programming techniques.
+					</arg>
+				</method>
+			</effect>
+		</event>
+	</events>
 </xml>
