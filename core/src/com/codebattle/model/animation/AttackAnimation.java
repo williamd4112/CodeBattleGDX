@@ -20,7 +20,7 @@ public class AttackAnimation extends TargetBasedAnimation {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         this.stage.setCameraTarget(this.target);
         if (this.duration % this.interval == 0)
             this.frame = AnimationUtil.frameOscillate(this.frame, 0, this.frames.length - 1);

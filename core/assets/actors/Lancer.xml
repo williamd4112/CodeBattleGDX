@@ -15,12 +15,17 @@
 				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>096-Attack08.ogg</sound>
+			<atk>10</atk>
+			<range>1</range>
 		</attack>
 		<skill range="8">
 			<animation class="GameActorAttackAnimation" source="009-Weapon04" duration="1" interval="10">
 				<region x="0" y="384" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>166-Skill10.ogg</sound>
+			<method name="skillAttack">
+			    <arg key="atk">60</arg>
+			</method>
 		</skill>
 	</type>
 	
@@ -39,12 +44,17 @@
 				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>168-Skill12.ogg</sound>
+			<atk>25</atk>
+			<range>1</range>
 		</attack>
 		<skill range="7">
 			<animation class="GameActorAttackAnimation" source="LancerSkill_022-Darkness01" duration="2" interval="20">
 				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
 			<sound>176-Skill20.ogg</sound>
+						<method name="areaAttack">
+			    <arg key="atk">80</arg>
+			</method>
 		</skill>
 	</type>
 	

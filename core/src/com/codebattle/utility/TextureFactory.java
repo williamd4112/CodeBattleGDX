@@ -82,10 +82,14 @@ public class TextureFactory {
         int vTileSize = region.vTile;
 
         TextureRegion[] regions;
-        regions = new TextureRegion[horizontal];
+        int index = 0;
+        regions = new TextureRegion[horizontal * vertical];
         final Texture texture = this.loadTextureFromFile(resName, ResourceType.ANIMATION);
         for (int h = 0; h < horizontal; h++) {
-            regions[h] = new TextureRegion(texture, x + h * hTileSize, y, hTileSize, vTileSize);
+            for (int v = 0; v < vertical; v++) {
+                regions[index++] = new TextureRegion(texture, x + h * hTileSize, y + v
+                        * vTileSize, hTileSize, vTileSize);
+            }
         }
 
         return regions;

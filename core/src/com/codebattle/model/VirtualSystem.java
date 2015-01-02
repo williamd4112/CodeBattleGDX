@@ -3,9 +3,11 @@ package com.codebattle.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.codebattle.model.animation.SummonAnimation;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.SoundUtil;
 
 /**
  * In Game System
@@ -40,6 +42,9 @@ public class VirtualSystem {
                 .createGameActor(stage, owner, source, type, x, y);
         this.stage.addGameObject(actor);
         this.decreaseResource(100);
+        this.stage.addAnimation(new SummonAnimation(this.stage, GameConstants.SUMMON_ANIMMETA,
+                actor));
+        SoundUtil.playSE(GameConstants.SUMMON_SE);
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
     }
 

@@ -14,10 +14,10 @@ public class Skill {
     public String soundName;
     private int range;
 
-    private List<MethodMeta> methods;
+    private List<GameMethod> methods;
 
-    public Skill(XmlReader.Element skillElement) {
-        this.methods = new LinkedList<MethodMeta>();
+    public Skill(XmlReader.Element skillElement) throws NoSuchMethodException, SecurityException {
+        this.methods = new LinkedList<GameMethod>();
 
         // Read animation element
         this.animMeta = new Animation(XMLUtil.childByName(skillElement, "animation"));
@@ -31,20 +31,20 @@ public class Skill {
 
         // Read method element
         for (XmlReader.Element methodElement : skillElement.getChildrenByName("method")) {
-            this.methods.add(new MethodMeta(methodElement));
+            this.methods.add(new GameMethod(methodElement));
         }
 
     }
 
     public void execute(GameStage stage, GameObject emitter, int x, int y) {
         try {
-            for (MethodMeta m : methods) {
-                m.args.bind("Emitter", emitter);
-                m.args.bind("Skill", this);
-                m.args.bind("Stage", stage);
-                m.args.bind("x", x);
-                m.args.bind("y", y);
-                m.method.invoke(this, m.args);
+            for (GameMethod m : methods) {
+                m.bind("Emitter", emitter);
+                m.bind("Skill", this);
+                m.bind("Stage", stage);
+                m.bind("x", x);
+                m.bind("y", y);
+                m.execute();
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

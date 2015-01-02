@@ -9,7 +9,7 @@ public class GameActorType {
     private Attack attack;
     private Skill skill;
 
-    public GameActorType(XmlReader.Element type) {
+    public GameActorType(XmlReader.Element type) throws NoSuchMethodException, SecurityException {
 
         // Read basic info
         this.prop = new GameActorProperties(type);

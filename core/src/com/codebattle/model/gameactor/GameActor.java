@@ -71,11 +71,11 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public GameObjectState onAttacked(Attack attack) {
         this.decreaseHP(attack.getATK());
         System.out.println("onAttacked(" + attack.getATK() + "): " + this.getName() + " : "
                 + this.getProp().hp);
-
+        return this.state;
     }
 
     @Override
@@ -132,9 +132,8 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public void onDestroyed(GameObject obj) {
+    public void onDestroyed() {
         System.out.println(this.getName() + " is dead.");
-
     }
 
     public boolean isInRange(int x, int y) {
@@ -232,6 +231,11 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public String getNameInfo() {
-        return this.getName();
+        return String.format("%s(%s)", this.getName(), this.properties.typeName);
+    }
+
+    @Override
+    public String getPositionInfo() {
+        return String.format("(%d , %d)", vx, vy);
     }
 }

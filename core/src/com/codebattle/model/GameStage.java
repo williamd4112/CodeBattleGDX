@@ -1,5 +1,6 @@
 package com.codebattle.model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,6 +34,7 @@ import com.codebattle.model.animation.BaseAnimation;
 import com.codebattle.model.animation.CursorAnimation;
 import com.codebattle.model.animation.GameActorAttackAnimation;
 import com.codebattle.model.animation.OnAttackAnimation;
+import com.codebattle.model.event.GameStageEventManager;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.PointLightMeta;
@@ -49,6 +51,10 @@ import com.codebattle.utility.ShaderLoader;
  * */
 
 public class GameStage extends Stage {
+    private Owner winner = null;
+    private boolean isInit = false;
+    private boolean[] switches = new boolean[1000];
+
     final GameScene parent;
     private GameState state;
     private int width, height;
@@ -87,10 +93,15 @@ public class GameStage extends Stage {
     // Lighting Variables
     private World world;
     private RayHandler rayHandler;
+    private float ambientLightIntensity = 0.15f;
+    private float generalLightIntensity = 0.5f;
 
     // Assistant GUI
     private CursorAnimation cursor;
     private VirtualCell selectCell = null;
+
+    // EventManager
+    private GameStageEventManager eventManager;
 
     /*
      * GameStage Constructor
@@ -99,6 +110,7 @@ public class GameStage extends Stage {
      */
     public GameStage(GameScene parent, String mapName) throws Exception {
         super();
+        Arrays.fill(this.switches, false);
         this.parent = parent;
 
         // Create shader
@@ -118,16 +130,19 @@ public class GameStage extends Stage {
         // Create Lighting
         this.world = new World(new Vector2(0, -10), true);
         this.rayHandler = new RayHandler(world);
-        this.rayHandler.setAmbientLight(0.5f, 0.3f, 0.7f, 0.15f);
+        this.rayHandler.setAmbientLight(0f, 0f, 0f, this.ambientLightIntensity);
         this.rayHandler.setBlur(true);
 
         // Create all data structure
         this.gameObjects = new Group();
+        this.gameObjects.setTouchable(Touchable.disabled);
         this.guiLayer = new Group();
+        this.guiLayer.setTouchable(Touchable.childrenOnly);
         this.popLayer = new Group();
         this.popLayer.setTouchable(Touchable.disabled);
         this.animQueue = new LinkedList<BaseAnimation>();
         this.dialogQueue = new GameDialogQueue(this);
+        this.eventManager = new GameStageEventManager(this);
 
         // Virtual world
         this.virtualMap = new VirtualMap(this, map);
@@ -146,7 +161,6 @@ public class GameStage extends Stage {
 
         // Initialize game state
         this.state = GameState.PAUSE;
-
     }
 
     @Override
@@ -157,6 +171,12 @@ public class GameStage extends Stage {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         // Update viewport
+        // First renderering
+        if (!this.isInit) {
+            this.emitStageStartEvent();
+            this.isInit = true;
+        }
+
         this.moveCamera();
         this.setGUILayerPosition(this.camera.position.x, this.camera.position.y);
 
@@ -174,13 +194,13 @@ public class GameStage extends Stage {
         this.mapRenderer.getSpriteBatch()
                 .end();
 
-        // Draw and process animation
-        this.processAnimation(this.mapRenderer.getSpriteBatch(), Gdx.graphics.getDeltaTime());
-
         // Draw lighting
         this.rayHandler.setCombinedMatrix(camera.combined);
         this.rayHandler.updateAndRender();
         this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+
+        // Draw and process animation
+        this.processAnimation(this.mapRenderer.getSpriteBatch(), Gdx.graphics.getDeltaTime());
 
         // Draw Cursor
         this.mapRenderer.getSpriteBatch()
@@ -212,7 +232,6 @@ public class GameStage extends Stage {
      * @param height
      */
     public void resize(int width, int height) {
-        this.camera.position.set(width / 2, height / 2, 0);
         this.width = width;
         this.height = height;
         this.camera.setToOrtho(false, width * zoom, height * zoom);
@@ -263,13 +282,16 @@ public class GameStage extends Stage {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        super.touchDown(screenX, screenY, pointer, button);
         Vector2 worldCoord = this.screenToStageCoordinates(new Vector2(screenX, screenY));
         int vx = (int) (worldCoord.x / 32);
         int vy = (int) (worldCoord.y / 32);
 
         if (!isOutBoundInVirtualMap(vx, vy)) {
             VirtualCell cell = this.virtualMap.getCell(vx, vy);
-            this.emitSelectEvent(cell);
+            if (cell.getObject() != null)
+                this.emitSelectEvent(cell);
+
         }
 
         return super.touchDown(screenX, screenY, pointer, button);
@@ -302,7 +324,7 @@ public class GameStage extends Stage {
             // Reset the virtual map (Update new state to enter the next state
             this.virtualMap.resetVirtualMap();
             this.emitGUIChangeEvent();
-
+            this.emitRoundCompleteEvent();
             return;
         }
 
@@ -326,7 +348,7 @@ public class GameStage extends Stage {
             this.animQueue.poll();
             anim.finished();
         } else {
-            anim.update();
+            anim.update(0);
             anim.draw(batch, this.camera, delta);
         }
 
@@ -337,6 +359,12 @@ public class GameStage extends Stage {
         this.animQueue.clear();
     }
 
+    public void reset() {
+        this.resetAnimQueue();
+        this.virtualMap.resetActorsVirtualCoordinate();
+        this.virtualMap.resetVirtualMap();
+    }
+
     /**
      * Event handling
      */
@@ -345,16 +373,17 @@ public class GameStage extends Stage {
             GameObject target = this.virtualMap.getCell(x, y)
                     .getObject();
             if (target != null) {
-                target.onAttacked(attack);
+                GameObjectState state = target.onAttacked(attack);
+                // Different type of attack animation
                 if (attack.animMeta.type.equals("GameActorAttackAnimation"))
                     this.addAnimation(new GameActorAttackAnimation(this, attack,
                             (GameActor) attacker, target));
                 else
                     this.addAnimation(new AttackAnimation(this, attack, target));
+
                 this.addAnimation(new OnAttackAnimation(target));
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -382,6 +411,7 @@ public class GameStage extends Stage {
                     .onSelected(this.parent.getCurrentPlayer());
             this.setCameraTarget(this.selectCell);
         }
+
         this.emitGUIChangeEvent();
     }
 
@@ -393,6 +423,28 @@ public class GameStage extends Stage {
 
     public void emitGUIChangeEvent() {
         this.parent.onGUIChange();
+    }
+
+    public void emitDestroyedEvent(GameObject obj) {
+        obj.onDestroyed();
+        this.eventManager.onGameObjectDestroyed(obj);
+        this.gameObjects.removeActor(obj);
+    }
+
+    public void emitVirtualMapUpdateEvent() {
+        this.eventManager.onVirtualMapUpdate(this.virtualMap);
+    }
+
+    public void emitRoundCompleteEvent() {
+        this.eventManager.onRoundComplete(this);
+    }
+
+    public void emitStageStartEvent() {
+        this.eventManager.onStageStart();
+    }
+
+    public void emitStageCompleteEvent(Owner winner) {
+        this.winner = winner;
     }
 
     /**
@@ -416,14 +468,9 @@ public class GameStage extends Stage {
         this.animQueue.add(animation);
     }
 
-    public PointLight addPointLight(float x, float y) {
-        Color color = new Color(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b, 0.85f);
-        return this.addPointLight(color, x, y, 100);
-    }
-
     public PointLight addPointLight(Color color, float x, float y, int radius) {
-        return new PointLight(rayHandler, 1000, new Color(color.r, color.g, color.b, 0.6f),
-                radius, x, y);
+        return new PointLight(rayHandler, 1000, new Color(color.r, color.g, color.b,
+                this.generalLightIntensity + 0.3f), radius, x, y);
     }
 
     public PointLight addPointLight(PointLightMeta light) {
@@ -477,13 +524,31 @@ public class GameStage extends Stage {
         return this.virtualSystems;
     }
 
+    public GameStageEventManager getEventManager() {
+        return this.eventManager;
+    }
+
     public GameObject findGameObjectByNameAndOwner(String name, Owner owner) {
-        for (GameObject obj : this.getGroupByType(GameObject.class)) {
-            if (obj.getName()
-                    .equals(name) && obj.getOwner() == owner)
-                return obj;
+        for (Actor actor : this.gameObjects.getChildren()) {
+            if (actor instanceof GameObject) {
+                GameObject obj = (GameObject) actor;
+                if (obj.getOwner() == owner && obj.getName()
+                        .equals(name))
+                    return obj;
+            }
         }
         return null;
+    }
+
+    public boolean isExistGameObject(String name, Owner owner) {
+        GameObject obj = this.findGameObjectByNameAndOwner(name, owner);
+        if (obj == null) {
+            System.out.println("Target is null");
+            return false;
+        } else {
+            System.out.println("Target: " + obj.getName() + "State: " + obj.getState());
+            return (obj.isAlive()) ? true : false;
+        }
     }
 
     public GameObject findGameObject(int vx, int vy) {
@@ -494,11 +559,19 @@ public class GameStage extends Stage {
     }
 
     public GameObject getSelectedObject() {
+        if (this.selectCell == null)
+            return null;
         return this.selectCell.getObject();
     }
 
     public Group getGUILayer() {
         return this.guiLayer;
+    }
+
+    public boolean getSwitchState(int index) {
+        if (index < this.switches.length)
+            return this.switches[index];
+        return false;
     }
 
     /**
@@ -518,6 +591,11 @@ public class GameStage extends Stage {
         this.camera.update();
     }
 
+    public void setCameraTarget(int x, int y) {
+        this.camera.position.set(x, y, 0);
+        this.camera.update();
+    }
+
     public void setGUIVisiable(boolean flag) {
         this.guiLayer.setVisible(flag);
     }
@@ -525,6 +603,12 @@ public class GameStage extends Stage {
     public void setGUILayerPosition(float x, float y) {
         this.guiLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
         this.popLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
+    }
+
+    public void setSwitch(int index, boolean val) {
+        if (index >= this.switches.length)
+            return;
+        this.switches[index] = val;
     }
 
     public void resetGUILayerPosition() {
@@ -564,11 +648,6 @@ public class GameStage extends Stage {
         default:
             break;
         }
-    }
-
-    public void emitDestroyedEvent(GameObject obj) {
-        obj.onDestroyed(obj);
-        this.gameObjects.removeActor(obj);
     }
 
     /**

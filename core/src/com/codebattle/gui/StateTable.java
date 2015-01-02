@@ -34,8 +34,8 @@ public class StateTable extends Table implements Resizeable {
         for (int i = 0; i < this.keyLabels.size(); i++) {
             Label key = keyLabels.get(i);
             Label val = valLabels.get(i);
-            key.setFontScale(width * 0.0009f);
-            val.setFontScale(width * 0.0009f);
+            // key.setFontScale(width * 0.0009f);
+            // val.setFontScale(width * 0.0009f);
             this.add(key)
                     .prefSize(width * 0.01f)
                     .spaceRight(width * 0.025f)

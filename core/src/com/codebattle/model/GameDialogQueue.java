@@ -25,8 +25,10 @@ public class GameDialogQueue {
     }
 
     public void nextDialog() {
-        if (this.currentDialog != null)
+        if (this.currentDialog != null) {
+            this.currentDialog.callback();
             this.currentDialog.remove();
+        }
 
         if (!this.queue.isEmpty()) {
             this.currentDialog = this.queue.poll();

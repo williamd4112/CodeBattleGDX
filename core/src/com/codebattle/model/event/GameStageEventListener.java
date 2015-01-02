@@ -1,12 +1,15 @@
 package com.codebattle.model.event;
 
 import com.codebattle.model.GameObject;
-import com.codebattle.model.VirtualSystem;
+import com.codebattle.model.GameStage;
+import com.codebattle.model.VirtualMap;
 
 public interface GameStageEventListener {
+    public void onStageStart();
+
     public void onGameObjectDestroyed(GameObject obj);
 
-    public void onVirtualSystemResourceChange(VirtualSystem sys);
+    public void onVirtualMapUpdate(VirtualMap map);
 
-    public void onGameObjectPositionChange(GameObject obj);
+    public void onRoundComplete(GameStage stage);
 }

@@ -5,23 +5,29 @@ import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.XmlReader;
+import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
+import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
+import com.codebattle.model.animation.FrameTimer;
+import com.codebattle.model.animation.Oscillator;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.meta.Skill;
-import com.codebattle.utility.FrameTimer;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.TextureFactory;
 
-public class GlowObject extends GameObject {
+public class GlowObject extends GameObject implements StateShowable {
 
     private TextureRegion[] frames;
     private PointLight light;
+    private PointLightMeta lightMeta;
     private FrameTimer timer;
+    private Oscillator oscillator;
 
     public GlowObject(GameStage stage, XmlReader.Element glowObjectContext, float x, float y)
             throws Exception {
@@ -32,7 +38,7 @@ public class GlowObject extends GameObject {
         Region region = new Region(glowObjectContext.getChildByName("type")
                 .getChildByName("region"));
 
-        PointLightMeta lightMeta = new PointLightMeta(glowObjectContext.getChildByName("type")
+        this.lightMeta = new PointLightMeta(glowObjectContext.getChildByName("type")
                 .getChildByName("pointlight"));
         lightMeta.x += x;
         lightMeta.y += y;
@@ -40,13 +46,16 @@ public class GlowObject extends GameObject {
         this.light = this.stage.addPointLight(lightMeta);
         this.frames = TextureFactory.getInstance()
                 .loadFrameRow(source, region, ResourceType.LEVELOBJECT);
+
         this.timer = new FrameTimer(10, this.frames.length - 1);
+        this.oscillator = new Oscillator(10, 0.08f);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         this.timer.act();
+        this.light.setDistance(this.lightMeta.radius + oscillator.getValue());
     }
 
     @Override
@@ -72,9 +81,9 @@ public class GlowObject extends GameObject {
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public GameObjectState onAttacked(Attack attack) {
         // TODO Auto-generated method stub
-
+        return this.state;
     }
 
     @Override
@@ -114,7 +123,7 @@ public class GlowObject extends GameObject {
     }
 
     @Override
-    public void onDestroyed(GameObject obj) {
+    public void onDestroyed() {
 
     }
 
@@ -122,6 +131,34 @@ public class GlowObject extends GameObject {
     public void onSelected(Owner owner) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public String[] getKeys() {
+
+        return new String[] { "" };
+    }
+
+    @Override
+    public String[] getValues() {
+
+        return new String[] { "" };
+    }
+
+    @Override
+    public Drawable getPortrait() {
+        return null;
+    }
+
+    @Override
+    public String getNameInfo() {
+        return this.getName();
+    }
+
+    @Override
+    public String getPositionInfo() {
+        // TODO Auto-generated method stub
+        return String.format("(%d , %d)", vx, vy);
     }
 
 }

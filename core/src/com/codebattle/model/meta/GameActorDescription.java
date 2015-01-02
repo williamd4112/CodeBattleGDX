@@ -32,7 +32,7 @@ public class GameActorDescription implements Readable {
      */
     final public Map<String, GameActorType> types;
 
-    public GameActorDescription(Element context) {
+    public GameActorDescription(Element context) throws NoSuchMethodException, SecurityException {
         this();
         this.read(context);
     }
@@ -42,7 +42,7 @@ public class GameActorDescription implements Readable {
     }
 
     @Override
-    public void read(Element context) {
+    public void read(Element context) throws NoSuchMethodException, SecurityException {
         this.source = context.getChildByName("source")
                 .getText();
         for (XmlReader.Element type : context.getChildrenByNameRecursively("type")) {

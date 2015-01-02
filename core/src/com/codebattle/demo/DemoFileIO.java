@@ -1,23 +1,11 @@
 package com.codebattle.demo;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.utils.XmlReader;
-import com.codebattle.model.meta.GameActorDescription;
-import com.codebattle.utility.XMLUtil;
-
-import java.io.IOException;
 
 public class DemoFileIO implements Screen {
 
     public DemoFileIO() {
-        try {
-            final XmlReader.Element root = XMLUtil.readXMLFromFile("actors/Saber.xml");
-            final GameActorDescription desc = new GameActorDescription(root);
-            System.out.println(desc);
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
     }
 
     @Override

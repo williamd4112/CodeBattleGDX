@@ -11,7 +11,7 @@ import com.codebattle.model.meta.GameActorDescription;
 public class XMLUtil {
 
     public static GameActorDescription readGameActorDescFromFile(final String path)
-            throws IOException {
+            throws IOException, NoSuchMethodException, SecurityException {
         final XmlReader reader = new XmlReader();
         final XmlReader.Element root = reader.parse(Gdx.files.internal(path));
 

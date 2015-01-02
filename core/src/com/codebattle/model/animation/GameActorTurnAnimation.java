@@ -21,7 +21,7 @@ public class GameActorTurnAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         this.obj.setDirection(direction);
     }
 

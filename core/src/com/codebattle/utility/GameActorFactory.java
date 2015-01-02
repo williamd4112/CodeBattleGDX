@@ -20,7 +20,8 @@ public class GameActorFactory {
         public int[] count;
         public GameActorDescription desc;
 
-        public Record(final String name) throws IOException {
+        public Record(final String name) throws IOException, NoSuchMethodException,
+                SecurityException {
             this.name = name;
             this.count = new int[GameConstants.OWNER_COUNT];
             Arrays.fill(this.count, 0);

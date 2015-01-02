@@ -19,6 +19,7 @@ public class Panel extends BasePanel {
     private StateTable stateTable;
     private APIList apiList;
     private Label nameInfo;
+    private Label positionInfo;
 
     private StateShowable showable;
 
@@ -29,7 +30,8 @@ public class Panel extends BasePanel {
         this.setImage("default");
         this.stateTable = new StateTable(skin);
         this.apiList = new APIList(skin);
-        this.nameInfo = new Label("Saber", skin);
+        this.nameInfo = new Label("", skin);
+        this.positionInfo = new Label("", skin);
     }
 
     public void resize(int width, int height) {
@@ -37,7 +39,8 @@ public class Panel extends BasePanel {
         this.setDebug(true);
         this.stateTable.resize(width, height);
         this.apiList.resize(width, height);
-        this.add(nameInfo)
+        this.add(nameInfo);
+        this.add(positionInfo)
                 .row();
         this.add(image)
                 .prefSize(width * 0.1f)
@@ -76,16 +79,22 @@ public class Panel extends BasePanel {
 
     public void setShowable(StateShowable showable) {
         this.showable = showable;
-        this.image.setDrawable(this.showable.getPortrait());
+        Drawable d = this.showable.getPortrait();
+        if (d != null)
+            this.image.setDrawable(d);
+        else
+            this.setImage("default");
         this.stateTable.setKeys(showable.getKeys());
         this.stateTable.setValues(showable.getValues());
         this.setAPI(showable.getClass());
         this.nameInfo.setText(showable.getNameInfo());
+        this.positionInfo.setText(showable.getPositionInfo());
     }
 
     public void resetShowable() {
         this.stateTable.resetShowable();
         this.setImage("default");
         this.nameInfo.setText("");
+        this.positionInfo.setText("");
     }
 }

@@ -11,4 +11,6 @@ public interface StateShowable {
 
     public String getNameInfo();
 
+    public String getPositionInfo();
+
 }

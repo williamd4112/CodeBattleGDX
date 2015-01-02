@@ -13,12 +13,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 
 abstract public class BaseAnimation {
-	
-	boolean isSetup = false;
-	
-	abstract public void update();
-	abstract public void draw(Batch batch , Camera camera, float delta);
-	abstract public boolean isFinished();
-	abstract public void finished();
-	abstract public void setup();
+
+    abstract public void update(float delta);
+
+    abstract public void draw(Batch batch, Camera camera, float delta);
+
+    abstract public boolean isFinished();
+
+    abstract public void finished();
+
+    abstract public void setup();
 }

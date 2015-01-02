@@ -5,13 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.codebattle.gui.GameDialog;
 import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
+import com.codebattle.model.event.Events;
+import com.codebattle.model.event.GameEvent;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
-import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameObjects;
 import com.codebattle.utility.SoundUtil;
 
@@ -30,10 +30,6 @@ public class SinglePlayerGameScene extends GameScene {
         this.stage.addGUI(this.gui);
         this.stage.getVirtualSystems()[this.currentPlayer.index].addSystemListener(this.gui.getControlGroup()
                 .getSystemIndicator());
-        this.stage.putDialog(new GameDialog("Hello World1 !!", GameConstants.DEFAULT_SKIN));
-        this.stage.putDialog(new GameDialog("Hello World2 !!", GameConstants.DEFAULT_SKIN));
-        this.stage.putDialog(new GameDialog("Hello World3 !!", GameConstants.DEFAULT_SKIN));
-
     }
 
     @Override
@@ -79,6 +75,18 @@ public class SinglePlayerGameScene extends GameScene {
         SoundUtil.playBGM(bgmName);
     }
 
+    @Override
+    public void setupEvents(Element context) throws NoSuchMethodException, SecurityException {
+        XmlReader.Element eventsElement = context.getChildByName("events");
+        for (XmlReader.Element eventElement : eventsElement.getChildrenByName("event")) {
+            GameEvent e = Events.create(this.stage, eventElement);
+            System.out.println("setup event: " + e.getName());
+            this.stage.getEventManager()
+                    .addGameEvent(e);
+        }
+
+    }
+
     /* Handling script interpretation */
     private class Handler extends ClickListener {
         @Override
@@ -87,7 +95,7 @@ public class SinglePlayerGameScene extends GameScene {
             final String script = SinglePlayerGameScene.this.gui.getEditor()
                     .getText();
             new ScriptProcessor(SinglePlayerGameScene.this.stage,
-                    SinglePlayerGameScene.this.currentPlayer, script).start();
+                    SinglePlayerGameScene.this.currentPlayer, script).run();
 
         }
     }

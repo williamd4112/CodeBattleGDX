@@ -39,7 +39,7 @@ public class MovementAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         this.stage.setCameraTarget(this.obj);
         if (this.pixelDiff > 0) {
             this.obj.moveBy(this.dx, this.dy);

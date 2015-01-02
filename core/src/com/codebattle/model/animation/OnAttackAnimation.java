@@ -20,7 +20,7 @@ public class OnAttackAnimation extends BaseAnimation{
 	}
 	
 	@Override
-	public void update() 
+	public void update(float delta) 
 	{
 		
 	}

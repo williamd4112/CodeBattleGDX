@@ -37,23 +37,20 @@ public class VirtualMap {
             TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
             for (int row = 0; row < mapHeight; row++) {
                 for (int col = 0; col < mapWidth; col++) {
-                    boolean passiable = true;
-                    try {
-                        Cell cell = tLayer.getCell(col, row);
-                        TiledMapTile tile = cell.getTile();
-                        String prop = tile.getProperties()
-                                .get("passiable", String.class);
-                        if (prop.equals("0")) {
-                            passiable = false;
-                        }
-                    } catch (Exception e) {
-                        // e.printStackTrace();
-                    }
+                    if (this.virtualCells[row][col] == null)
+                        this.virtualCells[row][col] = new VirtualCell(null, col, row, true);
 
-                    if (this.virtualCells[row][col] == null) {
-                        this.virtualCells[row][col] = new VirtualCell(null, col, row, passiable);
-                    } else if (this.virtualCells[row][col].isPassible()) {
-                        this.virtualCells[row][col] = new VirtualCell(null, col, row, passiable);
+                    Cell cell = tLayer.getCell(col, row);
+                    if (cell == null)
+                        continue;
+
+                    TiledMapTile tile = cell.getTile();
+                    String prop = tile.getProperties()
+                            .get("passiable", String.class);
+                    if (prop == null) {
+                        this.virtualCells[row][col].setPassiable(true);
+                    } else if (prop.equals("0")) {
+                        this.virtualCells[row][col].setPassiable(false);
                     }
                 }
             }

@@ -35,6 +35,7 @@ abstract public class GameScene implements Screen {
         this.setupGUI();
         this.setupGameObjects(context);
         this.setupPointLight(context);
+        this.setupEvents(context);
         this.setupInput();
         this.setupBGS(context);
         this.setupBGM(context);
@@ -106,6 +107,9 @@ abstract public class GameScene implements Screen {
     abstract public void setupBGS(XmlReader.Element context) throws Exception;
 
     abstract public void setupBGM(XmlReader.Element context) throws Exception;
+
+    abstract public void setupEvents(XmlReader.Element context) throws NoSuchMethodException,
+            SecurityException;
 
     abstract public void resizeGUI(int width, int height);
 

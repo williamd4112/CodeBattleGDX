@@ -8,7 +8,6 @@ import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.Attack;
-import com.codebattle.model.meta.GameActorType;
 import com.codebattle.model.units.Direction;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.TextureFactory;
@@ -17,26 +16,32 @@ public class GameActorAttackAnimation extends AttackAnimation {
 
     private GameActor attacker;
 
-    // GameActor Portrait
     private Texture texture;
+    private float x = 0, time = 0;
 
     public GameActorAttackAnimation(GameStage stage, Attack attack, GameActor attacker,
             GameObject target) throws Exception {
         super(stage, attack, target);
         this.attacker = attacker;
+
     }
 
     @Override
     public void setup() {
         super.setup();
         try {
-            GameActorType type = attacker.type;
             this.texture = TextureFactory.getInstance()
-                    .loadTextureFromFile(attacker.source, ResourceType.ANIMATION);
+                    .loadTextureFromFile(attacker.source + "_attack", ResourceType.ANIMATION);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         this.attacker.setDirection(Direction.HOLD_ATK);
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
     }
 
     @Override
@@ -48,10 +53,13 @@ public class GameActorAttackAnimation extends AttackAnimation {
     @Override
     public void draw(Batch batch, Camera camera, float delta) {
         super.draw(batch, camera, delta);
-        int step = (int) (camera.viewportWidth / this.duration);
-        Vector3 screen = camera.unproject(new Vector3(x += step, camera.viewportHeight
-                - (camera.viewportHeight - texture.getHeight()) / 2, 0));
-        batch.draw(texture, screen.x, screen.y);
+        this.x += Functions.exp6(time) * (camera.viewportWidth / this.duration);
+        this.time += 0.01f;
+
+        Vector3 screen = camera.unproject(new Vector3(x, camera.viewportHeight / 2
+                + (this.texture.getHeight() * 0.5f) / 2, 0));
+        batch.draw(texture, screen.x, screen.y, this.texture.getWidth() * 0.5f,
+                this.texture.getHeight() * 0.5f);
     }
 
 }

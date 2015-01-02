@@ -79,6 +79,10 @@ abstract public class GameObject extends Actor {
         return this.vy;
     }
 
+    public GameObjectState getState() {
+        return this.state;
+    }
+
     @Override
     public float getCenterX() {
         return this.getX() + GameConstants.CELL_SIZE / 2;
@@ -116,7 +120,7 @@ abstract public class GameObject extends Actor {
 
     abstract public boolean isBlock();
 
-    abstract public void onAttacked(Attack attack);
+    abstract public GameObjectState onAttacked(Attack attack);
 
     abstract public void onSkillAttacked(int atk);
 
@@ -130,7 +134,7 @@ abstract public class GameObject extends Actor {
 
     abstract public void onSkill(Skill skill);
 
-    abstract public void onDestroyed(GameObject obj);
+    abstract public void onDestroyed();
 
     // Interaction with user
     abstract public void onSelected(Owner owner);

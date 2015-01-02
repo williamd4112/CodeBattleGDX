@@ -1,0 +1,276 @@
+<xml>
+	<map time="noon">Dugeon</map>
+	<bgm>scene_tutorial1.ogg</bgm>
+	<bgs></bgs>
+	<init>
+		<gameobject class="GlowObject" owner="Green" name="Crystal"
+			type="normal" x="22" y="30" />
+		<pointlight color="f0ffff" radius="1000" x="22" y="22" />
+
+	</init>
+
+	<events>
+		<event name="Intro" trigger="onStageStart" type="ONCE">
+			<condition>
+				<method name="noCondition">
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						Welcome to this code based virtual world. This is a
+						basic tutorial to teach yo how to move your character, combat with
+						other enemy, interact with game world. And some basic programming
+						syntax will be covered, too.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						First, take a look at left botoom of your game panel.
+						You should see "Resource" and "Life" field.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Resource will be decreased when you create any unit.
+						Life will be decreased when you lost a character.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Now, try to create the first game actor.
+						Click on the
+						script editor on your right hand side and enter
+						"vs.createGameActor("Saber","light",20,24);"
+						And click on the
+						submit button.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="lookAt">
+					<arg key="x">20</arg>
+					<arg key="y">24</arg>
+				</method>
+			</effect>
+		</event>
+		<event name="InPosition" trigger="onRoundComplete" type="ONCE">
+			<condition>
+				<method name="isGameObjectAtPosition">
+					<arg key="Target">Saber</arg>
+					<arg key="Owner">Red</arg>
+					<arg key="x">22</arg>
+					<arg key="y">24</arg>
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						Well done, you have create your own first game actor
+						by coding.
+						"vs.createActor("Saber","light",22,24)" means that
+						create a Saber which type is light at (22,24) position
+						And what 's
+						the meaning of "vs" ? We explain this later.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Let's try to move your character !
+						Enter:
+						Saber.moveUp(6);
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="512" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+			</effect>
+		</event>
+		<event name="InPosition2" trigger="onRoundComplete" type="ONCE">
+			<condition>
+				<method name="isGameObjectAtPosition">
+					<arg key="Target">Saber</arg>
+					<arg key="Owner">Red</arg>
+					<arg key="x">22</arg>
+					<arg key="y">29</arg>
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						Did you see it? You expect your saber will be at
+						(22,30). But she stop at (22,29). Why? Because she blocked by a
+						crystal,a level object of this world.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Also,some terrain will block your game actor. e.g.
+						rock, water, etc...
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="512" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Now, go back to (22,25) . We'll continue our course.
+						Enter:
+						Saber.moveDown(4);
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+			</effect>
+		</event>
+		<event name="Encounter_Enemy" trigger="onRoundComplete" type="ONCE">
+			<condition>
+				<method name="isGameObjectAtPosition">
+					<arg key="Target">Saber</arg>
+					<arg key="Owner">Red</arg>
+					<arg key="x">22</arg>
+					<arg key="y">25</arg>
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						We got company !
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="256" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+					<arg key="Callback">
+						<methods>
+							<method name="createGameActor">
+								<arg key="Name">Saber</arg>
+								<arg key="Type">light</arg>
+								<arg key="Owner">Blue</arg>
+								<arg key="x">22</arg>
+								<arg key="y">24</arg>
+							</method>
+							<method name="decreaseHP">
+								<arg key="Name">Saber</arg>
+								<arg key="Owner">Blue</arg>
+								<arg key="Diff">60</arg>
+							</method>
+						</methods>
+					</arg>
+				</method>
+
+				<method name="showDialog">
+					<arg key="Context">
+						This is your first battle. Your enemy is same as you,
+						just a light saber. You can beat it.
+						Enter:
+						Saber.attack(22,24);
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="256" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+					<arg key="Callback">
+						<methods>
+							<method name="setSwitch">
+								<arg key="Index">0</arg>
+								<arg key="Value">true</arg>
+							</method>
+						</methods>
+					</arg>
+				</method>
+
+			</effect>
+		</event>
+		<event name="Enemy_Destroyed" trigger="onRoundComplete" type="ONCE">
+			<condition>
+				<method name="isSwitchOn">
+					<arg key="Index">0</arg>
+				</method>
+				<method name="isGameObjectDestroyed">
+					<arg key="Target">Saber</arg>
+					<arg key="Owner">Blue</arg>
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						Good work ! Now, you have learned how to control your
+						character to do some simple action.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						But you beat it by only one shot because it just a
+						light saber weakened by the system.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						We will cover more contents in the next tutorial. I
+						'll meet you there.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+					<arg key="Callback">
+						<methods>
+							<method name="callForWin">
+								<arg key="Player">Red</arg>
+							</method>
+						</methods>
+					</arg>
+				</method>
+			</effect>
+		</event>
+	</events>
+</xml>

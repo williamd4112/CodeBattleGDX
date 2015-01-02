@@ -21,7 +21,6 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
     protected int repeat;
     protected int duration;
     protected int interval;
-    protected float x = 0;
     protected int frame = 0;
     protected int frameWidth;
     protected int frameHeight;
@@ -35,7 +34,7 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         this.stage.setCameraTarget(this.target);
         if (this.duration % this.interval == 0)
             this.frame = AnimationUtil.frameOscillate(this.frame, 0, this.frames.length - 1);

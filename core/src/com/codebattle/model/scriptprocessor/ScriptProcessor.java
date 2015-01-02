@@ -17,7 +17,7 @@ import com.codebattle.model.gameactor.GameActor;
  * 1. Pass a stage so that the processor knows where it should do operation.
  * 2. Create a new thread to run all commands.
  */
-public class ScriptProcessor extends Thread {
+public class ScriptProcessor {
 
     private final ScriptEngineManager manager;
     private final ScriptEngine engine;
@@ -26,7 +26,7 @@ public class ScriptProcessor extends Thread {
     private final String script;
 
     public ScriptProcessor(final GameStage stage, final Owner currentPlayer, final String script) {
-        this.setDaemon(true);
+        // this.setDaemon(true);
         this.script = script;
         this.stage = stage;
         this.currentPlayer = currentPlayer;
@@ -46,7 +46,6 @@ public class ScriptProcessor extends Thread {
         }
     }
 
-    @Override
     public void run() {
         try {
             // Processing script (put animation object into queue
@@ -60,11 +59,7 @@ public class ScriptProcessor extends Thread {
 
         } catch (final ScriptException e) {
             System.out.println("------Exception occurred------");
-            this.stage.resetAnimQueue();
-            this.stage.getVirtualMap()
-                    .resetActorsVirtualCoordinate();
-            this.stage.getVirtualMap()
-                    .resetVirtualMap();
+            this.stage.reset();
             e.printStackTrace();
         }
     }

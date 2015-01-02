@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.codebattle.model.meta.Animation;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.units.Interval;
 
@@ -45,6 +46,7 @@ public class GameConstants {
     public final static String BGM_DIR = "audio/BGM/";
     public final static String BGS_DIR = "audio/BGS/";
     public final static String SE_DIR = "audio/SE/";
+    public final static String DEFAULT_ANIMATION_META_DIR = "default/";
 
     public final static String DEFAULT_TEXTURE_EXTENSION = ".png";
     public final static String DEFAULT_GAMEACTORDESC_EXTENSION = ".xml";
@@ -62,14 +64,19 @@ public class GameConstants {
 
     public final static Skin DEFAULT_SKIN = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
 
+    public static Animation SUMMON_ANIMMETA;
+    public static String SUMMON_SE = "summon.ogg";
+
     public static Map<String, String> API_GAMEACTOR = new HashMap<String, String>();
 
     public static void init() {
         try {
             API_GAMEACTOR = XMLUtil.readAPIFromFile(API_DIR + "GameActor.xml");
+            SUMMON_ANIMMETA = new Animation(XMLUtil.readXMLFromFile(
+                    DEFAULT_ANIMATION_META_DIR + "summon_animation.xml")
+                    .getChildByName("animation"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

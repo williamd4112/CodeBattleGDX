@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="44" height="44" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="048-Sewer01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/048-Sewer01.png" width="256" height="768"/>
+  <terraintypes>
+   <terrain name="新地形" tile="-1"/>
+  </terraintypes>
+  <tile id="40">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="42">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="48">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="49">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="50">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="56">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="57">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="58">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="91">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="193" name="047-Mine01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/047-Mine01.png" width="256" height="864"/>
+ </tileset>
+ <tileset firstgid="409" name="033-Heaven02" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/033-Heaven02.png" width="256" height="928"/>
+  <tile id="131">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="139">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="147">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="163">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="171">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+  <tile id="179">
+   <properties>
+    <property name="passiable" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="641" name="032-Heaven01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/032-Heaven01.png" width="256" height="1024"/>
+ </tileset>
+ <tileset firstgid="897" name="051-Water01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/051-Water01.png" width="512" height="384"/>
+ </tileset>
+ <tileset firstgid="1089" name="009-CastleTown01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/009-CastleTown01.png" width="256" height="960"/>
+ </tileset>
+ <tileset firstgid="1329" name="025-Castle01" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/025-Castle01.png" width="256" height="896"/>
+ </tileset>
+ <tileset firstgid="1553" name="026-Castle02" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/026-Castle02.png" width="256" height="800"/>
+ </tileset>
+ <tileset firstgid="1753" name="052-Water02" tilewidth="32" tileheight="32">
+  <image source="../graphics/tilesets/052-Water02.png" width="512" height="384"/>
+ </tileset>
+ <layer name="Layer1" width="44" height="44">
+  <data encoding="base64" compression="zlib">
+   eJztwwENAAAMw6AKnX8dF3JIWDVVVVVVVVVV3z8uzbff
+  </data>
+ </layer>
+ <layer name="Layer2" width="44" height="44">
+  <data encoding="base64" compression="zlib">
+   eJztmDEOg0AMBP0FoEqo4KqDCmhI+P+/4sYljsQRC6IZaYqTXKzk1RXOIjLcxFGd1PkmLupLfZ/o+uVd4iYAAAAAsEel1gU2wXkf6rPAlrzkJe/f5u3UvsAUnDfL/p3A/ubGmRmD83p3C+tK68wswXm9u4V1JTkzV7olWFeid34U60r0zo9iXbnSzgEAAADgN3wAseYydQ==
+  </data>
+ </layer>
+ <layer name="Layer3" width="44" height="44">
+  <data encoding="base64" compression="zlib">
+   eJzlWMtKxEAQXPYDFlRYUPfi4+LjooJv1IOoB1EP6kkFn6D+/92agxDD9GwnU90ZtaAOSaa7Kx2mpkmvx8cj+AQ+G+S2wDv4AX52LUSJCXASnOpaiBLT4Aw4a1iD2ZM5cB5cIOSSdDF7wnx3SRezJ8x3l3QtgcvgimGNNpB0rYHr4IZhjTaQdO2Au+CeYY02YOrqssZvQ6ln0n/13/1+8xraeI2uph50LNQb9X/WGAnrpPg6WP57Hqk3wL3F2v1wPYisjcXHYOm/Q2hYrekI10OlthhydLE9xNqTtB5yjX7egLdj+mo9J2s95A4678GHMXpz5iLNt6nu1ZQfveDZK/iWWBPiNZ6Uc15U92rKjzbxbAvcTqwJ8RpPyjkvqns15UcHeHYIHiXWhHjN3veY10+g5RQ8y/Cxb3jM6xfQeQleEfR6zOtMlKrrr6PUeV2Cxz+kNpD6yPxnwITUR6b/MiH1kem/TEh9LNXnSu2jhFL72BRM//XIxfRfj1xM//XIxfRfj1xM3/DIxfSNUnN1gS95xDSw
+  </data>
+ </layer>
+</map>

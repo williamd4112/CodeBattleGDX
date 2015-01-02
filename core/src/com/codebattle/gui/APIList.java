@@ -49,7 +49,7 @@ public class APIList extends Table {
     public void resize(int width, int height) {
         this.reset();
         // this.setDebug(true);
-        this.label.setFontScale(width * 0.0009f);
+        // this.label.setFontScale(width * 0.0009f);
         this.add(pane)
                 .height(height * 0.2f)
                 .width(width * 0.2f);
