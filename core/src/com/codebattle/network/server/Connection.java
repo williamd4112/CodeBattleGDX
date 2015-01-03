@@ -46,17 +46,23 @@ public class Connection extends Thread {
             if (this.server == null) {
                 this.server = listener;
             }
-        } else if (listener.getClass()
+        }
+        else if (listener.getClass()
                 .equals(Room.class)) {
             if (this.room == null) {
                 this.room = listener;
             }
-        } else if (listener.getClass()
+        }
+        else if (listener.getClass()
                 .equals(ConnectionTimer.class)) {
             if (this.timer == null) {
                 this.timer = (ConnectionTimer) listener;
             }
         }
+    }
+    
+    public void unbindRoom() {
+    	this.room = null;
     }
 
     @Override
@@ -77,9 +83,11 @@ public class Connection extends Thread {
                 } else
                     break;
             }
-        } catch (final Exception e) {
+        }
+        catch (final Exception e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             this.emitDisconnect(this);
         }
     }
@@ -99,7 +107,8 @@ public class Connection extends Thread {
     public void emitReceiveMessage(final Connection connection, final String msg) {
         if (this.room != null) {
             this.room.onReceiveMessage(connection, msg);
-        } else {
+        }
+        else {
             System.out.println("Transfer to server");
             this.server.onReceiveMessage(connection, msg);
         }
@@ -108,7 +117,8 @@ public class Connection extends Thread {
     public void emitDisconnect(final Connection connection) {
         if (this.room != null) {
             this.room.onDisconnect(connection);
-        } else {
+        }
+        else {
             this.server.onDisconnect(connection);
         }
     }

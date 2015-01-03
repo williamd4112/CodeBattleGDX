@@ -83,6 +83,16 @@ public class Room implements ConnectionListener {
                 this.sceneName = msg.data.toString(); //Data: Scene name
                 this.emitChangeScene();
             }
+        	else if(msg.opt.equals("Leave")){
+        		this.removeConnection(connection);
+        		this.connectionNum--;
+        		connection.unbindRoom();
+        		server.addIdleConnection(connection);
+        		if (this.connectionNum == 0) {
+        			emitDestroyRoom(this.name);
+        		}
+        		
+        	}
         }
         else if (msg.type.equals("Game")) {
         	if(msg.opt.equals("Select") && this.playing == false){
@@ -105,7 +115,8 @@ public class Room implements ConnectionListener {
 			if (this.playing == true) {
 				if (msg.opt.equals("Script")) {
 					toDestination.send(rawMessage);
-				} else if (msg.opt.equals("Close")) {
+				}
+				else if (msg.opt.equals("Close")) {
 					toDestination.send(rawMessage);
 					this.resetGameVariable();
 				}
@@ -152,6 +163,7 @@ public class Room implements ConnectionListener {
     public void onDisconnect(Connection connection) {
         // this event will tell room which connection is disconnected, and send a close
         // message to another connection
+    	connection.unbindRoom();
 		this.closeGame(this.getDestination(connection));
 		this.removeConnection(connection);
 		this.connectionNum--;

@@ -112,14 +112,16 @@ public class Server implements RoomListener, ConnectionListener {
                     connection.setPlayer(msg.data.toString());
                     connection.send(DataHandler.accept("Login Succeed")
                             .toString());
-                } else if (msg.opt.equals("RoomList")) {
+                }
+                else if (msg.opt.equals("RoomList")) {
                     System.out.println("onReceiveMessage@Server: Room list request");
                     for (String key : this.roomsInfo.keySet())
                         System.out.println(this.roomsInfo.get(key));
                     connection.send(DataHandler.RoomList(roomsInfo)
                             .toString());
                 }
-            } else if (msg.type.equals("Room")) {
+            }
+            else if (msg.type.equals("Room")) {
                 if (msg.opt.equals("Create")) {
                     Room room = this.addRoom(msg.data.toString()); // Data: Room name
                     rooms.put(room.getName(), room);
@@ -132,13 +134,15 @@ public class Server implements RoomListener, ConnectionListener {
                             + " created.");
                 } else if (msg.opt.equals("Join")) {
                     Room room = this.rooms.get(msg.data.toString());
-                    if (room == null) { // Room is full
+                    if (room == null) {
                         connection.send(DataHandler.deny("Fail")
                                 .toString());
-                    } else if (room.isFull()) {
+                    }
+                    else if (room.isFull()) { // Room is full
                         connection.send(DataHandler.deny("Full")
                                 .toString());
-                    } else { // Is able to join
+                    }
+                    else { // Is able to join
                         room.addConnection(connection);
                         connection.send(DataHandler.accept("")
                                 .toString());
@@ -146,7 +150,8 @@ public class Server implements RoomListener, ConnectionListener {
                     }
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -168,6 +173,11 @@ public class Server implements RoomListener, ConnectionListener {
         Room room = rooms.get(oldRoomName);
         rooms.put(newRoomName, room);
     }
+    
+    @Override
+	public void addIdleConnection(Connection connection) {
+		this.idleConnections.add(connection);
+	}
 
     @Override
     public void destroyRoom(String roomName) {

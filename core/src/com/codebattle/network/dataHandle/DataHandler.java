@@ -42,8 +42,8 @@ public class DataHandler {
         return create("Room", "Join", data);
     }
 
-    public static JSONObject closeRoom(String data) {
-        return create("Room", "Close", data);
+    public static JSONObject leaveRoom(String data) {
+        return create("Room", "Leave", data);
     }
 
     public static JSONObject assignScene(String data) {
