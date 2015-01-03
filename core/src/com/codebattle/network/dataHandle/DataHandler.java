@@ -50,8 +50,8 @@ public class DataHandler {
         return create("Room", "Assign", data);
     }
     
-    public static JSONObject getAligment(String data) {
-        return create("Game", "Aligment", data);
+    public static JSONObject getTeam(String data) {
+        return create("Game", "Team", data);
     }
 
     public static JSONObject startGame(String data) {

@@ -112,8 +112,8 @@ public class Room implements ConnectionListener {
         			this.startGame();
         		}
         	}
-        	else if(msg.opt.equals("Aligment") && this.playing == false) {
-        		connection.send(DataHandler.getAligment(this.getSource(connection)).toString());
+        	else if(msg.opt.equals("Team") && this.playing == false) {
+        		connection.send(DataHandler.getTeam(this.getSource(connection)).toString());
         	}
         	else if (this.playing == true) {
 				if (msg.opt.equals("Script")) {
@@ -141,7 +141,7 @@ public class Room implements ConnectionListener {
     }
     
     private void startGame() {
-		boardcast(DataHandler.startGame(""));
+		boardcast(DataHandler.startGame(sceneName));
 		this.playing = true;
 	}
     
