@@ -49,6 +49,10 @@ public class DataHandler {
     public static JSONObject assignScene(String data) {
         return create("Room", "Assign", data);
     }
+    
+    public static JSONObject getAligment(String data) {
+        return create("Game", "Aligment", data);
+    }
 
     public static JSONObject startGame(String data) {
         return create("Game", "Start", data);

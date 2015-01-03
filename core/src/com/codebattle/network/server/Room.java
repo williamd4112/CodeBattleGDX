@@ -112,7 +112,10 @@ public class Room implements ConnectionListener {
         			this.startGame();
         		}
         	}
-			if (this.playing == true) {
+        	else if(msg.opt.equals("Aligment") && this.playing == false) {
+        		connection.send(DataHandler.getAligment(this.getSource(connection)).toString());
+        	}
+        	else if (this.playing == true) {
 				if (msg.opt.equals("Script")) {
 					toDestination.send(rawMessage);
 				}
