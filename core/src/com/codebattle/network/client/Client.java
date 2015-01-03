@@ -17,8 +17,6 @@ import com.codebattle.network.PeerListener;
 import com.codebattle.network.dataHandle.DataHandler;
 
 public class Client {
-    // private Game game;
-    // private GameAgent listener = null;
 
     // Network IO
     private Socket socket = null;
@@ -69,6 +67,7 @@ public class Client {
      */
     private void emitReceiveMessage(String msg) {
         // this.game.onReceiveMessage(msg);
+        System.out.println("emitReceiveMessage@Client: " + msg);
         for (PeerListener p : this.listeners)
             p.onReceivedMessage(msg);
     }
@@ -83,8 +82,8 @@ public class Client {
     }
 
     public void send(String msg) {
-    	this.writer.println(msg);
-		this.writer.flush();
+        this.writer.println(msg);
+        this.writer.flush();
     }
 
     private class ListenThread extends Thread {
@@ -93,30 +92,32 @@ public class Client {
             try {
                 String rawMessage = null;
                 while (!socket.isClosed()) {
-                    rawMessage = Client.this.reader.readLine();
-                    emitReceiveMessage(rawMessage);
+                    if ((rawMessage = Client.this.reader.readLine()) != null) {
+                        emitReceiveMessage(rawMessage);
+                        System.out.println("Raw: " + rawMessage);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    
-	private class TimerThread extends Thread {
-		long interval = 30; // unit: second
-		Timer timer = new Timer();
 
-		@Override
-		public void run() {
-			timer.schedule(new TimerTask() {
+    private class TimerThread extends Thread {
+        long interval = 30; // unit: second
+        Timer timer = new Timer();
 
-				@Override
-				public void run() {
-					Client.this.send(DataHandler.report().toString());
-				}
+        @Override
+        public void run() {
+            timer.schedule(new TimerTask() {
 
-			}, TimeUnit.SECONDS.toMillis(interval),
-					TimeUnit.SECONDS.toMillis(interval));
-		}
-	}
+                @Override
+                public void run() {
+                    Client.this.send(DataHandler.report()
+                            .toString());
+                }
+
+            }, TimeUnit.SECONDS.toMillis(interval), TimeUnit.SECONDS.toMillis(interval));
+        }
+    }
 }

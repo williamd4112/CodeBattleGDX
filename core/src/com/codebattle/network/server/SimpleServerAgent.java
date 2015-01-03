@@ -70,4 +70,9 @@ public class SimpleServerAgent extends JFrame implements PeerListener {
         }
     }
 
+    @Override
+    public void onDisconnected(Socket socket) {
+        this.monitor.printMessage("Client from " + socket.getRemoteSocketAddress()
+                + " disconnect.");
+    }
 }

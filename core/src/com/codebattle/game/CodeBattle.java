@@ -1,6 +1,7 @@
 package com.codebattle.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.codebattle.scene.StartupScene;
 import com.codebattle.utility.GameConstants;
@@ -12,7 +13,7 @@ public class CodeBattle extends Game {
         try {
             GameConstants.init();
             ShaderProgram.pedantic = false;
-            this.setScreen(new StartupScene());
+            this.setScreen(new StartupScene(this));
             // this.setScreen(new DemoLayout());
             // this.setScreen(new SinglePlayerGameScene("tutorial1"));
 
@@ -25,5 +26,9 @@ public class CodeBattle extends Game {
     @Override
     public void render() {
         super.render();
+    }
+
+    public void setScene(Screen screen) {
+        this.setScreen(screen);
     }
 }

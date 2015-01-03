@@ -70,14 +70,26 @@ public class SimpleGameAgent extends JFrame implements PeerListener {
     }
 
     @Override
-    public void onReceivedMessage(String msg) {
-        this.monitor.printMessage(msg);
+    public void onReceivedMessage(String rawMessage) {
+        try {
+            System.out.println("onReceiveMessage@Client: " + rawMessage);
+            // Message msg = new Message(rawMessage);
+            // this.monitor.printMessage(msg.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onConnected(Socket socket) {
         this.monitor.printMessage("***Server at " + socket.getRemoteSocketAddress()
                 + " connected***");
+    }
+
+    @Override
+    public void onDisconnected(Socket socket) {
+        // TODO Auto-generated method stub
+
     }
 
     public void connect(String address) {

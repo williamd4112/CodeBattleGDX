@@ -52,7 +52,7 @@ public class Server implements RoomListener, ConnectionListener {
     private final ListenThread listenThread;
 
     // Message Receiving routing
-    //private Map<String, Method> routingTable;
+    // private Map<String, Method> routingTable;
 
     // Interface with Agent
     private List<PeerListener> peerListeners;
@@ -97,72 +97,83 @@ public class Server implements RoomListener, ConnectionListener {
         try {
             // Extract data
             Message msg = new Message(rawMessage);
-            emitReceiveMessage(rawMessage);
+            System.out.println("Extract:");
+            System.out.println("Type: " + msg.type);
+            System.out.println("Opt: " + msg.opt);
+            System.out.println("Data: " + msg.data);
+
             // Routing (will be replaced with routing table if there is enough time
             if (msg.type.equals("Server")) {
                 // Login the server (Although connection has been created, but its player
                 // data
                 // hasn't been set
                 if (msg.opt.equals("Login")) {
-                    connection.getPlayer()
-                            .setName(msg.data.toString());
+                    System.out.println("onReceiveMessage@Server: Player login");
+                    connection.setPlayer(msg.data.toString());
+                    connection.send(DataHandler.accept("Login Succeed")
+                            .toString());
+                } else if (msg.opt.equals("RoomList")) {
+                    System.out.println("onReceiveMessage@Server: Room list request");
+                    for (String key : this.roomsInfo.keySet())
+                        System.out.println(this.roomsInfo.get(key));
+                    connection.send(DataHandler.RoomList(roomsInfo)
+                            .toString());
                 }
-                else if (msg.opt.equals("RoomList")) {
-                	connection.send(DataHandler.RoomList(roomsInfo).toString());
-                }
-            }
-            else if (msg.type.equals("Room")) {
+            } else if (msg.type.equals("Room")) {
                 if (msg.opt.equals("Create")) {
-                    Room room = this.addRoom(msg.data.toString()); //Data: Room name
+                    Room room = this.addRoom(msg.data.toString()); // Data: Room name
                     rooms.put(room.getName(), room);
                     roomsInfo.put(room.getName(), room.getScene());
                     room.addConnection(connection);
-                    connection.send(DataHandler.accept("").toString());
+                    connection.send(DataHandler.accept("")
+                            .toString());
                     this.idleConnections.remove(connection);
+                    System.out.println("onReceiveMessage@Server: " + room.getName()
+                            + " created.");
+                } else if (msg.opt.equals("Join")) {
+                    Room room = this.rooms.get(msg.data.toString());
+                    if (room == null) { // Room is full
+                        connection.send(DataHandler.deny("Fail")
+                                .toString());
+                    } else if (room.isFull()) {
+                        connection.send(DataHandler.deny("Full")
+                                .toString());
+                    } else { // Is able to join
+                        room.addConnection(connection);
+                        connection.send(DataHandler.accept("")
+                                .toString());
+                        this.idleConnections.remove(connection);
+                    }
                 }
-                else if (msg.opt.equals("Join")) {
-                	Room room = this.rooms.get(msg.data.toString());
-                	if (room == null) { // Room is full
-                		connection.send(DataHandler.deny("Fail").toString());
-                	}
-                	else if (room.isFull()){
-                		connection.send(DataHandler.deny("Full").toString());
-                	}
-                	else { // Is able to join
-	                    room.addConnection(connection);
-	                    connection.send(DataHandler.accept("").toString());
-	                    this.idleConnections.remove(connection);
-                	}
-            	}
             }
-        }
-        catch (Exception e) {
-            // e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void onDisconnect(Connection connection) {
         this.idleConnections.remove(connection);
+        this.emitDisconnectEvent(connection.getSocket());
     }
 
     // Trigger by Room
     @Override
-	public void ChangeScene(String roomName, String sceneName) {
-    	this.roomsInfo.put(roomName, sceneName);
-	}
+    public void ChangeScene(String roomName, String sceneName) {
+        this.roomsInfo.put(roomName, sceneName);
+    }
 
-	@Override
-	public void ChangeName(String newRoomName, String oldRoomName) {
-		Room room = rooms.get(oldRoomName);
-		rooms.put(newRoomName, room);
-	}
-	
     @Override
-	public void destroyRoom(String roomName) {
-		this.rooms.remove(roomName);
-		this.roomsInfo.remove(roomName);
-	}
+    public void ChangeName(String newRoomName, String oldRoomName) {
+        Room room = rooms.get(oldRoomName);
+        rooms.put(newRoomName, room);
+    }
+
+    @Override
+    public void destroyRoom(String roomName) {
+        this.rooms.remove(roomName);
+        this.roomsInfo.remove(roomName);
+    }
 
     public void emitReceiveMessage(String msg) {
         for (PeerListener p : this.peerListeners)
@@ -172,6 +183,15 @@ public class Server implements RoomListener, ConnectionListener {
     public void emitConnectEvent(Socket socket) {
         for (PeerListener p : this.peerListeners)
             p.onConnected(socket);
+    }
+
+    /**
+     * @author 1/3
+     * @param socket
+     */
+    public void emitDisconnectEvent(Socket socket) {
+        for (PeerListener p : this.peerListeners)
+            p.onDisconnected(socket);
     }
 
     /**
@@ -194,8 +214,7 @@ public class Server implements RoomListener, ConnectionListener {
 
                     emitConnectEvent(clientSocket);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
