@@ -203,5 +203,5 @@ Temporary Items
 .apdisk
 
 # Resource file
-*.png
-*.ogg
+#*.png
+#*.ogg
