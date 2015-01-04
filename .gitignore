@@ -205,7 +205,3 @@ Temporary Items
 # Resource file
 *.png
 *.ogg
-
-
-### Project ###
-!libs/**/*.jar
