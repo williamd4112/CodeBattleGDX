@@ -2,16 +2,19 @@ package com.codebattle.gui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.codebattle.model.GameStage;
 
 public class ControlGroup extends Table {
-    // private TextButton button;
+    final GameStage stage;
+
     private Menu menu;
     private SystemIndicator sysIndicator;
     private Panel panel;
 
-    public ControlGroup(Skin skin) {
+    public ControlGroup(GameStage stage, Skin skin) {
         super();
-        this.menu = new Menu(skin);
+        this.stage = stage;
+        this.menu = new Menu(stage, skin);
         this.sysIndicator = new SystemIndicator(skin);
         this.panel = new Panel(skin);
     }

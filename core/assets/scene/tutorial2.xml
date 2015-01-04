@@ -1,0 +1,19 @@
+<xml>
+	<map time="noon">Dugeon</map>
+	<bgm>scene_tutorial2.ogg</bgm>
+	<bgs></bgs>
+	<ambient color="000000" intensity="0.1f"/>
+	<init>
+	    <gameobject class="GameActor" owner="Red" name="Saber"
+			type="light" x="22" y="24" />
+		<gameobject class="GlowObject" owner="Green" name="Crystal"
+			type="normal" x="12" y="25" />
+		<gameobject class="GlowObject" owner="Green" name="Crystal"
+			type="normal" x="32" y="25" />
+		<pointlight color="f0ffff" radius="1000" x="22" y="22" />
+	</init>
+
+	<events>
+
+	</events>
+</xml>

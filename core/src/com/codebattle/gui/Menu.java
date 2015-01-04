@@ -8,15 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.codebattle.model.GameStage;
+import com.codebattle.scene.StartupScene;
 
 public class Menu extends Table implements Resizeable {
+    final GameStage stage;
+
     private final String[] items = { "Options", "Save", "Load", "Exit" };
     private boolean isShow = false;
 
     private final TextButton menuBtn;
     private final List<TextButton> btnList;
 
-    public Menu(final Skin skin) {
+    private final TextButton btn_exit;
+
+    public Menu(final GameStage stage, final Skin skin) {
+        this.stage = stage;
         this.btnList = new ArrayList<TextButton>();
         this.menuBtn = new TextButton("Menu", skin);
         this.menuBtn.addListener(new ClickListener() {
@@ -37,6 +44,19 @@ public class Menu extends Table implements Resizeable {
             this.btnList.add(btn);
             btn.setVisible(false);
         }
+
+        this.btn_exit = btnList.get(3);
+        this.btn_exit.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                stage.parent.parent.setScene(new StartupScene(stage.parent.parent));
+                stage.parent.dispose();
+
+            }
+
+        });
     }
 
     @Override

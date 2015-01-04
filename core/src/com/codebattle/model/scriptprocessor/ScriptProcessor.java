@@ -1,15 +1,13 @@
 package com.codebattle.model.scriptprocessor;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.codebattle.model.GameActorProxy;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.GameState;
 import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.gameactor.GameActorProxy;
 
 /**
  * Script processor.
@@ -17,21 +15,17 @@ import com.codebattle.model.gameactor.GameActor;
  * 1. Pass a stage so that the processor knows where it should do operation.
  * 2. Create a new thread to run all commands.
  */
-public class ScriptProcessor {
+public class ScriptProcessor extends BaseScriptProcessor {
 
-    private final ScriptEngineManager manager;
-    private final ScriptEngine engine;
-    private final GameStage stage;
     private final Owner currentPlayer;
-    private final String script;
+    private final GameStage stage;
 
-    public ScriptProcessor(final GameStage stage, final Owner currentPlayer, final String script) {
-        // this.setDaemon(true);
-        this.script = script;
+    public ScriptProcessor(final GameStage stage, final Owner currentPlayer,
+            final String script) {
+        super();
         this.stage = stage;
         this.currentPlayer = currentPlayer;
-        this.manager = new ScriptEngineManager();
-        this.engine = this.manager.getEngineByExtension("js");
+        this.script = script;
 
         System.out.println("ScriptProcessor put object : ");
         this.engine.put("vs", this.stage.getVirtualSystems()[currentPlayer.index]);
@@ -46,16 +40,17 @@ public class ScriptProcessor {
         }
     }
 
+    @Override
     public void run() {
         try {
+            this.stage.getVirtualMap().preUpdate();
             // Processing script (put animation object into queue
             this.engine.eval(this.script);
 
             // Processing animation (start processing animation)
             this.stage.printAllVirtualObjects();
             this.stage.setState(GameState.ANIM);
-            this.stage.getVirtualMap()
-                    .resetActorsCulmuSteps();
+            this.stage.getVirtualMap().resetActorsCulmuSteps();
 
         } catch (final ScriptException e) {
             System.out.println("------Exception occurred------");

@@ -8,11 +8,16 @@ public class GameActorType {
     public Region region;
     private Attack attack;
     private Skill skill;
+    private String select_sound;
 
     public GameActorType(XmlReader.Element type) throws NoSuchMethodException, SecurityException {
 
         // Read basic info
         this.prop = new GameActorProperties(type);
+
+        // Read selct_sound name
+        this.select_sound = type.getChildByName("sound")
+                .getText();
 
         // Read actors movement animation region
         XmlReader.Element regionElement = type.getChildByName("region");
@@ -32,5 +37,9 @@ public class GameActorType {
 
     public Skill getSkill() {
         return this.skill;
+    }
+
+    public String getSelectSoundName() {
+        return this.select_sound;
     }
 }

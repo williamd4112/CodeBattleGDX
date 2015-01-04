@@ -12,6 +12,8 @@ import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.Owner;
+import com.codebattle.model.VirtualCell;
+import com.codebattle.model.animation.OnAttackAnimation;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.GameActorType;
 import com.codebattle.model.meta.Skill;
@@ -72,6 +74,7 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public GameObjectState onAttacked(Attack attack) {
+        this.stage.addAnimation(new OnAttackAnimation(this));
         this.decreaseHP(attack.getATK());
         System.out.println("onAttacked(" + attack.getATK() + "): " + this.getName() + " : "
                 + this.getProp().hp);
@@ -94,6 +97,7 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public void onSelected(Owner owner) {
+        SoundUtil.playSE(type.getSelectSoundName());
         SoundUtil.playSE(GameConstants.ONSELECT_SE);
     }
 
@@ -113,6 +117,14 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     public void interact(int x, int y) {
         if (this.isInRange(1, x, y)) {
             this.stage.emitInteractEvent(this, x, y);
+        }
+    }
+
+    public void writeCell(int x, int y, String type, String script) {
+        VirtualCell cell = this.stage.getVirtualMap()
+                .getCell(x, y);
+        if (cell != null) {
+            cell.setScript(type, script);
         }
     }
 

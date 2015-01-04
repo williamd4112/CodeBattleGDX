@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.codebattle.game.CodeBattle;
 import com.codebattle.model.startup.MainMenuStage;
+import com.codebattle.utility.SoundUtil;
 
 public class StartupScene implements Screen {
 
@@ -17,7 +18,7 @@ public class StartupScene implements Screen {
         super();
         this.parent = parent;
         this.stage = new MainMenuStage(this);
-        // this.stage = new MultiPlayerLobby(this);
+        SoundUtil.playBGM("main_theme.mp3");
     }
 
     @Override

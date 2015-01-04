@@ -1,7 +1,8 @@
 <xml>
-	<map time="noon">MultiplayStage</map>
+	<map time="noon">MultiPlayStage</map>
 	<bgm>scene_demo_bgm.ogg</bgm>
 	<bgs></bgs>
+	<ambient color="000000" intensity="0.1f"/>
 	<init>
 		<gameobject class="GameActor" owner="Blue" name="Saber"
 			type="heavy" x="5" y="12" />

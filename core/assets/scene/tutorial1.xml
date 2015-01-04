@@ -2,6 +2,7 @@
 	<map time="noon">Dugeon</map>
 	<bgm>scene_tutorial1.ogg</bgm>
 	<bgs></bgs>
+	<ambient color="000000" intensity="0.1f"/>
 	<init>
 		<gameobject class="GlowObject" owner="Green" name="Crystal"
 			type="normal" x="22" y="30" />
@@ -18,10 +19,7 @@
 			<effect>
 				<method name="showDialog">
 					<arg key="Context">
-						Welcome to this code based virtual world. This is a
-						basic tutorial to teach yo how to move your character, combat with
-						other enemy, interact with game world. And some basic programming
-						syntax will be covered, too.
+						Welcome to this code based virtual world. This is a basic tutorial to teach yo how to move your character, combat with other enemy, interact with game world. And some basic programming syntax will be covered, too.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -31,8 +29,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						First, take a look at left botoom of your game panel.
-						You should see "Resource" and "Life" field.
+						First, take a look at left botoom of your game panel. You should see "Resource" and "Life" field.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -42,8 +39,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						Resource will be decreased when you create any unit.
-						Life will be decreased when you lost a character.
+						Resource will be decreased when you create any unit. Life will be decreased when you lost a character.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -53,12 +49,8 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						Now, try to create the first game actor.
-						Click on the
-						script editor on your right hand side and enter
-						"vs.createGameActor("Saber","light",20,24);"
-						And click on the
-						submit button.
+						Now, try to create the first game actor. Click on the script editor on your right hand side and enter
+						"vs.createGameActor("Saber","light",20,24);" And click on the submit button.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -84,12 +76,7 @@
 			<effect>
 				<method name="showDialog">
 					<arg key="Context">
-						Well done, you have create your own first game actor
-						by coding.
-						"vs.createActor("Saber","light",22,24)" means that
-						create a Saber which type is light at (22,24) position
-						And what 's
-						the meaning of "vs" ? We explain this later.
+						Well done, you have create your own first game actor by coding. "vs.createActor("Saber","light",22,24)" means that create a Saber which type is light at (22,24) position And what 's the meaning of "vs" ? We explain this later.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -123,9 +110,7 @@
 			<effect>
 				<method name="showDialog">
 					<arg key="Context">
-						Did you see it? You expect your saber will be at
-						(22,30). But she stop at (22,29). Why? Because she blocked by a
-						crystal,a level object of this world.
+						Did you see it? You expect your saber will be at (22,30). But she stop at (22,29). Why? Because she blocked by a crystal,a level object of this world.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -135,8 +120,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						Also,some terrain will block your game actor. e.g.
-						rock, water, etc...
+						Also,some terrain will block your game actor. e.g. rock, water, etc...
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -197,8 +181,7 @@
 
 				<method name="showDialog">
 					<arg key="Context">
-						This is your first battle. Your enemy is same as you,
-						just a light saber. You can beat it.
+						This is your first battle. Your enemy is same as you, just a light saber. You can beat it.
 						Enter:
 						Saber.attack(22,24);
 					</arg>
@@ -232,8 +215,7 @@
 			<effect>
 				<method name="showDialog">
 					<arg key="Context">
-						Good work ! Now, you have learned how to control your
-						character to do some simple action.
+						Good work ! Now, you have learned how to control your character to do some simple action.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -243,8 +225,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						But you beat it by only one shot because it just a
-						light saber weakened by the system.
+						But you beat it by only one shot because it just a light saber weakened by the system.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -254,8 +235,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						We will cover more contents in the next tutorial. I
-						'll meet you there.
+						We will cover more contents in the next tutorial. I 'll meet you there.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">

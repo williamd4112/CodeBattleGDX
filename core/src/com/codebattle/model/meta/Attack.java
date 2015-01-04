@@ -2,6 +2,11 @@ package com.codebattle.model.meta;
 
 import com.badlogic.gdx.utils.XmlReader;
 
+/**
+ * Consist of Animation, Sound List, ATK, Range, Type(Resistance)
+ * @author williamd
+ *
+ */
 public class Attack {
     public Animation animMeta;
     public String soundName;

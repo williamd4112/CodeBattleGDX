@@ -48,6 +48,7 @@ public class StateTable extends Table implements Resizeable {
     }
 
     public void setKeys(String[] keys) {
+        this.resetKeys();
         for (int i = 0; i < keys.length; i++) {
             this.keyLabels.get(i)
                     .setText(keys[i]);
@@ -55,22 +56,30 @@ public class StateTable extends Table implements Resizeable {
     }
 
     public void setValues(String[] values) {
+        this.resetValues();
         for (int i = 0; i < values.length; i++) {
             this.valLabels.get(i)
                     .setText(values[i]);
         }
     }
 
-    public void resetShowable() {
-        for (int i = 0; i < this.valLabels.size(); i++) {
-            this.valLabels.get(i)
-                    .setText(values[i]);
-        }
-
+    public void resetKeys() {
         for (int i = 0; i < this.keyLabels.size(); i++) {
             this.keyLabels.get(i)
                     .setText(list[i]);
         }
+    }
+
+    public void resetValues() {
+        for (int i = 0; i < this.valLabels.size(); i++) {
+            this.valLabels.get(i)
+                    .setText(values[i]);
+        }
+    }
+
+    public void resetShowable() {
+        this.resetKeys();
+        this.resetValues();
     }
 
 }

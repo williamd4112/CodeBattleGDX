@@ -59,6 +59,7 @@ public class APIList extends Table {
     }
 
     public void setAPIList(Map<String, String> apiList) {
+        this.resetAPIList();
         this.map = apiList;
         java.util.List<Object> items = new LinkedList<Object>();
         for (String key : apiList.keySet())

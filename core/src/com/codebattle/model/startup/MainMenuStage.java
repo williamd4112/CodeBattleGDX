@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.codebattle.scene.SinglePlayerGameScene;
 import com.codebattle.scene.StartupScene;
 import com.codebattle.utility.GameConstants;
 
@@ -64,14 +63,15 @@ public class MainMenuStage extends Stage {
                 Gdx.app.exit();
             } else if (event.getListenerActor() == btn_tutorial) {
                 try {
-                    parent.getParent()
-                            .setScreen(new SinglePlayerGameScene("tutorial1"));
+                    parent.setStage(new TutorialListStage(parent));
+                    MainMenuStage.this.dispose();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             } else if (event.getListenerActor() == btn_multi) {
                 parent.setStage(new MultiPlayerLobby(parent));
+                MainMenuStage.this.dispose();
             }
         }
     }

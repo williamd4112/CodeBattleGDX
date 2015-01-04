@@ -1,13 +1,17 @@
 package com.codebattle.scene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.codebattle.game.CodeBattle;
 import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
+import com.codebattle.model.Owner;
 import com.codebattle.model.event.Events;
 import com.codebattle.model.event.GameEvent;
 import com.codebattle.model.meta.PointLightMeta;
@@ -20,13 +24,13 @@ public class SinglePlayerGameScene extends GameScene {
     // private ScriptEditor scriptEditor;
     private GameSceneGUI gui;
 
-    public SinglePlayerGameScene(final String sceneName) throws Exception {
-        super(sceneName);
+    public SinglePlayerGameScene(CodeBattle parent, final String sceneName) throws Exception {
+        super(parent, sceneName);
     }
 
     @Override
     public void setupGUI() {
-        this.gui = new GameSceneGUI(new Handler());
+        this.gui = new GameSceneGUI(this.stage, new Handler());
         this.stage.addGUI(this.gui);
         this.stage.getVirtualSystems()[this.currentPlayer.index].addSystemListener(this.gui.getControlGroup()
                 .getSystemIndicator());
@@ -38,6 +42,15 @@ public class SinglePlayerGameScene extends GameScene {
             final GameObject obj = GameObjects.create(stage, element);
             this.stage.addGameObject(obj);
         }
+    }
+
+    @Override
+    public void setupAmbientLight(Element context) throws Exception {
+        XmlReader.Element ambientElement = context.getChildByName("ambient");
+        Color color = Color.valueOf(ambientElement.getAttribute("color"));
+        float intensity = Float.parseFloat(ambientElement.getAttribute("intensity"));
+        this.stage.setAmbientLight(color, intensity);
+
     }
 
     @Override
@@ -81,8 +94,7 @@ public class SinglePlayerGameScene extends GameScene {
         for (XmlReader.Element eventElement : eventsElement.getChildrenByName("event")) {
             GameEvent e = Events.create(this.stage, eventElement);
             System.out.println("setup event: " + e.getName());
-            this.stage.getEventManager()
-                    .addGameEvent(e);
+            this.stage.getEventManager().addGameEvent(e);
         }
 
     }
@@ -92,8 +104,7 @@ public class SinglePlayerGameScene extends GameScene {
         @Override
         public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
-            final String script = SinglePlayerGameScene.this.gui.getEditor()
-                    .getText();
+            final String script = SinglePlayerGameScene.this.gui.getEditor().getText();
             new ScriptProcessor(SinglePlayerGameScene.this.stage,
                     SinglePlayerGameScene.this.currentPlayer, script).run();
 
@@ -121,4 +132,17 @@ public class SinglePlayerGameScene extends GameScene {
         }
     }
 
+    @Override
+    public void onStageComplete(Owner winner) {
+        this.stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
+                Actions.run(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        parent.setScene(new StartupScene(parent));
+
+                    }
+
+                })));
+    }
 }

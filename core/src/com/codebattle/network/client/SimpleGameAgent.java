@@ -74,7 +74,7 @@ public class SimpleGameAgent extends JFrame implements PeerListener {
         try {
             System.out.println("onReceiveMessage@Client: " + rawMessage);
             // Message msg = new Message(rawMessage);
-            // this.monitor.printMessage(msg.toString());
+            this.monitor.printMessage(rawMessage);
         } catch (Exception e) {
             e.printStackTrace();
         }

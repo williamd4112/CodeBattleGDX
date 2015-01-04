@@ -70,6 +70,8 @@ public class Panel extends BasePanel {
     public void setAPI(Class type) {
         if (type == GameActor.class) {
             this.apiList.setAPIList(GameConstants.API_GAMEACTOR);
+        } else {
+            this.apiList.resetAPIList();
         }
     }
 

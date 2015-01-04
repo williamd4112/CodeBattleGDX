@@ -10,17 +10,29 @@
 		<range>3</range>
 		<maxsteps>15</maxsteps>
 		<maxoperation>2</maxoperation>
+		<sound>other-01-bosses-a_KnightClickSound.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="5">
 				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
+			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
 			<sound>097-Attack09.ogg</sound>
+			<atk>20</atk>
+			<range>3</range>
 		</attack>
+		
 		<skill range="10">
 			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011" duration="1" interval="5">
 				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
+			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
 			<sound>117-Fire01.ogg</sound>
+			<method name="SkillAttack">
+				<arg key="atk">80</arg>
+			</method>
+			<method name="poison">
+				<arg key="damage,keeping rounds">10,2</arg>
+			</method>
 		</skill>
 	</type>
 	
@@ -34,17 +46,28 @@
 		<range>5</range>
 		<maxsteps>12</maxsteps>
 		<maxoperation>1</maxoperation>
+		<sound>other-01-bosses-a_KnightClickSound.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="5">
 				<region x="0" y="384" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
+			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
 			<sound>097-Attack09.ogg</sound>
+			<atk>50</atk>
+			<range>5</range>
 		</attack>
 		<skill range="8">
-			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011" duration="2" interval="10">
+			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011" duration="2" interval="5">
 				<region x="0" y="576" width="960" height="192" hTile="192" vTile="192" />
 			</animation>
+			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
 			<sound>119-Fire03.ogg</sound>
+			<method name="areaAttack">
+				<arg key="atk">90</arg>
+			</method>
+			<method name="transfer">
+				<arg key="sx,sy,tx,ty"></arg>
+			</method>
 		</skill>
 	</type>
 	

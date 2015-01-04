@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundUtil {
 
+    private static Sound bgm = null;
     private static int loopingID = 0;
 
     public static void playSE(final String name) {
@@ -16,7 +17,12 @@ public class SoundUtil {
     }
 
     public static void playBGM(final String name) {
-        playSound(GameConstants.BGM_DIR + name).setLooping(loopingID, true);
+        if (bgm != null) {
+            bgm.stop();
+            bgm.dispose();
+        }
+        bgm = playSound(GameConstants.BGM_DIR + name);
+        bgm.setLooping(loopingID++, true);
     }
 
     private static Sound playSound(final String path) {

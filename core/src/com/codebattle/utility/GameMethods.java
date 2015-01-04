@@ -118,6 +118,8 @@ public class GameMethods {
     }
 
     public static void callForWin(Bundle args) {
+        GameStage stage = args.extract("Stage", GameStage.class);
+        stage.emitStageCompleteEvent(Owner.RED);
         System.out.println("!!!!!!!!!Win!!!!!!!!!!!!");
     }
 

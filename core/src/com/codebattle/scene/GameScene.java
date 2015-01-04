@@ -2,6 +2,7 @@ package com.codebattle.scene;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.XmlReader;
+import com.codebattle.game.CodeBattle;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.utility.GameConstants;
@@ -15,6 +16,8 @@ import com.codebattle.utility.XMLUtil;
  * */
 
 abstract public class GameScene implements Screen {
+
+    final public CodeBattle parent;
     final public GameStage stage;
 
     // Current player
@@ -25,11 +28,11 @@ abstract public class GameScene implements Screen {
      * @param sceneName
      * @throws Exception
      */
-    public GameScene(String sceneName) throws Exception {
-        XmlReader.Element context = XMLUtil.readXMLFromFile(GameConstants.SCENE_DIR + sceneName
-                + ".xml");
-        String mapName = context.getChildByName("map")
-                .getText();
+    public GameScene(CodeBattle parent, String sceneName) throws Exception {
+        this.parent = parent;
+        XmlReader.Element context = XMLUtil.readXMLFromFile(GameConstants.SCENE_DIR
+                + sceneName + ".xml");
+        String mapName = context.getChildByName("map").getText();
 
         this.stage = new GameStage(this, mapName);
         this.setupGUI();
@@ -40,8 +43,7 @@ abstract public class GameScene implements Screen {
         this.setupBGS(context);
         this.setupBGM(context);
 
-        this.stage.getVirtualMap()
-                .resetVirtualMap();
+        this.stage.getVirtualMap().resetVirtualMap();
     }
 
     @Override
@@ -60,25 +62,25 @@ abstract public class GameScene implements Screen {
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
+        // Android used
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
+        // Android used
 
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
+        // Android used
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
+        // Android used
 
     }
 
@@ -102,6 +104,8 @@ abstract public class GameScene implements Screen {
 
     abstract public void setupGameObjects(XmlReader.Element context) throws Exception;
 
+    abstract public void setupAmbientLight(XmlReader.Element context) throws Exception;
+
     abstract public void setupPointLight(XmlReader.Element context);
 
     abstract public void setupBGS(XmlReader.Element context) throws Exception;
@@ -115,4 +119,5 @@ abstract public class GameScene implements Screen {
 
     abstract public void onGUIChange();
 
+    abstract public void onStageComplete(Owner winner);
 }

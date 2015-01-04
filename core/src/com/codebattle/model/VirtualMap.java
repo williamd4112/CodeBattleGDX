@@ -35,6 +35,10 @@ public class VirtualMap {
 
         for (MapLayer layer : layers) {
             TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
+            if (tLayer.getName()
+                    .equals("dye"))
+                continue;
+
             for (int row = 0; row < mapHeight; row++) {
                 for (int col = 0; col < mapWidth; col++) {
                     if (this.virtualCells[row][col] == null)
@@ -121,6 +125,17 @@ public class VirtualMap {
         obj.setVirtualCoordinate(newX, newY);
     }
 
+    /**
+     * Pre-update will process the cell script before all actor's action
+     */
+    public void preUpdate() {
+        for (VirtualCell[] row : this.virtualCells) {
+            for (VirtualCell cell : row) {
+                cell.onUpdate();
+            }
+        }
+    }
+
     public boolean isPassiable(int x, int y) {
         return this.virtualCells[y][x].isPassible();
     }
@@ -132,4 +147,5 @@ public class VirtualMap {
     public VirtualCell[][] getVirtualCells() {
         return this.virtualCells;
     }
+
 }
