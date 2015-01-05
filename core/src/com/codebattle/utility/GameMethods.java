@@ -8,8 +8,9 @@ import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.model.animation.OnAttackAnimation;
-import com.codebattle.model.animation.SkillAnimation;
+import com.codebattle.model.animation.TransferAnimation;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.Bundle;
 import com.codebattle.model.meta.GameMethod;
 import com.codebattle.model.meta.Region;
@@ -43,23 +44,30 @@ public class GameMethods {
     public static void areaAttack(Bundle args) {
         Skill skill = args.extract("Skill", Skill.class);
         GameStage stage = args.extract("Stage", GameStage.class);
-        GameObject attacker = args.extract("Emitter", GameObject.class);
-        int range = skill.getRange();
-        String atk = args.extract("atk", String.class);
+        GameObject target = args.extract("Target", GameObject.class);
+        Owner source = args.extract("Source", Owner.class);
+        String attack = args.extract("Attack", String.class);
 
-        int leftTopX = attacker.getVX() - range, leftTopY = attacker.getVY() + range;
-        int rightBottomX = attacker.getVX() + range, rightBottomY = attacker.getVY() - range;
+        int range = skill.getRange();
+        int tx = target.getVX();
+        int ty = target.getVY();
+
+        int leftTopX = tx - range, leftTopY = ty + range;
+        int rightBottomX = tx + range, rightBottomY = ty - range;
+
         for (int y = leftTopY; y >= rightBottomY; y--) {
             for (int x = leftTopX; x <= rightBottomX; x++) {
-                if (x == attacker.getVX() && y == attacker.getVY())
+                GameObject subTarget = stage.findGameObject(x, y);
+                if (subTarget == null)
                     continue;
-                Bundle bundle = new Bundle();
-                bundle.bind("Stage", stage);
-                bundle.bind("Skill", skill);
-                bundle.bind("x", x);
-                bundle.bind("y", y);
-                bundle.bind("atk", atk);
-                skillAttack(bundle);
+                if (subTarget.getOwner() != source) {
+                    Bundle bundle = new Bundle();
+                    bundle.bind("Stage", stage);
+                    bundle.bind("Skill", skill);
+                    bundle.bind("Target", subTarget);
+                    bundle.bind("Attack", attack);
+                    skillAttack(bundle);
+                }
             }
         }
     }
@@ -67,20 +75,33 @@ public class GameMethods {
     public static void skillAttack(Bundle args) {
         try {
             Skill skill = args.extract("Skill", Skill.class);
-            GameObject emitter = args.extract("Emitter", GameObject.class);
             GameStage stage = args.extract("Stage", GameStage.class);
-            int atk = Integer.parseInt(args.extract("atk", String.class));
-            int vx = args.extract("x", int.class);
-            int vy = args.extract("y", int.class);
+            GameObject target = args.extract("Target", GameObject.class);
+            Attack attack = new Attack(XMLUtil.stringToElement(args.extract("Attack",
+                    String.class)));
+            target.onAttacked(attack);
+            stage.addAnimation(new OnAttackAnimation(target));
 
-            GameObject target = stage.getVirtualMap()
-                    .getCell(vx, vy)
-                    .getObject();
-            if (target != null) {
-                target.onSkillAttacked(atk);
-                stage.addAnimation(new SkillAnimation(stage, skill, emitter, target));
-                stage.addAnimation(new OnAttackAnimation(target));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void transfer(Bundle args) {
+        try {
+            Skill skill = args.extract("Skill", Skill.class);
+            GameStage stage = args.extract("Stage", GameStage.class);
+            GameObject target = args.extract("Target", GameObject.class);
+            GameObject emitter = args.extract("Emitter", GameObject.class);
+            int x = target.getVX();
+            int y = target.getVY();
+
+            if (!stage.isOutBoundInVirtualMap(x, y)) {
+                stage.getVirtualMap().updateVirtualMap(emitter, x, y);
+                stage.addAnimation(new TransferAnimation(stage,
+                        GameConstants.SUMMON_ANIMMETA, emitter, x, y));
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,10 +120,11 @@ public class GameMethods {
 
             XmlReader.Element regionElement = reader.parse(xml);
             Region region = new Region(regionElement);
-            portrait = TextureFactory.getInstance()
-                    .loadFrameRow(source, region, ResourceType.PORTRAIT)[0];
+            portrait = TextureFactory.getInstance().loadFrameRow(source, region,
+                    ResourceType.PORTRAIT)[0];
 
-            GameDialog dlg = new GameDialog(stage, portrait, context, GameConstants.DEFAULT_SKIN);
+            GameDialog dlg = new GameDialog(stage, portrait, context,
+                    GameConstants.DEFAULT_SKIN);
             if (callback != null) {
                 XmlReader.Element callbackMethodElements = reader.parse(callback);
 
@@ -140,13 +162,14 @@ public class GameMethods {
             String name = args.extract("Name", String.class);
             String type = args.extract("Type", String.class);
             Owner owner = GameUtil.toOwner(args.extract("Owner", String.class));
-            int x = Integer.parseInt(args.extract("x", String.class)) * GameConstants.CELL_SIZE;
-            int y = Integer.parseInt(args.extract("y", String.class)) * GameConstants.CELL_SIZE;
-            GameActor actor = GameActorFactory.getInstance()
-                    .createGameActor(stage, owner, name, type, x, y);
+            int x = Integer.parseInt(args.extract("x", String.class))
+                    * GameConstants.CELL_SIZE;
+            int y = Integer.parseInt(args.extract("y", String.class))
+                    * GameConstants.CELL_SIZE;
+            GameActor actor = GameObjectFactory.getInstance().createGameActor(stage, owner,
+                    name, type, x, y);
             stage.addGameObject(actor);
-            stage.getVirtualMap()
-                    .resetVirtualMap();
+            stage.getVirtualMap().resetVirtualMap();
             stage.setCameraTarget(x, y);
         } catch (Exception e) {
             e.printStackTrace();

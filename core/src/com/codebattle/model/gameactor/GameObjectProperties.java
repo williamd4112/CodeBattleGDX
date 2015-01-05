@@ -2,7 +2,7 @@ package com.codebattle.model.gameactor;
 
 import com.badlogic.gdx.utils.XmlReader;
 
-public class GameActorProperties {
+public class GameObjectProperties {
     final public String typeName;
     public int hp;
     public int mp;
@@ -11,7 +11,7 @@ public class GameActorProperties {
     public int range;
     public int maxsteps;
 
-    public GameActorProperties(String type, int hp, int mp, int atk, int def, int range,
+    public GameObjectProperties(String type, int hp, int mp, int atk, int def, int range,
             int maxsteps) {
         this.typeName = type;
         this.hp = hp;
@@ -22,7 +22,7 @@ public class GameActorProperties {
         this.maxsteps = maxsteps;
     }
 
-    public GameActorProperties(XmlReader.Element type) {
+    public GameObjectProperties(XmlReader.Element type) {
         this.typeName = type.getAttribute("name");
         this.hp = Integer.parseInt(type.getChildByName("hp")
                 .getText());
@@ -38,7 +38,7 @@ public class GameActorProperties {
                 .getText());
     }
 
-    public GameActorProperties(GameActorProperties prop) {
+    public GameObjectProperties(GameObjectProperties prop) {
         this(prop.typeName, prop.hp, prop.mp, prop.atk, prop.def, prop.range, prop.maxsteps);
     }
 

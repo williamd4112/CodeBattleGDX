@@ -104,7 +104,7 @@ public class GameStage extends Stage {
 
     /*
      * GameStage Constructor
-     *
+     * 
      * @param - mapName : used to create map and map renderer , camera
      */
     public GameStage(GameScene parent, String mapName) throws Exception {
@@ -366,7 +366,7 @@ public class GameStage extends Stage {
             GameObject target = this.virtualMap.getCell(x, y).getObject();
             if (target != null) {
                 // Different type of attack animation
-                if (attack.animMeta.type.equals("GameActorAttackAnimation"))
+                if (attacker instanceof GameActor)
                     this.addAnimation(new GameActorAttackAnimation(this, attack,
                             (GameActor) attacker, target));
                 else
@@ -387,7 +387,12 @@ public class GameStage extends Stage {
 
     public void emitSkillEvent(GameObject emitter, Skill skill, int x, int y) {
         try {
-            skill.execute(this, emitter, x, y);
+            if (!this.isOutBoundInVirtualMap(x, y)) {
+                GameObject target = this.virtualMap.getCell(x, y).getObject();
+                if (target != null) {
+                    target.onSkill(skill, emitter);
+                }
+            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

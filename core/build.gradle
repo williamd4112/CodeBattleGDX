@@ -10,6 +10,6 @@ eclipse.project {
 }
 
 dependencies {
-    compile 'org.json:json:20141113'
+    compile files('libs/json.jar')
     compile files('libs/JTattoo-1.6.11.jar')
 }

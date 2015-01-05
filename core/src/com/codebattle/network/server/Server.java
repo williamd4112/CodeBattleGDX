@@ -97,10 +97,6 @@ public class Server implements RoomListener, ConnectionListener {
         try {
             // Extract data
             Message msg = new Message(rawMessage);
-            System.out.println("Extract:");
-            System.out.println("Type: " + msg.type);
-            System.out.println("Opt: " + msg.opt);
-            System.out.println("Data: " + msg.data);
 
             // Routing (will be replaced with routing table if there is enough time
             if (msg.type.equals("Server")) {
@@ -108,50 +104,35 @@ public class Server implements RoomListener, ConnectionListener {
                 // data
                 // hasn't been set
                 if (msg.opt.equals("Login")) {
-                    System.out.println("onReceiveMessage@Server: Player login");
                     connection.setPlayer(msg.data.toString());
-                    connection.send(DataHandler.accept("Login Succeed")
-                            .toString());
-                }
-                else if (msg.opt.equals("RoomList")) {
-                    System.out.println("onReceiveMessage@Server: Room list request");
+                    connection.send(DataHandler.accept("Login").toString());
+                } else if (msg.opt.equals("RoomList")) {
                     for (String key : this.roomsInfo.keySet())
                         System.out.println(this.roomsInfo.get(key));
-                    connection.send(DataHandler.RoomList(roomsInfo)
-                            .toString());
+                    connection.send(DataHandler.RoomList(roomsInfo).toString());
                 }
-            }
-            else if (msg.type.equals("Room")) {
+            } else if (msg.type.equals("Room")) {
                 if (msg.opt.equals("Create")) {
                     Room room = this.addRoom(msg.data.toString()); // Data: Room name
                     rooms.put(room.getName(), room);
                     roomsInfo.put(room.getName(), room.getScene());
                     room.addConnection(connection);
-                    connection.send(DataHandler.accept("")
-                            .toString());
+                    connection.send(DataHandler.accept("CreateRoom").toString());
                     this.idleConnections.remove(connection);
-                    System.out.println("onReceiveMessage@Server: " + room.getName()
-                            + " created.");
                 } else if (msg.opt.equals("Join")) {
                     Room room = this.rooms.get(msg.data.toString());
                     if (room == null) {
-                        connection.send(DataHandler.deny("Fail")
-                                .toString());
-                    }
-                    else if (room.isFull()) { // Room is full
-                        connection.send(DataHandler.deny("Full")
-                                .toString());
-                    }
-                    else { // Is able to join
+                        connection.send(DataHandler.deny("Fail").toString());
+                    } else if (room.isFull()) { // Room is full
+                        connection.send(DataHandler.deny("Full").toString());
+                    } else { // Is able to join
                         room.addConnection(connection);
-                        connection.send(DataHandler.accept("")
-                                .toString());
+                        connection.send(DataHandler.accept("Join").toString());
                         this.idleConnections.remove(connection);
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -173,11 +154,11 @@ public class Server implements RoomListener, ConnectionListener {
         Room room = rooms.get(oldRoomName);
         rooms.put(newRoomName, room);
     }
-    
+
     @Override
-	public void addIdleConnection(Connection connection) {
-		this.idleConnections.add(connection);
-	}
+    public void addIdleConnection(Connection connection) {
+        this.idleConnections.add(connection);
+    }
 
     @Override
     public void destroyRoom(String roomName) {

@@ -1,0 +1,51 @@
+<xml>
+	<source>Crystal</source>
+	<type name="normal">
+	    <through>false</through>
+		<cost>0</cost>
+		<region x="0" y="0" width="128" height="256" hTile="32" vTile="64" />
+		<hp>80</hp>
+		<mp>100</mp>
+		<atk>12</atk>
+		<def>10</def>
+		<range>3</range>
+		<maxsteps>10</maxsteps>
+		<maxoperation>2</maxoperation>
+		<sound>other-05-soldiers-f_SaberClickSound.mp3</sound>
+		<attack>
+			<animation class="AttackAnimation" source="007-Weapon02"
+				duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>137-Light03.ogg</sound>
+			<atk>12</atk>
+		</attack>
+
+		<skill range="3">
+			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002"
+				duration="1" interval="5">
+				<region x="0" y="960" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>1-07-assault_SaberAttackMusic.mp3</sound>
+			<sound>100-Attack12.ogg</sound>
+			<method name="skillAttack">
+				<arg key="Attack">
+					<attack>
+						<animation class="GameActorAttackAnimation" source="006-Weapon01"
+							duration="1" interval="5">
+							<region x="0" y="192" width="960" height="192" hTile="192"
+								vTile="192" />
+						</animation>
+						<sound>1-07-assault_SaberAttackMusic.mp3</sound>
+						<sound>096-Attack08.ogg</sound>
+						<atk>12</atk>
+					</attack>
+				</arg>
+			</method>
+		</skill>
+	</type>
+</xml>
+
+

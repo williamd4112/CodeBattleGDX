@@ -39,8 +39,8 @@ public class VirtualCell {
         this.obj = obj;
         if (obj != null) {
             this.onEnter(obj);
-            System.out.printf("set %s(%d , %d) at (%d , %d)\n", this.obj.getName(),
-                    this.obj.getVX(), this.obj.getVY(), x, y);
+            // System.out.printf("set %s(%d , %d) at (%d , %d)\n", this.obj.getName(),
+            // this.obj.getVX(), this.obj.getVY(), x, y);
         }
     }
 
@@ -52,8 +52,8 @@ public class VirtualCell {
     public void removeObject(int x, int y) {
         if (this.obj != null) {
             this.onExit(obj);
-            System.out.printf("remove %s(%d , %d) from (%d , %d)\n", this.obj.getName(),
-                    this.obj.getVX(), this.obj.getVY(), x, y);
+            // System.out.printf("remove %s(%d , %d) from (%d , %d)\n", this.obj.getName(),
+            // this.obj.getVX(), this.obj.getVY(), x, y);
         }
         this.obj = null;
     }
@@ -94,7 +94,7 @@ public class VirtualCell {
     }
 
     public void onUpdate() {
-        System.out.printf("onUpdate@cell(%d , %d):\n ", x, y);
+        // System.out.printf("onUpdate@cell(%d , %d):\n ", x, y);
         if (this.script_update != null) {
             CellScriptProcessor processor = new CellScriptProcessor(this);
             processor.setScript(script_update);
@@ -104,7 +104,7 @@ public class VirtualCell {
     }
 
     public void onEnter(GameObject obj) {
-        System.out.printf("onEnter@cell(%d , %d):\n ", x, y);
+        // System.out.printf("onEnter@cell(%d , %d):\n ", x, y);
         if (this.script_enter != null) {
             CellScriptProcessor processor = new CellScriptProcessor(this);
             processor.setScript(script_enter);
@@ -114,7 +114,7 @@ public class VirtualCell {
     }
 
     public void onExit(GameObject obj) {
-        System.out.printf("onExit@cell(%d , %d):\n ", x, y);
+        // System.out.printf("onExit@cell(%d , %d):\n ", x, y);
         if (this.script_exit != null) {
             CellScriptProcessor processor = new CellScriptProcessor(this);
             processor.setScript(script_exit);

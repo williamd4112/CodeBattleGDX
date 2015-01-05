@@ -1,6 +1,7 @@
 <xml>
 	<source>Assassin</source>	
 	<type name="light">
+	    <through>false</through>
 		<cost>8</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>80</hp>
@@ -33,6 +34,7 @@
 	</type>
 	
 	<type name="heavy">
+	    <through>false</through>
 		<cost>16</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>300</hp>

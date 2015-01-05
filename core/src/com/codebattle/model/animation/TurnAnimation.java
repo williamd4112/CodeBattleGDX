@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.units.Direction;
 
-public class GameActorTurnAnimation extends BaseAnimation {
+public class TurnAnimation extends BaseAnimation {
 
     final Direction direction;
     final MoveableGameObject obj;
 
-    public GameActorTurnAnimation(MoveableGameObject obj, Direction direction) {
+    public TurnAnimation(MoveableGameObject obj, Direction direction) {
         this.obj = obj;
         this.direction = direction;
     }

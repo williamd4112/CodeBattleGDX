@@ -67,9 +67,10 @@ public class Client {
      */
     private void emitReceiveMessage(String msg) {
         // this.game.onReceiveMessage(msg);
-        System.out.println("emitReceiveMessage@Client: " + msg);
-        for (PeerListener p : this.listeners)
+        for (PeerListener p : this.listeners) {
+            System.out.println("emitReceiveMessage@" + p.getClass() + ": " + msg);
             p.onReceivedMessage(msg);
+        }
     }
 
     private void emitConnectEvent(Socket socket) {
@@ -79,6 +80,14 @@ public class Client {
 
     public void addPeerListener(PeerListener listener) {
         this.listeners.add(listener);
+    }
+
+    // Always set main listener
+    public void setPeerListener(PeerListener listener) {
+        if (this.listeners.isEmpty())
+            this.listeners.add(listener);
+        else
+            this.listeners.set(0, listener);
     }
 
     public void send(String msg) {
@@ -94,7 +103,7 @@ public class Client {
                 while (!socket.isClosed()) {
                     if ((rawMessage = Client.this.reader.readLine()) != null) {
                         emitReceiveMessage(rawMessage);
-                        System.out.println("Raw: " + rawMessage);
+                        // System.out.println("Raw: " + rawMessage);
                     }
                 }
             } catch (IOException e) {
@@ -113,8 +122,7 @@ public class Client {
 
                 @Override
                 public void run() {
-                    Client.this.send(DataHandler.report()
-                            .toString());
+                    Client.this.send(DataHandler.report().toString());
                 }
 
             }, TimeUnit.SECONDS.toMillis(interval), TimeUnit.SECONDS.toMillis(interval));

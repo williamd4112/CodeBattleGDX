@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.codebattle.model.animation.SummonAnimation;
 import com.codebattle.model.gameactor.GameActor;
-import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameObjectFactory;
 import com.codebattle.utility.SoundUtil;
 
 /**
@@ -37,14 +37,22 @@ public class VirtualSystem {
     }
 
     public void createGameActor(String source, String type, int vx, int vy) throws Exception {
+        if (stage.isOutBoundInVirtualMap(vx, vy))
+            return;
+        if (!stage.getVirtualMap().getCell(vx, vy).isPassible()
+                || stage.getVirtualMap().getCell(vx, vy).getObject() != null)
+            return;
+
         int x = GameConstants.CELL_SIZE * vx, y = GameConstants.CELL_SIZE * vy;
-        GameActor actor = GameActorFactory.getInstance()
-                .createGameActor(stage, owner, source, type, x, y);
+        GameActor actor = GameObjectFactory.getInstance().createGameActor(stage, owner,
+                source, type, x, y);
         this.stage.addGameObject(actor);
         this.decreaseResource(100);
-        this.stage.addAnimation(new SummonAnimation(this.stage, GameConstants.SUMMON_ANIMMETA,
-                actor));
+        SummonAnimation anim = new SummonAnimation(this.stage, actor);
+        this.stage.addAnimation(anim);
+
         SoundUtil.playSE(GameConstants.SUMMON_SE);
+        SoundUtil.playSE(actor.type.getSelectSoundName());
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
     }
 

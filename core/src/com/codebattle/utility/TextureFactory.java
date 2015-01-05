@@ -6,6 +6,8 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.codebattle.model.meta.Region;
 
 public class TextureFactory {
@@ -135,7 +137,14 @@ public class TextureFactory {
         return frames;
     }
 
-    public Texture loadTextureFromFile(final String resName, ResourceType type) throws Exception {
+    public Drawable loadDrawable(String resName, ResourceType type) throws Exception {
+        Texture tex = loadTextureFromFile(resName, ResourceType.PORTRAIT);
+        Drawable drawable = new TextureRegionDrawable(new TextureRegion(tex));
+        return drawable;
+    }
+
+    public Texture loadTextureFromFile(final String resName, ResourceType type)
+            throws Exception {
         String resPath = "";
         switch (type) {
         case CHARACTER:

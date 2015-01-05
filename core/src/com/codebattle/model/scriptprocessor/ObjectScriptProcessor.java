@@ -2,13 +2,13 @@ package com.codebattle.model.scriptprocessor;
 
 import javax.script.ScriptException;
 
-import com.codebattle.model.GameObject;
+import com.codebattle.model.levelobject.ScriptableObject;
 
 public class ObjectScriptProcessor extends BaseScriptProcessor {
 
-    private GameObject obj;
+    private ScriptableObject obj;
 
-    public ObjectScriptProcessor(GameObject obj) {
+    public ObjectScriptProcessor(ScriptableObject obj) {
         super();
         this.obj = obj;
         this.engine.put("self", obj);

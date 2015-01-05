@@ -27,8 +27,7 @@ public class GameMethod {
             String key = argElement.get("key");
             String value = (argElement.getText() == null) ? "" : argElement.getText();
             for (int i = 0; i < argElement.getChildCount(); i++)
-                value += argElement.getChild(i)
-                        .toString();
+                value += argElement.getChild(i).toString();
             // System.out.printf("key: %s\n value:%s \n", key, value);
             args.bind(key, value);
         }

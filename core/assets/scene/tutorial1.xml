@@ -6,7 +6,19 @@
 	<init>
 		<gameobject class="GlowObject" owner="Green" name="Crystal"
 			type="normal" x="22" y="30" />
-		<pointlight color="f0ffff" radius="1000" x="22" y="22" />
+				<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="12" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="32" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="22" y="29" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<pointlight color="33CCCC" radius="600" x="22" y="22" />
 
 	</init>
 
@@ -50,7 +62,7 @@
 				<method name="showDialog">
 					<arg key="Context">
 						Now, try to create the first game actor. Click on the script editor on your right hand side and enter
-						"vs.createGameActor("Saber","light",20,24);" And click on the submit button.
+						"vs.createGameActor("Saber","light",22,24);" And click on the submit button.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.codebattle.model.meta.Animation;
+import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.units.Interval;
 
@@ -38,7 +39,7 @@ public class GameConstants {
     public final static String GAMEACTOR_ANIMATION_TEXTURE_DIR = "graphics/animation/";
     public final static String IMAGE_TEXTURE_DIR = "graphics/texture/";
     public final static String GUI_TEXTURE_DIR = "graphics/gui/";
-    public final static String GAMEACTOR_PROP_DIR = "actors/";
+    public final static String GAMEACTOR_PROP_DIR = "gameobjects/";
     public final static String LEVEL_PROP_DIR = "levelobjects/";
     public final static String API_DIR = "apis/";
     public final static String SCENE_DIR = "scene/";
@@ -46,7 +47,7 @@ public class GameConstants {
     public final static String BGM_DIR = "audio/BGM/";
     public final static String BGS_DIR = "audio/BGS/";
     public final static String SE_DIR = "audio/SE/";
-    public final static String DEFAULT_ANIMATION_META_DIR = "default/";
+    public final static String DEFAULT_META_DIR = "default/";
 
     public final static String DEFAULT_TEXTURE_EXTENSION = ".png";
     public final static String DEFAULT_GAMEACTORDESC_EXTENSION = ".xml";
@@ -62,9 +63,11 @@ public class GameConstants {
     public final static int INIT_HP = 4000;
     public final static int INIT_RES = 4000;
 
-    public final static Skin DEFAULT_SKIN = new Skin(Gdx.files.internal("skin/demo/uiskin.json"));
+    public final static Skin DEFAULT_SKIN = new Skin(
+            Gdx.files.internal("skin/demo/uiskin.json"));
 
     public static Animation SUMMON_ANIMMETA;
+    public static PointLightMeta SUMMON_LIGHTMETA;
     public static String SUMMON_SE = "summon.ogg";
 
     public static Map<String, String> API_GAMEACTOR = new HashMap<String, String>();
@@ -73,8 +76,11 @@ public class GameConstants {
         try {
             API_GAMEACTOR = XMLUtil.readAPIFromFile(API_DIR + "GameActor.xml");
             SUMMON_ANIMMETA = new Animation(XMLUtil.readXMLFromFile(
-                    DEFAULT_ANIMATION_META_DIR + "summon_animation.xml")
-                    .getChildByName("animation"));
+                    DEFAULT_META_DIR + "summon_animation.xml").getChildByName(
+                    "animation"));
+            SUMMON_LIGHTMETA = new PointLightMeta(XMLUtil.readXMLFromFile(
+                    DEFAULT_META_DIR + "summon_pointlight.xml").getChildByName(
+                    "pointlight"));
         } catch (IOException e) {
             e.printStackTrace();
         }

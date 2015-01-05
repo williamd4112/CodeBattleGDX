@@ -38,6 +38,7 @@ public class SimpleServerAgent extends JFrame implements PeerListener {
             }
 
         });
+
         this.add(this.monitor);
         this.add(this.btn_start);
         this.setVisible(true);

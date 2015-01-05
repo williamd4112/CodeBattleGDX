@@ -16,6 +16,7 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
     final public GameObject target;
 
     // Frame variable
+    protected float scale = 1.0f;
     protected Animation animMeta;
     protected TextureRegion[] frames;
     protected int repeat;
@@ -44,8 +45,9 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
 
     @Override
     public void draw(Batch batch, Camera camera, float delta) {
-        batch.draw(this.frames[frame], target.getX() + GameConstants.CELL_SIZE / 2 - frameWidth
-                / 2, target.getY() + GameConstants.CELL_SIZE / 2 - frameHeight / 2);
+        batch.draw(this.frames[frame], target.getX() + GameConstants.CELL_SIZE / 2
+                - frameWidth * scale / 2, target.getY() + GameConstants.CELL_SIZE / 2
+                - frameHeight * scale / 2, frameWidth * scale, frameHeight * scale);
 
     }
 
@@ -57,8 +59,8 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
     @Override
     public void setup() {
         try {
-            this.frames = TextureFactory.getInstance()
-                    .loadAnimationFramesFromFile(animMeta.source, animMeta.region);
+            this.frames = TextureFactory.getInstance().loadAnimationFramesFromFile(
+                    animMeta.source, animMeta.region);
             this.repeat = animMeta.repeat;
             this.interval = animMeta.interval;
             this.duration = this.repeat * frames.length * this.interval;
@@ -70,4 +72,7 @@ abstract public class TargetBasedAnimation extends BaseAnimation {
         }
     }
 
+    public void setScale(float scale) {
+        this.scale = scale;
+    }
 }

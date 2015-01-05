@@ -6,16 +6,16 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
-import com.codebattle.model.meta.GameActorDescription;
+import com.codebattle.model.meta.GameObjectDescription;
 
 public class XMLUtil {
 
-    public static GameActorDescription readGameActorDescFromFile(final String path)
+    public static GameObjectDescription readGameActorDescFromFile(final String path)
             throws IOException, NoSuchMethodException, SecurityException {
         final XmlReader reader = new XmlReader();
         final XmlReader.Element root = reader.parse(Gdx.files.internal(path));
 
-        return new GameActorDescription(root);
+        return new GameObjectDescription(root);
     }
 
     public static XmlReader.Element readXMLFromFile(final String path) throws IOException {
@@ -39,5 +39,10 @@ public class XMLUtil {
 
     public static XmlReader.Element childByName(XmlReader.Element root, String name) {
         return root.getChildByName(name);
+    }
+
+    public static XmlReader.Element stringToElement(String str) {
+        XmlReader reader = new XmlReader();
+        return reader.parse(str);
     }
 }

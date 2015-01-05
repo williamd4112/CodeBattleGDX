@@ -2,18 +2,80 @@
 	<map time="noon">Dugeon</map>
 	<bgm>scene_tutorial2.ogg</bgm>
 	<bgs></bgs>
-	<ambient color="000000" intensity="0.1f"/>
+	<ambient color="000000" intensity="0.1f" />
 	<init>
-	    <gameobject class="GameActor" owner="Red" name="Saber"
-			type="light" x="22" y="24" />
-		<gameobject class="GlowObject" owner="Green" name="Crystal"
-			type="normal" x="12" y="25" />
-		<gameobject class="GlowObject" owner="Green" name="Crystal"
-			type="normal" x="32" y="25" />
-		<pointlight color="f0ffff" radius="1000" x="22" y="22" />
+		<gameobject class="GameActor" owner="Red" name="Saber"
+			type="light" x="22" y="28" />
+		<gameobject class="GameActor" owner="Blue" name="Wizard"
+			type="heavy" x="23" y="24" />
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="12" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="32" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="22" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<pointlight color="33CCCC" radius="600" x="22" y="22" />
 	</init>
 
 	<events>
-
+		<event name="Intro" trigger="onStageStart" type="ONCE">
+			<condition>
+				<method name="noCondition">
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						In the last tutorial, you summon a light saber, a totally combat unit. But in this world, blade is not at all. Wisely using coding skill to change the environment is always best.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						But before we jump into how to modify some environment, we need to learn some basic syntax of programming.
+						First, we take a look at "if-else"
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						You may have find that your movement command will be consumed by obstacles at the map. Worsely, your actor's movements is limited by steps.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						We need to check obstacle in the path manually so that we can get more effective movements. 
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="lookAt">
+					<arg key="x">22</arg>
+					<arg key="y">24</arg>
+				</method>
+			</effect>
+		</event>
 	</events>
 </xml>

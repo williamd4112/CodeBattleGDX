@@ -1,7 +1,8 @@
 package com.codebattle.model;
 
-import com.codebattle.model.animation.GameActorTurnAnimation;
 import com.codebattle.model.animation.MovementAnimation;
+import com.codebattle.model.animation.TurnAnimation;
+import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Speed;
 
@@ -14,9 +15,9 @@ abstract public class MoveableGameObject extends GameObject {
 
     final protected int maxsteps;
 
-    public MoveableGameObject(GameStage stage, Owner owner, String source, String name, int id,
-            float sx, float sy, int maxsteps) {
-        super(stage, owner, source, name, id, sx, sy);
+    public MoveableGameObject(GameStage stage, Owner owner, String source, String name,
+            int id, GameObjectType type, float sx, float sy, int maxsteps) {
+        super(stage, owner, source, name, id, type, sx, sy);
         this.direction = Direction.HOLD_DEF;
         this.speed = Speed.VERYFAST;
         this.maxsteps = maxsteps;
@@ -48,10 +49,12 @@ abstract public class MoveableGameObject extends GameObject {
 
     public void move(Direction direction, int pace) {
         // Check steps
+        if (this.culmuSteps >= this.maxsteps)
+            return;
         int checkedPace = this.pathCheck(direction, pace);
         this.culmuSteps += checkedPace;
         if (this.culmuSteps >= maxsteps) {
-            checkedPace -= this.culmuSteps - maxsteps;
+            checkedPace -= (this.culmuSteps - maxsteps);
         }
 
         int nx = (int) (this.vx + direction.udx * checkedPace);
@@ -59,11 +62,12 @@ abstract public class MoveableGameObject extends GameObject {
 
         this.updateVirtualMap(this, nx, ny);
 
-        this.stage.addAnimation(new MovementAnimation(this.stage, this, direction, checkedPace));
+        this.stage.addAnimation(new MovementAnimation(this.stage, this, direction,
+                checkedPace));
     }
 
     private void turn(Direction direction) {
-        this.stage.addAnimation(new GameActorTurnAnimation(this, direction));
+        this.stage.addAnimation(new TurnAnimation(this, direction));
     }
 
     /**
@@ -85,8 +89,7 @@ abstract public class MoveableGameObject extends GameObject {
     public boolean isPassiable(int x, int y) {
         if (!this.isInbounding(x, y))
             return false;
-        return this.stage.getVirtualMap()
-                .getVirtualCells()[y][x].isPassible();
+        return this.stage.getVirtualMap().getVirtualCells()[y][x].isPassible();
     }
 
     public boolean isPassiable(Direction direction, int step) {

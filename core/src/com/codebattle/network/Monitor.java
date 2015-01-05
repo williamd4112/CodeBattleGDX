@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Monitor extends JPanel {
@@ -20,8 +21,11 @@ public class Monitor extends JPanel {
         this.writerBoard = new JTextArea();
         this.writerBoard.setPreferredSize(new Dimension(600, 200));
 
+        JScrollPane pane = new JScrollPane(this.readerBoard);
+        pane.setPreferredSize(new Dimension(600, 200));
+
         this.add(new JLabel("Received"));
-        this.add(this.readerBoard);
+        this.add(pane);
         this.add(new JLabel("Send"));
         this.add(this.writerBoard);
     }

@@ -9,16 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.codebattle.model.GameStage;
 
 public class Editor extends Table {
+    final public GameStage stage;
 
     private boolean isShow = true;
     private final EditorBar bar;
     private final TextArea editText;
     private final TextButton button;
 
-    public Editor(final ClickListener handler, final Skin skin) {
+    public Editor(GameStage stage, final ClickListener handler, final Skin skin) {
         super();
+        this.stage = stage;
         this.bar = new EditorBar(skin);
         this.editText = new TextArea("Editor", skin);
         this.editText.addAction(Actions.alpha(0.8f));
@@ -34,16 +37,10 @@ public class Editor extends Table {
     public void resize(final int width, final int height) {
         this.reset();
         this.bar.resize(width, height);
-        this.add(this.bar)
-                .expandX()
-                .fillX()
-                .row();
-        this.add(this.editText)
-                .expand()
-                .fill();
+        this.add(this.bar).expandX().fillX().row();
+        this.add(this.editText).expand().fill();
         this.row();
-        this.add(this.button)
-                .fill();
+        this.add(this.button).fill();
     }
 
     private class EditorBar extends BasePanel {
@@ -62,9 +59,8 @@ public class Editor extends Table {
                     if (!Editor.this.isShow) {
                         editText.addAction((Actions.sequence(Actions.fadeOut(0.8f),
                                 Actions.hide())));
-                        button.addAction(Actions.sequence(
-                                Actions.moveBy(0,
-                                        Gdx.graphics.getHeight() - 2 * button.getHeight(), 0.8f),
+                        button.addAction(Actions.sequence(Actions.moveBy(0,
+                                Gdx.graphics.getHeight() - 2 * button.getHeight(), 0.8f),
                                 Actions.hide()));
                     } else {
                         editText.addAction((Actions.sequence(Actions.show(),
@@ -80,13 +76,8 @@ public class Editor extends Table {
 
         public void resize(final int width, final int height) {
             this.reset();
-            this.add(this.title)
-                    .padLeft(10)
-                    .expandX()
-                    .left();
-            this.add(this.minBtn)
-                    .fill()
-                    .right();
+            this.add(this.title).padLeft(10).expandX().left();
+            this.add(this.minBtn).fill().right();
         }
 
     }

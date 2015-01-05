@@ -3,6 +3,7 @@ package com.codebattle.model.startup;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -16,8 +17,10 @@ abstract public class SelectionStage extends Stage {
     protected StartupScene parent;
     protected List<Object> list;
 
+    protected HorizontalGroup topbar;
     protected Label title;
     protected Label info;
+
     protected TextButton btn_select;
     protected TextButton btn_exit;
     protected Table table;
@@ -25,7 +28,7 @@ abstract public class SelectionStage extends Stage {
     public SelectionStage(final StartupScene parent) {
         this.parent = parent;
         this.list = new List<Object>(GameConstants.DEFAULT_SKIN);
-
+        this.topbar = new HorizontalGroup();
         this.title = new Label("Tutorials", GameConstants.DEFAULT_SKIN);
         this.info = new Label("Info", GameConstants.DEFAULT_SKIN);
 
@@ -51,22 +54,11 @@ abstract public class SelectionStage extends Stage {
     }
 
     public void layout() {
-        this.table.add(title)
-                .colspan(2)
-                .row();
-        this.table.add(new ScrollPane(list))
-                .expand()
-                .fill()
-                .left()
-                .top();
-        this.table.add(info)
-                .prefWidth(0.3f * Gdx.graphics.getWidth())
-                .row();
-        this.table.add(btn_select)
-                .center()
-                .fill();
-        this.table.add(btn_exit)
-                .center()
-                .fill();
+        this.table.add(title).colspan(2).row();
+        this.table.add(topbar).right().colspan(2).row();
+        this.table.add(new ScrollPane(list)).expand().fill().left().top();
+        this.table.add(info).prefWidth(0.3f * Gdx.graphics.getWidth()).row();
+        this.table.add(btn_select).center().fill();
+        this.table.add(btn_exit).center().fill();
     }
 }

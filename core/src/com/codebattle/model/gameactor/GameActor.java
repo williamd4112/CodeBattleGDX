@@ -14,12 +14,14 @@ import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.Owner;
 import com.codebattle.model.VirtualCell;
 import com.codebattle.model.animation.OnAttackAnimation;
+import com.codebattle.model.animation.SkillAnimation;
+import com.codebattle.model.levelobject.ScriptableObject;
 import com.codebattle.model.meta.Attack;
-import com.codebattle.model.meta.GameActorType;
+import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.model.units.Interval;
-import com.codebattle.utility.GameActorFactory;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameObjectFactory;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.SoundUtil;
 import com.codebattle.utility.TextureFactory;
@@ -35,9 +37,6 @@ import com.codebattle.utility.TextureFactory;
  */
 
 public class GameActor extends MoveableGameObject implements StateShowable {
-    final public GameActorType type;
-    final private GameActorProperties properties;
-
     private TextureRegion[][] frames;
     private Interval interval;
     private int frame = 0;
@@ -45,10 +44,9 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     private String alias;
 
     public GameActor(GameStage stage, Owner owner, int id, String source, String name,
-            GameActorType type, TextureRegion[][] frames, float sx, float sy) throws Exception {
-        super(stage, owner, source, name, id, sx, sy, type.prop.maxsteps);
-        this.type = type;
-        this.properties = new GameActorProperties(type.prop);
+            GameObjectType type, TextureRegion[][] frames, float sx, float sy)
+            throws Exception {
+        super(stage, owner, source, name, id, type, sx, sy, type.prop.maxsteps);
         this.frames = frames;
         this.interval = Interval.HIGH;
         this.alias = this.getName();
@@ -60,8 +58,8 @@ public class GameActor extends MoveableGameObject implements StateShowable {
         Color color = batch.getColor();
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, parentAlpha
                 * this.getColor().a);
-        batch.draw(this.frames[this.direction.val][this.frame / this.interval.val], this.getX(),
-                this.getY());
+        batch.draw(this.frames[this.direction.val][this.frame / this.interval.val],
+                this.getX(), this.getY());
         batch.setColor(color);
     }
 
@@ -73,20 +71,11 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public GameObjectState onAttacked(Attack attack) {
+    public void onAttacked(Attack attack) {
         this.stage.addAnimation(new OnAttackAnimation(this));
         this.decreaseHP(attack.getATK());
         System.out.println("onAttacked(" + attack.getATK() + "): " + this.getName() + " : "
                 + this.getProp().hp);
-        return this.state;
-    }
-
-    @Override
-    public void onSkillAttacked(int atk) {
-        this.decreaseHP(atk);
-        System.out.println("onSkillAttacked(" + atk + "): " + this.getName() + " : "
-                + this.getProp().hp);
-
     }
 
     @Override
@@ -121,26 +110,40 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     public void writeCell(int x, int y, String type, String script) {
-        VirtualCell cell = this.stage.getVirtualMap()
-                .getCell(x, y);
+        VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
         if (cell != null) {
             cell.setScript(type, script);
         }
     }
 
+    public void writeObject(int x, int y, String type, String script) {
+        VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
+        GameObject obj = cell.getObject();
+        if (obj != null) {
+            if (obj instanceof ScriptableObject) {
+                ((ScriptableObject) obj).setScript(type, script);
+            }
+        }
+    }
+
     @Override
     public void skill(int x, int y) {
-        if (this.isInRange(this.type.getSkill()
-                .getRange(), x, y)) {
+        if (this.isInRange(this.type.getSkill().getRange(), x, y)) {
             System.out.println(this.getName() + " emit skill at " + x + " , " + y);
             this.stage.emitSkillEvent(this, this.type.getSkill(), x, y);
+            try {
+                this.stage.addAnimation(new SkillAnimation(stage, type.getSkill(), this));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
     @Override
-    public void onSkill(Skill skill) {
+    public void onSkill(Skill skill, GameObject emitter) {
         System.out.println("onSkill: " + skill.animMeta.source);
+        skill.execute(this, emitter);
     }
 
     @Override
@@ -162,6 +165,15 @@ public class GameActor extends MoveableGameObject implements StateShowable {
         return (this.state == GameObjectState.DEATH) ? false : true;
     }
 
+    @Override
+    public boolean isPassiable(int x, int y) {
+        if (!this.isInbounding(x, y))
+            return false;
+        if (this.type.through)
+            return true;
+        return this.stage.getVirtualMap().getVirtualCells()[y][x].isPassible();
+    }
+
     /**
      * Getters
      */
@@ -173,7 +185,7 @@ public class GameActor extends MoveableGameObject implements StateShowable {
         return this.frame;
     }
 
-    public GameActorProperties getProp() {
+    public GameObjectProperties getProp() {
         return this.properties;
     }
 
@@ -194,8 +206,7 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     public int increaseHP(int diff) {
         int newValue = (this.properties.hp + diff);
-        int max = GameActorFactory.getInstance()
-                .getGameActorType(this).prop.hp;
+        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.hp;
         this.properties.hp = (newValue >= max) ? max : newValue;
         return this.properties.hp;
     }
@@ -230,8 +241,8 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     @Override
     public Drawable getPortrait() {
         try {
-            Texture texture = TextureFactory.getInstance()
-                    .loadTextureFromFile(source + "_portrait", ResourceType.PORTRAIT);
+            Texture texture = TextureFactory.getInstance().loadTextureFromFile(
+                    source + "_portrait", ResourceType.PORTRAIT);
             Drawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
             return drawable;
         } catch (Exception e) {

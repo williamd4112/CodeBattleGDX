@@ -40,7 +40,8 @@ public class SinglePlayerGameScene extends GameScene {
     public void setupGameObjects(final XmlReader.Element context) throws Exception {
         for (final XmlReader.Element element : context.getChildrenByNameRecursively("gameobject")) {
             final GameObject obj = GameObjects.create(stage, element);
-            this.stage.addGameObject(obj);
+            if (obj != null)
+                this.stage.addGameObject(obj);
         }
     }
 

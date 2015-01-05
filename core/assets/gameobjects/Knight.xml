@@ -1,6 +1,7 @@
 <xml>
 	<source>Knight</source>	
 	<type name="light">
+	    <through>false</through>
 		<cost>15</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>150</hp>
@@ -37,6 +38,7 @@
 	</type>
 	
 	<type name="heavy">
+	    <through>false</through>
 		<cost>30</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
 		<hp>250</hp>

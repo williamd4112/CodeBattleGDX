@@ -6,6 +6,7 @@ import com.codebattle.game.CodeBattle;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameObjectFactory;
 import com.codebattle.utility.XMLUtil;
 
 /*
@@ -88,6 +89,7 @@ abstract public class GameScene implements Screen {
     public void dispose() {
         // TODO Auto-generated method stub
         this.stage.dispose();
+        GameObjectFactory.getInstance().resetCount();
     }
 
     public void setCurrentPlayer(Owner owner) {

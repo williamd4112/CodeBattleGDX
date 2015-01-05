@@ -1,23 +1,26 @@
 package com.codebattle.model.meta;
 
 import com.badlogic.gdx.utils.XmlReader;
-import com.codebattle.model.gameactor.GameActorProperties;
+import com.codebattle.model.gameactor.GameObjectProperties;
 
-public class GameActorType {
-    public GameActorProperties prop;
+public class GameObjectType {
+    public boolean through;
+    public GameObjectProperties prop;
     public Region region;
     private Attack attack;
     private Skill skill;
     private String select_sound;
 
-    public GameActorType(XmlReader.Element type) throws NoSuchMethodException, SecurityException {
+    public GameObjectType(XmlReader.Element type) throws NoSuchMethodException,
+            SecurityException {
+        // Read through ability
+        this.through = Boolean.parseBoolean(type.getChildByName("through").getText());
 
         // Read basic info
-        this.prop = new GameActorProperties(type);
+        this.prop = new GameObjectProperties(type);
 
         // Read selct_sound name
-        this.select_sound = type.getChildByName("sound")
-                .getText();
+        this.select_sound = type.getChildByName("sound").getText();
 
         // Read actors movement animation region
         XmlReader.Element regionElement = type.getChildByName("region");

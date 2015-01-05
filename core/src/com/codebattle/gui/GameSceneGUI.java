@@ -16,7 +16,7 @@ public class GameSceneGUI extends Table implements Resizeable {
         super();
         this.stage = stage;
         this.controlGroup = new ControlGroup(stage, GameConstants.DEFAULT_SKIN);
-        this.editor = new Editor(handler, GameConstants.DEFAULT_SKIN);
+        this.editor = new Editor(stage, handler, GameConstants.DEFAULT_SKIN);
     }
 
     @Override
@@ -25,12 +25,8 @@ public class GameSceneGUI extends Table implements Resizeable {
         this.setFillParent(true);
         this.editor.resize(width, height);
         this.controlGroup.resize(width, height);
-        this.add(controlGroup)
-                .expand()
-                .fill();
-        this.add(editor)
-                .width(width * 0.3f)
-                .fill();
+        this.add(controlGroup).expand().fill();
+        this.add(editor).width(width * 0.3f).fill();
     }
 
     public Editor getEditor() {
@@ -42,10 +38,8 @@ public class GameSceneGUI extends Table implements Resizeable {
     }
 
     public void resetShowable() {
-        this.controlGroup.getPanel()
-                .resetShowable();
-        this.controlGroup.getPanel()
-                .resetAPI();
+        this.controlGroup.getPanel().resetShowable();
+        this.controlGroup.getPanel().resetAPI();
     }
 
 }

@@ -1,7 +1,9 @@
 package com.codebattle.model;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.codebattle.model.gameactor.GameObjectProperties;
 import com.codebattle.model.meta.Attack;
+import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.utility.GameConstants;
 
@@ -19,6 +21,8 @@ abstract public class GameObject extends Actor {
     final public int id;
 
     final public String source;
+    final public GameObjectType type;
+    final protected GameObjectProperties properties;
 
     // Virtual Coordinate , used to calculate in actorsmap
     protected int vx;
@@ -32,9 +36,11 @@ abstract public class GameObject extends Actor {
     final protected Owner owner;
 
     public GameObject(GameStage stage, Owner owner, String source, String name, int id,
-            float sx, float sy) {
+            GameObjectType type, float sx, float sy) {
         super();
         this.source = source;
+        this.type = type;
+        this.properties = new GameObjectProperties(type.prop);
         this.stage = stage;
         this.owner = owner;
         this.setName(name);
@@ -46,9 +52,12 @@ abstract public class GameObject extends Actor {
     }
 
     protected void updateVirtualMap(GameObject obj, int newX, int newY) {
-        System.out.printf("update object (%d , %d) to (%d , %d)\n", obj.vx, obj.vy, newX, newY);
-        this.stage.getVirtualMap()
-                .updateVirtualMap(this, newX, newY);
+        if (stage.isOutBoundInVirtualMap(newX, newY))
+            return;
+        System.out.printf("update object (%d , %d) to (%d , %d)\n", obj.vx, obj.vy, newX,
+                newY);
+
+        this.stage.getVirtualMap().updateVirtualMap(this, newX, newY);
     }
 
     protected void resetVirtualCoordinate() {
@@ -106,6 +115,10 @@ abstract public class GameObject extends Actor {
         return this.owner;
     }
 
+    public GameStage getGameStage() {
+        return this.stage;
+    }
+
     public void setVirtualCoordinate(int x, int y) {
         this.vx = x;
         this.vy = y;
@@ -120,9 +133,7 @@ abstract public class GameObject extends Actor {
 
     abstract public boolean isBlock();
 
-    abstract public GameObjectState onAttacked(Attack attack);
-
-    abstract public void onSkillAttacked(int atk);
+    abstract public void onAttacked(Attack attack);
 
     abstract public void attack(int x, int y);
 
@@ -132,7 +143,7 @@ abstract public class GameObject extends Actor {
 
     abstract public void skill(int x, int y);
 
-    abstract public void onSkill(Skill skill);
+    abstract public void onSkill(Skill skill, GameObject emitter);
 
     abstract public void onDestroyed();
 

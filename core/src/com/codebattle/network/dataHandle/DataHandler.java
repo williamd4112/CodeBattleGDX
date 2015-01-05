@@ -1,5 +1,6 @@
 package com.codebattle.network.dataHandle;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -26,6 +27,10 @@ public class DataHandler {
         return create("Server", "List", data);
     }
 
+    public static JSONObject requestRoomList() {
+        return create("Server", "RoomList", "");
+    }
+
     public static JSONObject accept(String data) {
         return create("Server", "Success", data);
     }
@@ -46,10 +51,22 @@ public class DataHandler {
         return create("Room", "Leave", data);
     }
 
+    public static JSONObject playerstState(Map<String, String> data) {
+        return create("Room", "PlayerState", data);
+    }
+
+    public static JSONObject ready(String team) {
+        return create("Room", "Ready", team);
+    }
+
+    public static JSONObject requestPlayerState() {
+        return create("Room", "RequestPlayerState", "");
+    }
+
     public static JSONObject assignScene(String data) {
         return create("Room", "Assign", data);
     }
-    
+
     public static JSONObject getTeam(String data) {
         return create("Game", "Team", data);
     }
@@ -72,6 +89,14 @@ public class DataHandler {
 
     public static JSONObject report() {
         return create("Report", "", "");
+    }
+
+    public static Map<Object, Object> JsonToMap(JSONObject obj) {
+        Map<Object, Object> map = new HashMap<Object, Object>();
+        for (String key : obj.keySet()) {
+            map.put(key, obj.get(key));
+        }
+        return map;
     }
 
     /*

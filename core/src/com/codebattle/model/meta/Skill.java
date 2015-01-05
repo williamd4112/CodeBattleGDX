@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.GameObject;
-import com.codebattle.model.GameStage;
 import com.codebattle.utility.XMLUtil;
 
 public class Skill {
@@ -16,15 +15,15 @@ public class Skill {
 
     private List<GameMethod> methods;
 
-    public Skill(XmlReader.Element skillElement) throws NoSuchMethodException, SecurityException {
+    public Skill(XmlReader.Element skillElement) throws NoSuchMethodException,
+            SecurityException {
         this.methods = new LinkedList<GameMethod>();
 
         // Read animation element
         this.animMeta = new Animation(XMLUtil.childByName(skillElement, "animation"));
 
         // Read sound element
-        this.soundName = XMLUtil.childByName(skillElement, "sound")
-                .getText();
+        this.soundName = XMLUtil.childByName(skillElement, "sound").getText();
 
         // Read range element
         this.range = Integer.parseInt(skillElement.getAttribute("range"));
@@ -36,14 +35,14 @@ public class Skill {
 
     }
 
-    public void execute(GameStage stage, GameObject emitter, int x, int y) {
+    public void execute(GameObject target, GameObject emitter) {
         try {
             for (GameMethod m : methods) {
+                m.bind("Target", target);
                 m.bind("Emitter", emitter);
                 m.bind("Skill", this);
-                m.bind("Stage", stage);
-                m.bind("x", x);
-                m.bind("y", y);
+                m.bind("Stage", target.getGameStage());
+                m.bind("Source", emitter.getOwner());
                 m.execute();
             }
         } catch (IllegalAccessException e) {

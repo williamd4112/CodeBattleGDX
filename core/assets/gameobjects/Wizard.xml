@@ -1,0 +1,87 @@
+<xml>
+	<source>Wizard</source>
+	<type name="light">
+		<through>false</through>
+		<cost>9</cost>
+		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32" />
+		<hp>50</hp>
+		<mp>150</mp>
+		<atk>15</atk>
+		<def>5</def>
+		<range>7</range>
+		<maxsteps>5</maxsteps>
+		<maxoperation>2</maxoperation>
+		<sound>voice-collection-27-liz_WizardClickSound.mp3</sound>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="015-Fire01"
+				duration="1" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>2-08-i-was-impotent-and-foolish_WizardAttackMusic.mp3</sound>
+			<sound>159-Skill03.ogg</sound>
+			<atk>15</atk>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="008-Weapon03"
+				duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>114-Remedy02.ogg</sound>
+			<method name="transfer"></method>
+		</skill>
+	</type>
+
+	<type name="heavy">
+		<through>false</through>
+		<cost>18</cost>
+		<region x="0" y="3072" width="128" height="320" hTile="32"
+			vTile="32" />
+		<hp>100</hp>
+		<mp>350</mp>
+		<atk>45</atk>
+		<def>30</def>
+		<range>14</range>
+		<maxsteps>8</maxsteps>
+		<maxoperation>1</maxoperation>
+		<sound>voice-collection-27-liz_WizardClickSound.mp3</sound>
+		<attack>
+			<animation class="GameActorAttackAnimation" source="015-Fire01"
+				duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>2-08-i-was-impotent-and-foolish_WizardAttackMusic.mp3</sound>
+			<sound>159-Skill03.ogg</sound>
+			<atk>45</atk>
+			<range>14</range>
+		</attack>
+		<skill range="8">
+			<animation class="GameActorAttackAnimation" source="WizardSkill_fire_effect_002"
+				duration="2" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
+			</animation>
+			<sound>2-08-i-was-impotent-and-foolish_WizardAttackMusic.mp3</sound>
+			<sound>118-Fire03.ogg</sound>
+			<method name="areaAttack">
+				<arg key="Attack">
+					<attack>
+						<animation class="GameActorAttackAnimation" source="015-Fire01"
+							duration="1" interval="10">
+							<region x="0" y="192" width="960" height="192" hTile="192"
+								vTile="192" />
+						</animation>
+						<sound>2-08-i-was-impotent-and-foolish_WizardAttackMusic.mp3
+						</sound>
+						<sound>159-Skill03.ogg</sound>
+						<atk>45</atk>
+						<range>14</range>
+					</attack>
+				</arg>
+			</method>
+		</skill>
+	</type>
+
+</xml>

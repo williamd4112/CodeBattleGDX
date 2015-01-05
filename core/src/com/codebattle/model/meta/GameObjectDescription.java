@@ -21,7 +21,7 @@ import com.codebattle.model.Readable;
  * @author williamd
  *
  */
-public class GameActorDescription implements Readable {
+public class GameObjectDescription implements Readable {
     /**
      * Source Image
      */
@@ -30,15 +30,15 @@ public class GameActorDescription implements Readable {
     /**
      * Map<GameActorName , Map<TypeName , GameActorType>>
      */
-    final public Map<String, GameActorType> types;
+    final public Map<String, GameObjectType> types;
 
-    public GameActorDescription(Element context) throws NoSuchMethodException, SecurityException {
+    public GameObjectDescription(Element context) throws NoSuchMethodException, SecurityException {
         this();
         this.read(context);
     }
 
-    public GameActorDescription() {
-        this.types = new HashMap<String, GameActorType>();
+    public GameObjectDescription() {
+        this.types = new HashMap<String, GameObjectType>();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GameActorDescription implements Readable {
         this.source = context.getChildByName("source")
                 .getText();
         for (XmlReader.Element type : context.getChildrenByNameRecursively("type")) {
-            GameActorType gameActorType = new GameActorType(type);
+            GameObjectType gameActorType = new GameObjectType(type);
             this.types.put(gameActorType.prop.typeName, gameActorType);
         }
     }
@@ -55,7 +55,7 @@ public class GameActorDescription implements Readable {
     public String toString() {
         String basic = "";
         for (String key : this.types.keySet()) {
-            GameActorType type = this.types.get(key);
+            GameObjectType type = this.types.get(key);
             basic += String.format(
                     "Type: %s\nHp: %d\nMp: %d\nAtk: %d\nDef: %d\nRange: %d\nMaxsteps: %d\n",
                     key, type.prop.hp, type.prop.mp, type.prop.atk, type.prop.def,

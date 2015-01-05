@@ -51,6 +51,10 @@ public class GameActorProxy {
         actor.writeCell(x, y, type, script);
     }
 
+    public void writeObject(int x, int y, String type, String script) {
+        actor.writeObject(x, y, type, script);
+    }
+
     public void skill(int x, int y) {
         actor.skill(x, y);
     }

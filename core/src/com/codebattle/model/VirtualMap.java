@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.levelobject.ScriptableObject;
 
 public class VirtualMap {
 
@@ -35,8 +36,7 @@ public class VirtualMap {
 
         for (MapLayer layer : layers) {
             TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
-            if (tLayer.getName()
-                    .equals("dye"))
+            if (tLayer.getName().equals("dye"))
                 continue;
 
             for (int row = 0; row < mapHeight; row++) {
@@ -49,8 +49,7 @@ public class VirtualMap {
                         continue;
 
                     TiledMapTile tile = cell.getTile();
-                    String prop = tile.getProperties()
-                            .get("passiable", String.class);
+                    String prop = tile.getProperties().get("passiable", String.class);
                     if (prop == null) {
                         this.virtualCells[row][col].setPassiable(true);
                     } else if (prop.equals("0")) {
@@ -94,8 +93,8 @@ public class VirtualMap {
     }
 
     public void resetActorsCulmuSteps() {
-        for (GameActor actor : this.stage.getGroupByType(GameActor.class)) {
-            System.out.println("Reset steps on " + actor.getName());
+        for (MoveableGameObject actor : this.stage.getGroupByType(MoveableGameObject.class)) {
+            // System.out.println("Reset steps on " + actor.getName());
             actor.resetCulmuSteps();
         }
     }
@@ -129,11 +128,16 @@ public class VirtualMap {
      * Pre-update will process the cell script before all actor's action
      */
     public void preUpdate() {
+        System.out.println("Pre-Update");
+        // Update cell
         for (VirtualCell[] row : this.virtualCells) {
             for (VirtualCell cell : row) {
                 cell.onUpdate();
             }
         }
+
+        for (ScriptableObject obj : this.stage.getGroupByType(ScriptableObject.class))
+            obj.onUpdate();
     }
 
     public boolean isPassiable(int x, int y) {
