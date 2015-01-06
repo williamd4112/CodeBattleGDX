@@ -23,7 +23,8 @@ import javax.swing.border.LineBorder;
 public class ClientItemView extends JPanel {
     private static final long serialVersionUID = 1304788367225793192L;
 
-    private static final String PATH_ICON_ACTIONS = "/icons/navigation/ic_menu_white_18dp.png";
+    private static final String PATH_ICON_ACTIONS =
+            "/icons/navigation/ic_menu_white_18dp.png";
 
     private static final Dimension iconSize = new Dimension(27, 27);
 

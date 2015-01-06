@@ -4,30 +4,22 @@ import com.codebattle.gui.server.models.ClientItem;
 import com.codebattle.gui.server.models.ClientList;
 import com.codebattle.gui.server.views.ClientItemView;
 import com.codebattle.gui.server.views.ClientListView;
+import com.codebattle.gui.server.views.View;
 
 public class ClientListPresenter extends AbstractPresenter<ClientListView, ClientList> {
-    public ClientListPresenter(final ClientListView view) {
-        super(view);
+    public ClientListPresenter(final View view) {
+        super((ClientListView) view);
     }
 
-    public void addItem(ClientItem item) {
-        this.getView().addItem(new ClientItemView(item));
+    public void addItem(final String role, final ClientItem item) {
+        this.getView(role).addItem(new ClientItemView(item));
     }
 
-    public void removeItem(int index) {
-        this.getView().remove(index);
+    public void removeItem(final String role, final int index) {
+        this.getView(role).remove(index);
     }
 
-    public void clearAllItems() {
-        this.getView().clearAllItems();
-    }
-
-    public void test() {
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.0", "Connecting")));
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.1", "Connected")));
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.2", "No response")));
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.3", "Connected")));
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.4", "No response")));
-        this.getView().addItem(new ClientItemView(new ClientItem("10.0.0.5", "Connecting")));
+    public void clearAllItems(final String role) {
+        this.getView(role).clearAllItems();
     }
 }

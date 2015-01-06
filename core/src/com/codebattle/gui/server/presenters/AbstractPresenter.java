@@ -1,24 +1,37 @@
 package com.codebattle.gui.server.presenters;
 
-public abstract class AbstractPresenter<V, M> implements Presenter<V> {
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class AbstractPresenter<V, M> implements PresenterWithView<V> {
+    private PresenterFactory presenterFactory;
+    private final Map<Object, V> views = new HashMap<Object, V>();
     private M model;
-    private V view;
 
     public AbstractPresenter(final V view) {
-        this.view = view;
+        this.setView(view);
     }
 
     @Override
-    public final void setView(final V view) {
+    public void setPresenterFactory(final PresenterFactory presenterFactory) {
+        this.presenterFactory = presenterFactory;
+    }
+
+    @Override
+    public void setView(final V view) {
         if (view == null) {
             throw new NullPointerException("View cannot be null.");
         }
 
-        if (this.view != null) {
+        if (this.getView() != null) {
             throw new IllegalStateException("View has already been set.");
         }
 
-        this.view = view;
+        this.views.put(null, view);
+    }
+
+    public void setView(final Object role, final V view) {
+        this.views.put(role, view);
     }
 
     /**
@@ -26,7 +39,7 @@ public abstract class AbstractPresenter<V, M> implements Presenter<V> {
      *
      * @param model     Associated model
      */
-    public final void setModel(final M model) {
+    public void setModel(final M model) {
         if (model == null) {
             throw new NullPointerException("Model cannot be null.");
         }
@@ -38,7 +51,16 @@ public abstract class AbstractPresenter<V, M> implements Presenter<V> {
         return this.model;
     }
 
-    protected final V getView() {
-        return this.view;
+    @Override
+    public PresenterFactory getPresenterFactory() {
+        return this.presenterFactory;
+    }
+
+    protected V getView() {
+        return this.views.get(null);
+    }
+
+    protected V getView(final Object role) {
+        return this.views.get(role);
     }
 }

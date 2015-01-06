@@ -1,5 +1,6 @@
 package com.codebattle.gui.server.views;
 
+import com.codebattle.gui.server.presenters.PresenterFactory;
 import com.codebattle.gui.server.presenters.ServerPresenter;
 
 import java.awt.BorderLayout;
@@ -18,11 +19,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
-public class ServerView {
+public class ServerView implements View {
     private JFrame frmCodeBattleServer;
 
-    private ServerPresenter presenter = new ServerPresenter(this);
+    private final PresenterFactory presenterFactory;
+    private ServerPresenter presenter;
 
     private JTabbedPane mainTabbedPane;
     private JPanel playersPanel;
@@ -33,11 +36,21 @@ public class ServerView {
     /**
      * Create the application.
      */
-    public ServerView() {
+    public ServerView(final PresenterFactory presenterFactory) {
+        this.presenterFactory = presenterFactory;
+        this.initializePresenter();
+
         this.initialize();
         this.initializeCustomView();
 
         this.frmCodeBattleServer.setVisible(true);
+    }
+
+    private void initializePresenter() {
+        this.presenter =
+                (ServerPresenter) this.presenterFactory.getPresenter(ServerPresenter.class,
+                        this);
+        this.presenter.setPresenterFactory(this.presenterFactory);
     }
 
     /**
@@ -47,7 +60,7 @@ public class ServerView {
         this.frmCodeBattleServer = new JFrame();
         this.frmCodeBattleServer.setTitle("Code Battle Server");
         this.frmCodeBattleServer.setBounds(100, 100, 500, 380);
-        this.frmCodeBattleServer.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.frmCodeBattleServer.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         this.mainTabbedPane = new JTabbedPane(SwingConstants.TOP);
         this.frmCodeBattleServer.getContentPane().add(this.mainTabbedPane,
@@ -84,55 +97,55 @@ public class ServerView {
         final JScrollPane playersScrollPane = new JScrollPane(this.playersPanel);
         clientsTabbedPane.addTab("Players", null, playersScrollPane, null);
 
-        roomsPanel = new JPanel();
-        roomsPanel.setLayout(new BorderLayout(0, 0));
+        this.roomsPanel = new JPanel();
+        this.roomsPanel.setLayout(new BorderLayout(0, 0));
 
-        JScrollPane roomsScrollPane = new JScrollPane(roomsPanel);
+        final JScrollPane roomsScrollPane = new JScrollPane(this.roomsPanel);
         clientsTabbedPane.addTab("Rooms", null, roomsScrollPane, null);
 
-        JMenuBar menuBar = new JMenuBar();
-        frmCodeBattleServer.setJMenuBar(menuBar);
+        final JMenuBar menuBar = new JMenuBar();
+        this.frmCodeBattleServer.setJMenuBar(menuBar);
 
-        JMenu mnServer = new JMenu("Server");
+        final JMenu mnServer = new JMenu("Server");
         mnServer.setMnemonic('S');
         menuBar.add(mnServer);
 
-        mntmStartServer = new JMenuItem("Start Server");
-        mntmStartServer.addActionListener(new ActionListener() {
+        this.mntmStartServer = new JMenuItem("Start Server");
+        this.mntmStartServer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-                if (presenter.isServerReady()) {
-                    presenter.startServer();
+            public void actionPerformed(final ActionEvent event) {
+                if (ServerView.this.getPresenter().isServerReady()) {
+                    ServerView.this.getPresenter().startServer();
 
-                    getMntmStartServer().setEnabled(false);
-                    getMntmCloseServer().setEnabled(true);
+                    ServerView.this.getMntmStartServer().setEnabled(false);
+                    ServerView.this.getMntmCloseServer().setEnabled(true);
                 }
             }
         });
-        mnServer.add(mntmStartServer);
+        mnServer.add(this.mntmStartServer);
 
-        mntmCloseServer = new JMenuItem("Close Server");
-        mntmCloseServer.addActionListener(new ActionListener() {
+        this.mntmCloseServer = new JMenuItem("Close Server");
+        this.mntmCloseServer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-                if (presenter.isServerReady()) {
-                    presenter.closeServer();
+            public void actionPerformed(final ActionEvent event) {
+                if (ServerView.this.getPresenter().isServerReady()) {
+                    ServerView.this.getPresenter().closeServer();
 
-                    getMntmStartServer().setEnabled(true);
-                    getMntmCloseServer().setEnabled(false);
+                    ServerView.this.getMntmStartServer().setEnabled(true);
+                    ServerView.this.getMntmCloseServer().setEnabled(false);
                 }
             }
         });
-        mnServer.add(mntmCloseServer);
+        mnServer.add(this.mntmCloseServer);
 
-        JSeparator separator = new JSeparator();
+        final JSeparator separator = new JSeparator();
         mnServer.add(separator);
 
-        JMenuItem mntmExit = new JMenuItem("Exit");
+        final JMenuItem mntmExit = new JMenuItem("Exit");
         mntmExit.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-                showConfirmExit();
+            public void actionPerformed(final ActionEvent event) {
+                ServerView.this.showConfirmExit();
             }
         });
         mnServer.add(mntmExit);
@@ -141,10 +154,10 @@ public class ServerView {
     private void initializeCustomView() {
         this.frmCodeBattleServer.setLocationRelativeTo(null);
         this.frmCodeBattleServer.setMinimumSize(new Dimension(400, 300));
-        frmCodeBattleServer.addWindowListener(new java.awt.event.WindowAdapter() {
+        this.frmCodeBattleServer.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                showConfirmExit();
+            public void windowClosing(final java.awt.event.WindowEvent windowEvent) {
+                ServerView.this.showConfirmExit();
             }
         });
 
@@ -153,22 +166,27 @@ public class ServerView {
 
         this.getMainTabbedPane().setSelectedIndex(1);
 
-        this.getPlayersPanel().add(new ClientListView());
-        this.getRoomsPanel().add(new ClientListView());
+        // Add client list views
+        this.getPlayersPanel().add(new ClientListView("Players", this.presenterFactory));
+        this.getRoomsPanel().add(new ClientListView("Rooms", this.presenterFactory));
     }
 
     private void showConfirmExit() {
-        if (this.presenter.isServerRunning()) {
+        if (this.getPresenter().isServerRunning()) {
             if (JOptionPane.showConfirmDialog(null, "Exit Code Battle server?",
                     "Confirm exit", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
-                presenter.dispose();
+                this.getPresenter().dispose();
                 System.exit(0);
             }
         } else {
-            presenter.dispose();
+            this.getPresenter().dispose();
             System.exit(0);
         }
+    }
+
+    private ServerPresenter getPresenter() {
+        return this.presenter;
     }
 
     protected JTabbedPane getMainTabbedPane() {
@@ -180,14 +198,14 @@ public class ServerView {
     }
 
     protected JPanel getRoomsPanel() {
-        return roomsPanel;
+        return this.roomsPanel;
     }
 
     protected JMenuItem getMntmStartServer() {
-        return mntmStartServer;
+        return this.mntmStartServer;
     }
 
     protected JMenuItem getMntmCloseServer() {
-        return mntmCloseServer;
+        return this.mntmCloseServer;
     }
 }

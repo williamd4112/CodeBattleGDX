@@ -1,6 +1,7 @@
 package com.codebattle.gui.server.views;
 
 import com.codebattle.gui.server.presenters.ClientListPresenter;
+import com.codebattle.gui.server.presenters.PresenterFactory;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -10,10 +11,12 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class ClientListView extends JPanel {
+public class ClientListView extends JPanel implements View {
     private static final long serialVersionUID = 475731162060924131L;
 
-    private final ClientListPresenter presenter = new ClientListPresenter(this);
+    private final String role;
+    private final PresenterFactory presenterFactory;
+    private ClientListPresenter presenter;
 
     private final List<Component> components = new ArrayList<Component>();
 
@@ -22,15 +25,17 @@ public class ClientListView extends JPanel {
     /**
      * Create the panel.
      */
-    public ClientListView() {
+    public ClientListView(final String role, final PresenterFactory presenterFactory) {
+        this.role = role;
+        this.presenterFactory = presenterFactory;
+        this.initializePresenter();
+
         final GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 0 };
         gridBagLayout.rowHeights = new int[] { 0 };
         gridBagLayout.columnWeights = new double[] { Double.MIN_VALUE };
         gridBagLayout.rowWeights = new double[] { Double.MIN_VALUE };
         this.setLayout(gridBagLayout);
-
-        this.presenter.test();
     }
 
     /**
@@ -52,6 +57,7 @@ public class ClientListView extends JPanel {
         this.add(component, constraints);
 
         this.resetDummyPanel();
+        this.revalidate();
     }
 
     /**
@@ -68,6 +74,7 @@ public class ClientListView extends JPanel {
         this.updateConstraints();
 
         this.resetDummyPanel();
+        this.revalidate();
     }
 
     /**
@@ -78,6 +85,15 @@ public class ClientListView extends JPanel {
         this.removeAll();
 
         this.resetDummyPanel();
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void initializePresenter() {
+        this.presenter =
+                (ClientListPresenter) this.presenterFactory.getPresenter(
+                        ClientListPresenter.class, this);
+        this.presenter.setView(this.role, this);
     }
 
     private void updateConstraints() {

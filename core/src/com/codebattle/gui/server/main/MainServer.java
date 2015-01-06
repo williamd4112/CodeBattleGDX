@@ -1,5 +1,6 @@
 package com.codebattle.gui.server.main;
 
+import com.codebattle.gui.server.presenters.PresenterFactory;
 import com.codebattle.gui.server.views.ServerView;
 
 import java.awt.EventQueue;
@@ -19,7 +20,9 @@ public class MainServer {
                 try {
                     UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 
-                    new ServerView();
+                    final PresenterFactory presenterFactory = new PresenterFactory();
+
+                    new ServerView(presenterFactory);
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
