@@ -1,60 +1,72 @@
 <xml>
 	<map time="noon">MultiPlayStage</map>
-	<bgm>scene_demo_bgm.ogg</bgm>
+	<bgm>scene_tutorial2.ogg</bgm>
 	<bgs></bgs>
 	<ambient color="000000" intensity="0.1f"/>
-	<init>
-		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="5" y="12" />
-		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="5" y="8" />
-		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="6" y="10" />
-		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="4" y="10" />
-		<gameobject class="GameActor" owner="Red" name="Saber"
-			type="heavy" x="5" y="11" />
+	<init>		
 
-		<gameobject class="GlowObject" owner="Green" name="Crystal"
-			type="normal" x="7" y="11" />
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="5" y="11" >
+		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="39" y="11" >
+		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="5" y="37" >
+		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="39" y="37" >
+		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="15" y="28" >
+		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="15" y="20" >
+		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="28" y="28" >
+		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="28" y="20" >
+		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		</gameobject>
 
-		<pointlight color="ffd700" radius="800" x="15" y="15" />
-		<pointlight color="ffd700" radius="800" x="30" y="30" />
+		<pointlight color="33FF66" radius="600" x="22" y="22" />
+		<pointlight color="33FF66" radius="600" x="21" y="3" />
+		<pointlight color="33FF66" radius="600" x="21" y="40" />
+
+		
+		<gameobject class="GameActor" owner="Red" name="Wizard"
+			type="light" x="8" y="28" />
+		<gameobject class="GameActor" owner="Blue" name="Wizard"
+			type="light" x="35" y="21" />
+		
+		<gameobject class="LevelObject" owner="Red" name="Crystal"
+			type="normal" x="5" y="28" >
+		    <pointlight color="FF3333" radius="600" x="0" y="0" />
+		</gameobject>
+		
+		<gameobject class="LevelObject" owner="Blue" name="Crystal"
+			type="normal" x="39" y="21" >
+		    <pointlight color="33CCCC" radius="600" x="0" y="0" />
+		</gameobject>
 	</init>
 	
 	<events>
-		<event name="Intro" trigger="onGameObjectDestroyed" type="ONCE">
-			<condition>
-				<method name="isGameObjectDestroyed">
-					<arg key="Target">Saber</arg>
-					<arg key="Owner">Blue</arg>
-				</method>
-			</condition>
-			<effect>
-				<method name="showDialog">
-					<arg key="Context">
-						This is a basic tutorial course. This course will cover basic programming (e.g. if-else, for-loop,etc). After finished this course, you can advance to data structure course. That will teach you more programming techniques.
-					</arg>
-				</method>
-			</effect>
-		</event>
-		
-		<event name="InPosition" trigger="onRoundComplete" type="FOREVER">
-			<condition>
-				<method name="isGameObjectAtPosition">
-					<arg key="Target">Saber</arg>
-					<arg key="Owner">Red</arg>
-					<arg key="x">5</arg>
-					<arg key="y">10</arg>
-				</method>
-			</condition>
-			<effect>
-				<method name="showDialog">
-					<arg key="Context">
-					    Red Saber in position !!
-					</arg>
-				</method>
-			</effect>
-		</event>
+
 	</events>
 </xml>

@@ -121,7 +121,7 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
     public void connect() {
         // Create Client
         try {
-            client.setPeerListener(this);
+            client.addPeerListener(this);
             client.send(DataHandler.loginServer("Williamd").toString());
             client.send(DataHandler.requestRoomList().toString());
         } catch (Exception e) {

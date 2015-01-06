@@ -29,6 +29,10 @@ public class GameSceneGUI extends Table implements Resizeable {
         this.add(editor).width(width * 0.3f).fill();
     }
 
+    public void addEditorHandler(ClickListener handler) {
+        this.editor.addHandler(handler);
+    }
+
     public Editor getEditor() {
         return this.editor;
     }

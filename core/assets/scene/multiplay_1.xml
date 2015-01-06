@@ -1,0 +1,32 @@
+<xml>
+	<map time="noon">MultiPlayStage</map>
+	<bgm>scene_tutorial2.ogg</bgm>
+	<bgs></bgs>
+	<ambient color="000000" intensity="0.1f" />
+	<init>
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="5" y="12" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="5" y="8" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="6" y="10" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="heavy" x="4" y="10" />
+		<gameobject class="GameActor" owner="Red" name="Saber"
+			type="heavy" x="5" y="11" />
+		
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="12" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="32" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="22" y="24" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<pointlight color="33CCCC" radius="600" x="22" y="22" />
+	</init>
+</xml>

@@ -11,7 +11,7 @@
 		<range>7</range>
 		<maxsteps>5</maxsteps>
 		<maxoperation>2</maxoperation>
-		<sound>voice-collection-27-liz_WizardClickSound.mp3</sound>
+		<sound key="select">voice-collection-27-liz_WizardClickSound.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="015-Fire01"
 				duration="1" interval="10">

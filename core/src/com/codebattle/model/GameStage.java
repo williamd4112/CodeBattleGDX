@@ -104,7 +104,7 @@ public class GameStage extends Stage {
 
     /*
      * GameStage Constructor
-     * 
+     *
      * @param - mapName : used to create map and map renderer , camera
      */
     public GameStage(GameScene parent, String mapName) throws Exception {
@@ -431,6 +431,7 @@ public class GameStage extends Stage {
 
     public void emitRoundCompleteEvent() {
         this.eventManager.onRoundComplete(this);
+        this.parent.onRoundComplete();
     }
 
     public void emitStageStartEvent() {

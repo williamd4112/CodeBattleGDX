@@ -20,6 +20,19 @@ public class GameUtil {
         }
     }
 
+    public static String ownerToString(Owner owner) {
+        switch (owner) {
+        case RED:
+            return "Red";
+        case BLUE:
+            return "Blue";
+        case GREEN:
+            return "Green";
+        default:
+            return null;
+        }
+    }
+
     public static Direction toDirection(String dir) {
         if (dir.equals("Right") || dir.equals("R")) {
             return Direction.RIGHT;

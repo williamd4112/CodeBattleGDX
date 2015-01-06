@@ -21,8 +21,7 @@ import com.codebattle.utility.SoundUtil;
 
 public class SinglePlayerGameScene extends GameScene {
 
-    // private ScriptEditor scriptEditor;
-    private GameSceneGUI gui;
+    protected GameSceneGUI gui;
 
     public SinglePlayerGameScene(CodeBattle parent, final String sceneName) throws Exception {
         super(parent, sceneName);
@@ -106,9 +105,7 @@ public class SinglePlayerGameScene extends GameScene {
         public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
             final String script = SinglePlayerGameScene.this.gui.getEditor().getText();
-            new ScriptProcessor(SinglePlayerGameScene.this.stage,
-                    SinglePlayerGameScene.this.currentPlayer, script).run();
-
+            onReceiveScript(script);
         }
     }
 
@@ -134,6 +131,17 @@ public class SinglePlayerGameScene extends GameScene {
     }
 
     @Override
+    public void onReceiveScript(String script) {
+        new ScriptProcessor(this.stage, SinglePlayerGameScene.this.currentPlayer, script).run();
+
+    }
+
+    @Override
+    public void onRoundComplete() {
+
+    }
+
+    @Override
     public void onStageComplete(Owner winner) {
         this.stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
                 Actions.run(new Runnable() {
@@ -146,4 +154,5 @@ public class SinglePlayerGameScene extends GameScene {
 
                 })));
     }
+
 }

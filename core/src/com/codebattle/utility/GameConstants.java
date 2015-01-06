@@ -37,7 +37,7 @@ public class GameConstants {
     public final static String LEVELOBJECT_TEXTURE_DIR = "graphics/levelobjects/";
     public final static String GAMEACTOR_PORTRAIT_TEXTURE_DIR = "graphics/portrait/";
     public final static String GAMEACTOR_ANIMATION_TEXTURE_DIR = "graphics/animation/";
-    public final static String IMAGE_TEXTURE_DIR = "graphics/texture/";
+    public final static String IMAGE_TEXTURE_DIR = "graphics/picture/";
     public final static String GUI_TEXTURE_DIR = "graphics/gui/";
     public final static String GAMEACTOR_PROP_DIR = "gameobjects/";
     public final static String LEVEL_PROP_DIR = "levelobjects/";
@@ -70,17 +70,17 @@ public class GameConstants {
     public static PointLightMeta SUMMON_LIGHTMETA;
     public static String SUMMON_SE = "summon.ogg";
 
+    public static String INJURE_SE = "injure.mp3";
+
     public static Map<String, String> API_GAMEACTOR = new HashMap<String, String>();
 
     public static void init() {
         try {
             API_GAMEACTOR = XMLUtil.readAPIFromFile(API_DIR + "GameActor.xml");
             SUMMON_ANIMMETA = new Animation(XMLUtil.readXMLFromFile(
-                    DEFAULT_META_DIR + "summon_animation.xml").getChildByName(
-                    "animation"));
+                    DEFAULT_META_DIR + "summon_animation.xml").getChildByName("animation"));
             SUMMON_LIGHTMETA = new PointLightMeta(XMLUtil.readXMLFromFile(
-                    DEFAULT_META_DIR + "summon_pointlight.xml").getChildByName(
-                    "pointlight"));
+                    DEFAULT_META_DIR + "summon_pointlight.xml").getChildByName("pointlight"));
         } catch (IOException e) {
             e.printStackTrace();
         }

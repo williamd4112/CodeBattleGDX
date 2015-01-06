@@ -116,13 +116,13 @@
 					<arg key="Target">Saber</arg>
 					<arg key="Owner">Red</arg>
 					<arg key="x">22</arg>
-					<arg key="y">29</arg>
+					<arg key="y">28</arg>
 				</method>
 			</condition>
 			<effect>
 				<method name="showDialog">
 					<arg key="Context">
-						Did you see it? You expect your saber will be at (22,30). But she stop at (22,29). Why? Because she blocked by a crystal,a level object of this world.
+						Did you see it? You expect your saber will be at (22,30). But she stop at (22,28). Why? Because she blocked by a crystal,a level object of this world.
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">

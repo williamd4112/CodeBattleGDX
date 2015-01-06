@@ -1,9 +1,9 @@
 <xml>
-	<source>Assassin</source>	
+	<source>Assassin</source>
 	<type name="light">
-	    <through>false</through>
+		<through>false</through>
 		<cost>8</cost>
-		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32"/>
+		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
 		<hp>80</hp>
 		<mp>100</mp>
 		<atk>10</atk>
@@ -13,8 +13,10 @@
 		<maxoperation>2</maxoperation>
 		<sound>voice-collection-18-gimle-m_AssassinClickSound.mp3</sound>
 		<attack>
-			<animation class="GameActorAttackAnimation" source="006-Weapon01" duration="1" interval="10">
-				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			<animation class="GameActorAttackAnimation" source="006-Weapon01"
+				duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
 			</animation>
 			<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3</sound>
 			<sound>089-Attack01.ogg</sound>
@@ -22,21 +24,37 @@
 			<range>3</range>
 		</attack>
 		<skill range="5">
-			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001" duration="1" interval="10">
-				<region x="0" y="576" width="960" height="192" hTile="192" vTile="192" />
+			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001"
+				duration="1" interval="10">
+				<region x="0" y="576" width="960" height="192" hTile="192"
+					vTile="192" />
 			</animation>
 			<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3</sound>
 			<sound>123-Thunder01.ogg</sound>
 			<method name="skillAttack">
-			    <arg key="atk">60</arg>
+				<arg key="Attack">
+					<attack>
+						<animation class="GameActorAttackAnimation" source="006-Weapon01"
+							duration="1" interval="10">
+							<region x="0" y="192" width="960" height="192" hTile="192"
+								vTile="192" />
+						</animation>
+						<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3
+						</sound>
+						<sound>089-Attack01.ogg</sound>
+						<atk>10</atk>
+						<range>3</range>
+					</attack>
+				</arg>
 			</method>
 		</skill>
 	</type>
-	
+
 	<type name="heavy">
-	    <through>false</through>
+		<through>false</through>
 		<cost>16</cost>
-		<region x="0" y="1024" width="128" height="320" hTile="32" vTile="32"/>
+		<region x="0" y="1024" width="128" height="320" hTile="32"
+			vTile="32" />
 		<hp>300</hp>
 		<mp>100</mp>
 		<atk>48</atk>
@@ -46,8 +64,10 @@
 		<maxoperation>1</maxoperation>
 		<sound>voice-collection-18-gimle-m_AssassinClickSound.mp3</sound>
 		<attack>
-			<animation class="GameActorAttackAnimation" source="007-Weapon02" duration="1" interval="10">
-				<region x="0" y="192" width="960" height="192" hTile="192" vTile="192" />
+			<animation class="GameActorAttackAnimation" source="007-Weapon02"
+				duration="1" interval="10">
+				<region x="0" y="192" width="960" height="192" hTile="192"
+					vTile="192" />
 			</animation>
 			<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3</sound>
 			<sound>124-Thunder02.ogg</sound>
@@ -55,15 +75,30 @@
 			<range>5</range>
 		</attack>
 		<skill range="4">
-			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001" duration="2" interval="10" >
-				<region x="0" y="0" width="960" height="192" hTile="192" vTile="192" />
+			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001"
+				duration="2" interval="10">
+				<region x="0" y="0" width="960" height="192" hTile="192"
+					vTile="192" />
 			</animation>
 			<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3</sound>
 			<sound>125-Thunder03.ogg</sound>
 			<method name="areaAttack">
-			    <arg key="atk">80</arg>
+				<arg key="Attack">
+					<attack>
+						<animation class="GameActorAttackAnimation" source="007-Weapon02"
+							duration="1" interval="10">
+							<region x="0" y="192" width="960" height="192" hTile="192"
+								vTile="192" />
+						</animation>
+						<sound>2-05-this-guy-he-is-trying-to-start-a-war_Assassin.mp3
+						</sound>
+						<sound>124-Thunder02.ogg</sound>
+						<atk>48</atk>
+						<range>5</range>
+					</attack>
+				</arg>
 			</method>
 		</skill>
 	</type>
-	
+
 </xml>

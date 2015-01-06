@@ -42,7 +42,8 @@ public class Room implements ConnectionListener {
     private int connectionNum = 0;
 
     // Game Variable
-    private String sceneName = "scene_demo";
+    private String default_scene = "scene_demo";
+    private String scene_name = default_scene;
     private boolean playing = false;
     private boolean redSelected = false;
     private boolean blueSelected = false;
@@ -89,7 +90,7 @@ public class Room implements ConnectionListener {
         Message msg = new Message(rawMessage);
         if (msg.type.equals("Room") && this.playing == false) {
             if (msg.opt.equals("Assign")) {
-                this.sceneName = msg.data.toString(); // Data: Scene name
+                this.scene_name = msg.data.toString(); // Data: Scene name
                 this.emitChangeScene();
             } else if (msg.opt.equals("Leave")) {
                 this.removeConnection(connection);
@@ -135,7 +136,7 @@ public class Room implements ConnectionListener {
     }
 
     private Connection getDestination(Connection connection) {
-        return connection.equals(this.connection_red) ? this.connection_blue
+        return (connection == this.connection_red) ? this.connection_blue
                 : this.connection_red;
     }
 
@@ -148,7 +149,7 @@ public class Room implements ConnectionListener {
     }
 
     private void startGame() {
-        boardcast(DataHandler.startGame(sceneName));
+        boardcast(DataHandler.startGame(scene_name));
         this.playing = true;
     }
 
@@ -158,11 +159,14 @@ public class Room implements ConnectionListener {
     }
 
     private void resetGameVariable() {
-        this.sceneName = "Scene01";
+        this.scene_name = this.default_scene;
+        for (String key : this.playersReadyStates.keySet())
+            this.playersReadyStates.put(key, false);
         this.redSelected = false;
         this.blueSelected = false;
         this.selectedPlayer = 0;
         this.playing = false;
+
     }
 
     private void boardcast(JSONObject messsage) {
@@ -177,7 +181,8 @@ public class Room implements ConnectionListener {
     }
 
     private void broadcastStartGame() {
-        this.boardcast(DataHandler.startGame(sceneName));
+        this.boardcast(DataHandler.startGame(scene_name));
+        this.playing = true;
     }
 
     private void setReady(String team) {
@@ -243,7 +248,7 @@ public class Room implements ConnectionListener {
     }
 
     public void emitChangeScene() {
-        this.server.ChangeScene(this.name, this.sceneName);
+        this.server.ChangeScene(this.name, this.scene_name);
     }
 
     public void emitChangeName(String oldRoomName) {
@@ -251,7 +256,7 @@ public class Room implements ConnectionListener {
     }
 
     public String getScene() {
-        return this.sceneName;
+        return this.scene_name;
     }
 
     public String getName() {

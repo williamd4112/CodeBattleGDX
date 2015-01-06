@@ -19,6 +19,8 @@ public class Editor extends Table {
     private final TextArea editText;
     private final TextButton button;
 
+    private ClickListener listener;
+
     public Editor(GameStage stage, final ClickListener handler, final Skin skin) {
         super();
         this.stage = stage;
@@ -27,11 +29,23 @@ public class Editor extends Table {
         this.editText.addAction(Actions.alpha(0.8f));
 
         this.button = new TextButton("Submit", skin);
+        this.listener = handler;
+        this.button.addListener(handler);
+    }
+
+    public void addHandler(ClickListener handler) {
         this.button.addListener(handler);
     }
 
     public String getText() {
         return this.editText.getText();
+    }
+
+    public void setDisable(boolean b) {
+        this.editText.setDisabled(b);
+        this.button.setDisabled(b);
+        this.editText.setVisible(!b);
+        this.setVisible(!b);
     }
 
     public void resize(final int width, final int height) {

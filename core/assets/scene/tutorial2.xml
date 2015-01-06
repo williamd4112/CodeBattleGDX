@@ -4,20 +4,24 @@
 	<bgs></bgs>
 	<ambient color="000000" intensity="0.1f" />
 	<init>
+		<gameobject class="GameActor" owner="Red" name="Archer"
+			type="heavy" x="19" y="24" />
+		<gameobject class="GameActor" owner="Red" name="Assassin"
+			type="heavy" x="20" y="24" />
+		<gameobject class="GameActor" owner="Red" name="Knight"
+			type="heavy" x="21" y="24" />
+		<gameobject class="GameActor" owner="Red" name="Lancer"
+			type="light" x="22" y="24" />
 		<gameobject class="GameActor" owner="Red" name="Saber"
-			type="light" x="22" y="28" />
-		<gameobject class="GameActor" owner="Blue" name="Wizard"
-			type="heavy" x="23" y="24" />
-		<gameobject class="LevelObject" owner="Green" name="Crystal"
-			type="normal" x="12" y="24" >
-		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
-		</gameobject>
+			type="light" x="23" y="24" />
+		<gameobject class="GameActor" owner="Red" name="Wizard"
+			type="heavy" x="24" y="24" />
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="32" y="24" >
 		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
 		</gameobject>
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
-			type="normal" x="22" y="24" >
+			type="normal" x="22" y="29" >
 		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
 		</gameobject>
 		<pointlight color="33CCCC" radius="600" x="22" y="22" />

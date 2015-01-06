@@ -7,8 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -28,10 +27,10 @@ public class Client {
     private TimerThread timerThread;
 
     // Event listeners
-    private List<PeerListener> listeners;
+    private Stack<PeerListener> listeners;
 
     public Client() {
-        this.listeners = new LinkedList<PeerListener>();
+        this.listeners = new Stack<PeerListener>();
         this.listenThread = new ListenThread();
         this.timerThread = new TimerThread();
     }
@@ -64,10 +63,11 @@ public class Client {
 
     /**
      * Event handling
+     * emitReceiveMessage only for top listener
      */
     private void emitReceiveMessage(String msg) {
-        // this.game.onReceiveMessage(msg);
-        for (PeerListener p : this.listeners) {
+        if (!this.listeners.isEmpty()) {
+            PeerListener p = this.listeners.peek();
             System.out.println("emitReceiveMessage@" + p.getClass() + ": " + msg);
             p.onReceivedMessage(msg);
         }
@@ -82,12 +82,8 @@ public class Client {
         this.listeners.add(listener);
     }
 
-    // Always set main listener
-    public void setPeerListener(PeerListener listener) {
-        if (this.listeners.isEmpty())
-            this.listeners.add(listener);
-        else
-            this.listeners.set(0, listener);
+    public void popPeerListener() {
+        this.listeners.pop();
     }
 
     public void send(String msg) {

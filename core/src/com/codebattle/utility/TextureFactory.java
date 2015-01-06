@@ -138,7 +138,7 @@ public class TextureFactory {
     }
 
     public Drawable loadDrawable(String resName, ResourceType type) throws Exception {
-        Texture tex = loadTextureFromFile(resName, ResourceType.PORTRAIT);
+        Texture tex = loadTextureFromFile(resName, type);
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(tex));
         return drawable;
     }
@@ -170,6 +170,9 @@ public class TextureFactory {
         case LEVELOBJECT:
             resPath = GameConstants.LEVELOBJECT_TEXTURE_DIR + resName
                     + GameConstants.DEFAULT_TEXTURE_EXTENSION;
+            break;
+        case PICTURE:
+            resPath = GameConstants.IMAGE_TEXTURE_DIR + resName;
             break;
         default:
             throw new Exception("not supported resource type");

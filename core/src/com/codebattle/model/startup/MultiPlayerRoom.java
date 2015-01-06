@@ -8,13 +8,13 @@ import org.json.JSONObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.codebattle.network.PeerListener;
 import com.codebattle.network.client.Client;
@@ -30,7 +30,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
 
     private Client client;
 
-    private String[] scenes = { "Scene01", "Scene02" };
+    private String[] scenes = { "scene_demo", "multiplay_1", "tutorial2" };
 
     final public StartupScene parentScene;
     final public MultiPlayerLobby lobbyStage;
@@ -46,7 +46,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
         super();
         // Init network
         this.client = lobbyStage.getClient();
-        this.client.setPeerListener(this);
+        this.client.addPeerListener(this);
 
         this.lobbyStage = lobbyStage;
         this.parentScene = lobbyStage.parent;
@@ -83,10 +83,9 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
             @Override
             public void run() {
                 try {
-                    parentScene.getParent()
-                            .setScene(
-                                    new MultiPlayerGameScene(parentScene.getParent(),
-                                            sceneName, team));
+                    parentScene.getParent().setScene(
+                            new MultiPlayerGameScene(parentScene.getParent(),
+                                    MultiPlayerRoom.this, sceneName, team));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -151,7 +150,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
         private List<Object> available_scenes;
         private TextButton btn_changeScene;
 
-        private HorizontalGroup bottomBar;
+        private VerticalGroup selectArea;
         private TextButton btn_start;
         private TextButton btn_exit;
 
@@ -163,14 +162,15 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
                     "default_portrait", ResourceType.PORTRAIT));
             this.blue_image = new Image(TextureFactory.getInstance().loadTextureFromFile(
                     "default_portrait", ResourceType.PORTRAIT));
+            this.selectArea = new VerticalGroup();
             this.available_scenes = new List<Object>(skin);
             this.available_scenes.setItems(scenes);
+            this.btn_changeScene = new TextButton("Assign", skin);
+            this.selectArea.addActor(available_scenes);
+            this.selectArea.addActor(btn_changeScene);
 
-            this.bottomBar = new HorizontalGroup();
             this.btn_start = new TextButton("Start", skin);
             this.btn_exit = new TextButton("Exit", skin);
-            this.bottomBar.addActor(btn_start);
-            this.bottomBar.addActor(btn_exit);
         }
 
         public void setupListener(Controller controller) {
@@ -182,7 +182,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
             this.add(title).top().colspan(3).row();
             this.add(red_image);
             this.add(blue_image);
-            this.add(available_scenes).expand().fill().top().right();
+            this.add(selectArea).expand().fill().top().right();
             this.row();
             this.add(btn_start).fillX();
             this.add(btn_exit).fillX();

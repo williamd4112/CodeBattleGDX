@@ -1,5 +1,8 @@
 package com.codebattle.model.meta;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.gameactor.GameObjectProperties;
 
@@ -10,9 +13,13 @@ public class GameObjectType {
     private Attack attack;
     private Skill skill;
     private String select_sound;
+    private Map<String, String> soundMap;
 
     public GameObjectType(XmlReader.Element type) throws NoSuchMethodException,
             SecurityException {
+        // Initialize sound map
+        this.soundMap = new HashMap<String, String>();
+
         // Read through ability
         this.through = Boolean.parseBoolean(type.getChildByName("through").getText());
 

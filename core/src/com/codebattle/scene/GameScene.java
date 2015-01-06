@@ -122,4 +122,9 @@ abstract public class GameScene implements Screen {
     abstract public void onGUIChange();
 
     abstract public void onStageComplete(Owner winner);
+
+    abstract public void onRoundComplete();
+
+    abstract public void onReceiveScript(String script);
+
 }
