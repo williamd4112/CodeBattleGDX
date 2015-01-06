@@ -29,13 +29,13 @@ public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
                 (ClientListPresenter)
                 this.getPresenterFactory().getExistedPresenter(ClientListPresenter.class);
 
-        clientListPresenter.addItem("Players", new ClientItem("10.0.0.0", "Connecting"));
-        clientListPresenter.addItem("Players", new ClientItem("10.0.0.1", "Connected"));
-        clientListPresenter.addItem("Players", new ClientItem("10.0.0.2", "No response"));
+        clientListPresenter.addItem("Players", new ClientItem(0, "10.0.0.0", "Connecting"));
+        clientListPresenter.addItem("Players", new ClientItem(1, "10.0.0.1", "Connected"));
+        clientListPresenter.addItem("Players", new ClientItem(2, "10.0.0.2", "No response"));
 
-        clientListPresenter.addItem("Rooms", new ClientItem("Room 1", "1 people"));
-        clientListPresenter.addItem("Rooms", new ClientItem("Room 2", "2 people, ready"));
-        clientListPresenter.addItem("Rooms", new ClientItem("Room 3", "2 people, playing"));
+        clientListPresenter.addItem("Rooms", new ClientItem(0, "Room 1", "1 people"));
+        clientListPresenter.addItem("Rooms", new ClientItem(1, "Room 2", "2 people, ready"));
+        clientListPresenter.addItem("Rooms", new ClientItem(2, "Room 3", "2 people, playing"));
 
         this.isServerRunning = true;
     }

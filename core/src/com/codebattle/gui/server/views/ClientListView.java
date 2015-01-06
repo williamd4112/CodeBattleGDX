@@ -6,8 +6,8 @@ import com.codebattle.gui.server.presenters.PresenterFactory;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
@@ -18,7 +18,8 @@ public class ClientListView extends JPanel implements View {
     private final PresenterFactory presenterFactory;
     private ClientListPresenter presenter;
 
-    private final List<Component> components = new ArrayList<Component>();
+    private final Map<Object, Component> components =
+            new HashMap<Object, Component>();
 
     private final JPanel dummyPanel = new JPanel();
 
@@ -39,12 +40,13 @@ public class ClientListView extends JPanel implements View {
     }
 
     /**
-     * Add a component.
+     * Add new item.
      *
-     * @param component     Component
+     * @param item          Item as key
+     * @param component     Component to be added
      */
-    public void addItem(final Component component) {
-        this.components.add(component);
+    public void addItem(final Object item, final Component component) {
+        this.components.put(item, component);
 
         final GridBagConstraints constraints = new GridBagConstraints();
 
@@ -60,16 +62,20 @@ public class ClientListView extends JPanel implements View {
         this.revalidate();
     }
 
+    public Component getItem(final Object item) {
+        return this.components.get(item);
+    }
+
     /**
-     * Remove a component.
+     * Remove a item.
      *
-     * @param index     Index at which component resides in list.
+     * @param item  Item as key
      */
-    public void removeItem(final int index) {
-        final Component component = this.components.get(index);
+    public void removeItem(final Object item) {
+        final Component component = this.components.get(item);
 
         this.components.remove(component);
-        this.remove(index);
+        this.remove(component);
 
         this.updateConstraints();
 
@@ -100,7 +106,7 @@ public class ClientListView extends JPanel implements View {
         final GridBagLayout gridBagLayout = (GridBagLayout) this.getLayout();
         int gridy = 0;
 
-        for (final Component component : this.components) {
+        for (final Component component : this.components.values()) {
             final GridBagConstraints constraints = gridBagLayout.getConstraints(component);
 
             constraints.gridy = gridy;

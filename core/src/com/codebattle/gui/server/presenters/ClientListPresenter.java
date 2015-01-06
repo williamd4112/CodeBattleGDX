@@ -12,11 +12,23 @@ public class ClientListPresenter extends AbstractPresenter<ClientListView, Clien
     }
 
     public void addItem(final String role, final ClientItem item) {
-        this.getView(role).addItem(new ClientItemView(item));
+        this.getView(role).addItem(item, new ClientItemView(item));
     }
 
-    public void removeItem(final String role, final int index) {
-        this.getView(role).remove(index);
+    /**
+     * Update item.
+     *
+     * @param role  Role
+     * @param item  Client item
+     */
+    public void updateItem(final String role, final ClientItem item) {
+        final ClientItemView itemView = (ClientItemView) this.getView(role).getItem(item);
+
+        itemView.update();
+    }
+
+    public void removeItem(final String role, final ClientItem item) {
+        this.getView(role).removeItem(item);
     }
 
     public void clearAllItems(final String role) {
