@@ -28,6 +28,8 @@ public class ClientItemView extends JPanel {
 
     private static final Dimension iconSize = new Dimension(27, 27);
 
+    private JPanel parent;
+
     private ClientItem clientItem;
 
     private final JLabel title;
@@ -40,8 +42,9 @@ public class ClientItemView extends JPanel {
      *
      * @param clientItem    Client item model.
      */
-    public ClientItemView(final ClientItem clientItem) {
+    public ClientItemView(final JPanel parent, final ClientItem clientItem) {
         this();
+        this.parent = parent;
         this.clientItem = clientItem;
         this.update();
     }
@@ -116,9 +119,15 @@ public class ClientItemView extends JPanel {
         this.initializeCustomActions();
     }
 
+    /**
+     * Update view.
+     */
     public void update() {
         this.title.setText(this.clientItem.getTitle());
         this.status.setText(this.clientItem.getStatus());
+
+        this.revalidate();
+        this.parent.revalidate();
     }
 
     private void initializeCustomView() {

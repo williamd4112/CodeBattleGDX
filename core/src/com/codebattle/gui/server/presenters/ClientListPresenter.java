@@ -11,8 +11,16 @@ public class ClientListPresenter extends AbstractPresenter<ClientListView, Clien
         super((ClientListView) view);
     }
 
+    /**
+     * Add an item.
+     *
+     * @param role  Role
+     * @param item  Item to be added.
+     */
     public void addItem(final String role, final ClientItem item) {
-        this.getView(role).addItem(item, new ClientItemView(item));
+        ClientListView view = this.getView(role);
+
+        view.addItem(item, new ClientItemView(view, item));
     }
 
     /**
