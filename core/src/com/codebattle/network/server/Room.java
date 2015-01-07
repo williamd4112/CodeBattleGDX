@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import com.codebattle.gui.server.models.ClientItem;
 import com.codebattle.network.dataHandle.DataHandler;
 import com.codebattle.network.dataHandle.Message;
 
@@ -40,6 +41,7 @@ public class Room implements ConnectionListener {
     private Connection connection_red;
     private Connection connection_blue;
     private int connectionNum = 0;
+    private final int ID;
 
     // Game Variable
     private String default_scene = "scene_demo";
@@ -52,7 +54,8 @@ public class Room implements ConnectionListener {
     // Counter for ready players
     private Map<String, Boolean> playersReadyStates;
 
-    public Room(String name, RoomListener server) {
+    public Room(int ID, String name, RoomListener server) {
+    	this.ID = ID;
         this.name = name;
         this.server = server;
         this.playersReadyStates = new HashMap<String, Boolean>();
@@ -95,6 +98,9 @@ public class Room implements ConnectionListener {
             } else if (msg.opt.equals("Leave")) {
                 this.removeConnection(connection);
                 this.connectionNum--;
+                ClientItem clientItem = ((Server)server).clientItems.get(connection);
+                clientItem.setStatus("Player Number: " + this.connectionNum);
+                ((Server)server).clientListPresenter.updateItem("Rooms", clientItem);
                 connection.unbindRoom();
                 server.addIdleConnection(connection);
                 if (this.connectionNum == 0) {
@@ -135,7 +141,7 @@ public class Room implements ConnectionListener {
         }
     }
 
-    private Connection getDestination(Connection connection) {
+    public Connection getDestination(Connection connection) {
         return (connection == this.connection_red) ? this.connection_blue
                 : this.connection_red;
     }
@@ -212,8 +218,14 @@ public class Room implements ConnectionListener {
         this.closeGame(this.getDestination(connection));
         this.removeConnection(connection);
         this.connectionNum--;
+        ClientItem clientItem = ((Server)server).clientItems.get(connection);
+        System.out.println(clientItem.getStatus());
+        clientItem.setStatus("Player Number: " + this.connectionNum);
+        ((Server)server).clientListPresenter.updateItem("Rooms", clientItem);
+        ((Server)server).clientListPresenter.removeItem("Players", clientItem);
         if (this.connectionNum == 0) {
             emitDestroyRoom(this.name);
+            ((Server)server).clientListPresenter.removeItem("Rooms", clientItem);
         } else {
             resetGameVariable();
         }
@@ -261,6 +273,14 @@ public class Room implements ConnectionListener {
 
     public String getName() {
         return this.name;
+    }
+    
+    public int getPlayerNum() {
+    	return this.connectionNum;
+    }
+    
+    public int getID(){
+    	return this.ID;
     }
 
     public boolean isFull() {

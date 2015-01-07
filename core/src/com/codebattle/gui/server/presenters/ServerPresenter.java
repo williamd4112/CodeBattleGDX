@@ -1,5 +1,7 @@
 package com.codebattle.gui.server.presenters;
 
+import java.io.IOException;
+
 import com.codebattle.gui.server.models.ClientItem;
 import com.codebattle.gui.server.models.Server;
 import com.codebattle.gui.server.views.ServerView;
@@ -7,6 +9,7 @@ import com.codebattle.gui.server.views.View;
 
 public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
     private boolean isServerRunning = false;
+    private com.codebattle.network.server.Server server;
 
     public ServerPresenter(final View view) {
         super((ServerView) view);
@@ -22,10 +25,11 @@ public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
 
     /**
      * Start server.
+     * @throws IOException 
      */
     public void startServer() {
         // Test
-        final ClientListPresenter clientListPresenter =
+        /*final ClientListPresenter clientListPresenter =
                 (ClientListPresenter)
                 this.getPresenterFactory().getExistedPresenter(ClientListPresenter.class);
 
@@ -35,9 +39,16 @@ public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
 
         clientListPresenter.addItem("Rooms", new ClientItem(0, "Room 1", "1 people"));
         clientListPresenter.addItem("Rooms", new ClientItem(1, "Room 2", "2 people, ready"));
-        clientListPresenter.addItem("Rooms", new ClientItem(2, "Room 3", "2 people, playing"));
+        clientListPresenter.addItem("Rooms", new ClientItem(2, "Room 3", "2 people, playing"));*/
+    	
+    	try{
+    	server = new com.codebattle.network.server.Server(8000);
+    	server.addPresenterFactory(this.getPresenterFactory());
+    	server.setClientListPresenter();
+    	server.start();
 
         this.isServerRunning = true;
+    	} catch(Exception e){}
     }
 
     /**
