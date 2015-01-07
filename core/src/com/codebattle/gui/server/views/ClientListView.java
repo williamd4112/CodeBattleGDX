@@ -81,6 +81,7 @@ public class ClientListView extends JPanel implements View {
 
         this.resetDummyPanel();
         this.revalidate();
+        this.repaint();
     }
 
     /**
