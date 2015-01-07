@@ -31,7 +31,7 @@ public class SimpleGameAgent extends JFrame implements PeerListener {
 
         this.monitor = new Monitor();
         this.monitor.setPreferredSize(new Dimension(600, 500));
-        this.editText_IP = new JTextField("140.114.197.82");
+        this.editText_IP = new JTextField("127.0.0.1");
         this.editText_username = new JTextField("anonymous");
 
         this.btn_connect = new JButton("Connect");

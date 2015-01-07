@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 public class Connection extends Thread {
 
     // Network
-	private final int ID;
     private final Socket clientSocket;
     private final BufferedReader reader;
     private final PrintWriter writer;
@@ -33,8 +32,7 @@ public class Connection extends Thread {
     // Client Player Info
     private Player player;
 
-    public Connection(final int ID, final Socket clientSocket) throws IOException {
-    	this.ID = ID;
+    public Connection(final Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
         this.reader = new BufferedReader(new InputStreamReader(
                 this.clientSocket.getInputStream()));
@@ -120,7 +118,9 @@ public class Connection extends Thread {
         if (this.room != null) {
             this.room.onDisconnect(connection);
         }
-        this.server.onDisconnect(connection);
+        else {
+            this.server.onDisconnect(connection);
+        }
     }
 
     /**
@@ -132,10 +132,6 @@ public class Connection extends Thread {
 
     public Socket getSocket() {
         return this.clientSocket;
-    }
-    
-    public int getID() {
-    	return this.ID;
     }
 
     public void setPlayer(String name) {
