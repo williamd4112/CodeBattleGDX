@@ -18,6 +18,7 @@ import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.SoundUtil;
 
 public class LevelObject extends ScriptableObject implements StateShowable {
@@ -32,8 +33,8 @@ public class LevelObject extends ScriptableObject implements StateShowable {
 
     public LevelObject(GameStage stage, Owner owner, String source, String name, int id,
             GameObjectType type, TextureRegion[] frames, PointLightMeta lightMeta, float sx,
-            float sy, int maxsteps) {
-        super(stage, owner, source, name, id, type, sx, sy, maxsteps);
+            float sy, int maxsteps, String readonlyScript, boolean isFixed) {
+        super(stage, owner, source, name, id, type, sx, sy, maxsteps, readonlyScript, isFixed);
         this.frames = frames;
         this.timer = new FrameTimer(10, frames.length - 1);
 
@@ -118,12 +119,26 @@ public class LevelObject extends ScriptableObject implements StateShowable {
     @Override
     public void onAttacked(Attack attack) {
         this.stage.addAnimation(new OnAttackAnimation(this));
+        this.transmitDamage(attack.getATK());
     }
 
     @Override
     public void onSkill(Skill skill, GameObject emitter) {
         System.out.println("onSkill: " + skill.animMeta.source);
-        skill.execute(this, emitter);
+        skill.execute(this, emitter, this.vx, this.vy);
+    }
+
+    public void setOwner(String owner) {
+        this.owner = GameUtil.toOwner(owner);
+    }
+
+    public void generateResource() {
+        this.stage.getVirtualSystems()[this.owner.index].increaseResource(
+                GameConstants.VIRTUAL_SYSTEM_RESOURCE_ADDING, this);
+    }
+
+    public void transmitDamage(int damage) {
+        this.stage.getVirtualSystem(owner).decreaseLift(damage);
     }
 
     @Override

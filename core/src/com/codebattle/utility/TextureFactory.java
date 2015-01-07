@@ -143,6 +143,16 @@ public class TextureFactory {
         return drawable;
     }
 
+    public Texture[] loadStripTextureFromFile(String resPrefix, ResourceType type, int count)
+            throws Exception {
+        Texture[] regions = new Texture[count];
+        for (int id = 0; id < count; id++) {
+            regions[id] = loadTextureFromFile(resPrefix + String.valueOf(id), type);
+        }
+
+        return regions;
+    }
+
     public Texture loadTextureFromFile(final String resName, ResourceType type)
             throws Exception {
         String resPath = "";

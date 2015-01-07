@@ -3,6 +3,7 @@ package com.codebattle.gui;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.codebattle.model.SystemListener;
+import com.codebattle.utility.GameConstants;
 
 public class SystemIndicator extends BasePanel implements SystemListener {
 
@@ -14,22 +15,18 @@ public class SystemIndicator extends BasePanel implements SystemListener {
     public SystemIndicator(Skin skin) {
         super(skin);
         this.resKey = new Label("Resource: ", skin);
-        this.resVal = new Label(String.valueOf(4000), skin);
+        this.resVal = new Label(String.valueOf(GameConstants.INIT_RES), skin);
         this.hpKey = new Label("Life: ", skin);
-        this.hpVal = new Label(String.valueOf(4000), skin);
+        this.hpVal = new Label(String.valueOf(GameConstants.INIT_HP), skin);
     }
 
     public void resize(int width, int height) {
         this.reset();
         this.pad(5);
-        this.add(resKey)
-                .space(5);
-        this.add(resVal)
-                .space(5);
-        this.add(hpKey)
-                .space(5);
-        this.add(hpVal)
-                .space(5);
+        this.add(resKey).space(5);
+        this.add(resVal).space(5);
+        this.add(hpKey).space(5);
+        this.add(hpVal).space(5);
     }
 
     @Override

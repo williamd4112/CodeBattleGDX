@@ -78,14 +78,15 @@ public class GameObjectFactory {
     }
 
     public LevelObject createLevelObject(GameStage stage, String name, String type,
-            PointLightMeta lightMeta, float sx, float sy) throws Exception {
+            Owner owner, PointLightMeta lightMeta, float sx, float sy, String readonlyScript,
+            boolean isFixed) throws Exception {
         if (!this.pool.containsKey(name)) {
             this.pool.put(name, new Record(name));
         }
 
         // Get region data and then load texture frames
         final Record record = this.pool.get(name);
-        final int id = record.count[Owner.GREEN.index];
+        final int id = 0; // no id for level object
         record.addCount(Owner.GREEN);
 
         final String source = record.desc.source;
@@ -94,8 +95,8 @@ public class GameObjectFactory {
         final TextureRegion[] frames = TextureFactory.getInstance().loadFrameRow(source,
                 region, ResourceType.LEVELOBJECT);
 
-        return new LevelObject(stage, Owner.GREEN, source, name, id, objType, frames,
-                lightMeta, sx, sy, objType.prop.maxsteps);
+        return new LevelObject(stage, owner, source, name, id, objType, frames, lightMeta,
+                sx, sy, objType.prop.maxsteps, readonlyScript, isFixed);
     }
 
     public GameObjectType getGameObjectType(final String source, final String type) {

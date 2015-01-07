@@ -1,8 +1,5 @@
 package com.codebattle.gui.server.views;
 
-import com.codebattle.gui.server.presenters.PresenterFactory;
-import com.codebattle.gui.server.presenters.ServerPresenter;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
@@ -20,6 +17,9 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import com.codebattle.gui.server.presenters.PresenterFactory;
+import com.codebattle.gui.server.presenters.ServerPresenter;
 
 public class ServerView implements View {
     private JFrame frmCodeBattleServer;
@@ -47,9 +47,8 @@ public class ServerView implements View {
     }
 
     private void initializePresenter() {
-        this.presenter =
-                (ServerPresenter) this.presenterFactory.getPresenter(ServerPresenter.class,
-                        this);
+        this.presenter = (ServerPresenter) this.presenterFactory.getPresenter(
+                ServerPresenter.class, this);
         this.presenter.setPresenterFactory(this.presenterFactory);
     }
 

@@ -2,9 +2,7 @@ package com.codebattle.model;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.codebattle.model.gameactor.GameObjectProperties;
-import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.GameObjectType;
-import com.codebattle.model.meta.Skill;
 import com.codebattle.utility.GameConstants;
 
 /**
@@ -13,7 +11,7 @@ import com.codebattle.utility.GameConstants;
  * @author williamd
  *
  */
-abstract public class GameObject extends Actor {
+abstract public class GameObject extends Actor implements Affectable {
 
     // Where is this object
     // Repeated object avoidance
@@ -33,7 +31,7 @@ abstract public class GameObject extends Actor {
     protected GameObjectState state;
 
     // Controller
-    final protected Owner owner;
+    protected Owner owner;
 
     public GameObject(GameStage stage, Owner owner, String source, String name, int id,
             GameObjectType type, float sx, float sy) {
@@ -133,8 +131,6 @@ abstract public class GameObject extends Actor {
 
     abstract public boolean isBlock();
 
-    abstract public void onAttacked(Attack attack);
-
     abstract public void attack(int x, int y);
 
     abstract public boolean onInteract(GameObject contacter);
@@ -142,8 +138,6 @@ abstract public class GameObject extends Actor {
     abstract public void interact(int x, int y);
 
     abstract public void skill(int x, int y);
-
-    abstract public void onSkill(Skill skill, GameObject emitter);
 
     abstract public void onDestroyed();
 

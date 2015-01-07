@@ -23,7 +23,7 @@ public class SkillAnimation extends TargetBasedAnimation {
     @Override
     public void setup() {
         super.setup();
-        SoundUtil.playSE(skill.soundName);
+        SoundUtil.playSES(skill.getSoundNames());
     }
 
 }

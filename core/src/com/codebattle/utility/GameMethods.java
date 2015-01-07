@@ -7,7 +7,8 @@ import com.codebattle.model.GameObject;
 import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
-import com.codebattle.model.animation.OnAttackAnimation;
+import com.codebattle.model.animation.AttackAnimation;
+import com.codebattle.model.animation.MovementAnimation;
 import com.codebattle.model.animation.TransferAnimation;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.Attack;
@@ -15,6 +16,8 @@ import com.codebattle.model.meta.Bundle;
 import com.codebattle.model.meta.GameMethod;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.meta.Skill;
+import com.codebattle.model.units.Direction;
+import com.codebattle.model.units.Speed;
 
 public class GameMethods {
     public static void increaseHP(GameActor actor, int diff) {
@@ -44,32 +47,150 @@ public class GameMethods {
     public static void areaAttack(Bundle args) {
         Skill skill = args.extract("Skill", Skill.class);
         GameStage stage = args.extract("Stage", GameStage.class);
-        GameObject target = args.extract("Target", GameObject.class);
-        Owner source = args.extract("Source", Owner.class);
         String attack = args.extract("Attack", String.class);
-
+        GameObject emitter = args.extract("Emitter", GameObject.class);
+        int tx = args.extract("tx", int.class);
+        int ty = args.extract("ty", int.class);
         int range = skill.getRange();
-        int tx = target.getVX();
-        int ty = target.getVY();
 
         int leftTopX = tx - range, leftTopY = ty + range;
         int rightBottomX = tx + range, rightBottomY = ty - range;
 
         for (int y = leftTopY; y >= rightBottomY; y--) {
             for (int x = leftTopX; x <= rightBottomX; x++) {
-                GameObject subTarget = stage.findGameObject(x, y);
-                if (subTarget == null)
-                    continue;
-                if (subTarget.getOwner() != source) {
-                    Bundle bundle = new Bundle();
-                    bundle.bind("Stage", stage);
-                    bundle.bind("Skill", skill);
-                    bundle.bind("Target", subTarget);
-                    bundle.bind("Attack", attack);
-                    skillAttack(bundle);
-                }
+                subSkillAttack(stage, emitter, x, y, skill, attack);
             }
         }
+    }
+
+    // NOTE: attack is string
+    private static void subSkillAttack(GameStage stage, GameObject emitter, int ax, int ay,
+            Skill skill, String attack) {
+        if (stage.isOutBoundInVirtualMap(ax, ay))
+            return;
+        GameObject subTarget = stage.findGameObject(ax, ay);
+        if (subTarget == null)
+            return;
+        if (subTarget.getOwner() != emitter.getOwner()) {
+            Bundle bundle = new Bundle();
+            bundle.bind("Stage", stage);
+            bundle.bind("Skill", skill);
+            bundle.bind("Target", subTarget);
+            bundle.bind("Attack", attack);
+            skillAttack(bundle);
+        }
+    }
+
+    public static void lineAttack(Bundle args) {
+        try {
+            Skill skill = args.extract("Skill", Skill.class);
+            GameStage stage = args.extract("Stage", GameStage.class);
+            GameObject emitter = args.extract("Emitter", GameObject.class);
+            String attack = args.extract("Attack", String.class);
+            int tx = args.extract("tx", int.class);
+            int ty = args.extract("ty", int.class);
+
+            Direction dir = relativeDirection(emitter.getVX(), emitter.getVY(), tx, ty);
+            int ax = emitter.getVX(), ay = emitter.getVY();
+
+            switch (dir) {
+            case UP:
+                for (; ay <= ty; ay++) {
+                    subSkillAttack(stage, emitter, ax, ay, skill, attack);
+                }
+                break;
+            case DOWN:
+                for (; ay >= ty; ay--) {
+                    subSkillAttack(stage, emitter, ax, ay, skill, attack);
+                }
+                break;
+            case LEFT:
+                for (; ax >= tx; ax--) {
+                    subSkillAttack(stage, emitter, ax, ay, skill, attack);
+                }
+                break;
+            case RIGHT:
+                for (; ax <= tx; ax++) {
+                    subSkillAttack(stage, emitter, ax, ay, skill, attack);
+                }
+                break;
+            default:
+                break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void charge(Bundle args) {
+        try {
+            Skill skill = args.extract("Skill", Skill.class);
+            GameStage stage = args.extract("Stage", GameStage.class);
+            GameObject emitter = args.extract("Emitter", GameObject.class);
+            int x = args.extract("tx", int.class);
+            int y = args.extract("ty", int.class);
+
+            Direction dir = relativeDirection(emitter.getVX(), emitter.getVY(), x, y);
+            int pace = paceCount(dir, emitter.getVX(), emitter.getVY(), x, y);
+
+            if (!stage.isOutBoundInVirtualMap(x, y)) {
+                System.out.println(emitter.getName() + " charge to "
+                        + String.format("(%d , %d)", x, y));
+                stage.getVirtualMap().updateVirtualMap(emitter, x, y);
+                stage.addAnimation(new MovementAnimation(stage, emitter, dir, pace,
+                        Speed.CHARGE));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static int paceCount(Direction dir, int sx, int sy, int tx, int ty) {
+        int pace = 0;
+        switch (dir) {
+        case UP:
+            for (; sy < ty; sy++) {
+                pace++;
+            }
+            break;
+        case DOWN:
+            for (; sy > ty; sy--) {
+                pace++;
+            }
+            break;
+        case LEFT:
+            for (; sx > tx; sx--) {
+                pace++;
+            }
+            break;
+        case RIGHT:
+            for (; sx < tx; sx++) {
+                pace++;
+            }
+            break;
+        default:
+            break;
+        }
+
+        return pace;
+    }
+
+    private static Direction relativeDirection(int sx, int sy, int tx, int ty) {
+        if (sy == ty) {
+            if (sx <= tx)
+                return Direction.RIGHT;
+            else
+                return Direction.LEFT;
+        } else if (sx == tx) {
+            if (sy <= ty)
+                return Direction.UP;
+            else
+                return Direction.DOWN;
+        } else
+            return Direction.HOLD_DEF;
     }
 
     public static void skillAttack(Bundle args) {
@@ -77,10 +198,12 @@ public class GameMethods {
             Skill skill = args.extract("Skill", Skill.class);
             GameStage stage = args.extract("Stage", GameStage.class);
             GameObject target = args.extract("Target", GameObject.class);
+            if (target == null)
+                return;
             Attack attack = new Attack(XMLUtil.stringToElement(args.extract("Attack",
                     String.class)));
+            stage.addAnimation(new AttackAnimation(stage, attack, target));
             target.onAttacked(attack);
-            stage.addAnimation(new OnAttackAnimation(target));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,10 +214,9 @@ public class GameMethods {
         try {
             Skill skill = args.extract("Skill", Skill.class);
             GameStage stage = args.extract("Stage", GameStage.class);
-            GameObject target = args.extract("Target", GameObject.class);
             GameObject emitter = args.extract("Emitter", GameObject.class);
-            int x = target.getVX();
-            int y = target.getVY();
+            int x = args.extract("tx", int.class);
+            int y = args.extract("ty", int.class);
 
             if (!stage.isOutBoundInVirtualMap(x, y)) {
                 stage.getVirtualMap().updateVirtualMap(emitter, x, y);

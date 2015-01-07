@@ -47,12 +47,13 @@ public class VirtualSystem {
         GameActor actor = GameObjectFactory.getInstance().createGameActor(stage, owner,
                 source, type, x, y);
         this.stage.addGameObject(actor);
-        this.decreaseResource(100);
+        this.decreaseResource(actor.type.cost);
+
         SummonAnimation anim = new SummonAnimation(this.stage, actor);
         this.stage.addAnimation(anim);
 
         SoundUtil.playSE(GameConstants.SUMMON_SE);
-        SoundUtil.playSE(actor.type.getSelectSoundName());
+        SoundUtil.playSES(actor.type.getSelectSoundNames());
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
     }
 
@@ -62,6 +63,21 @@ public class VirtualSystem {
 
     public int getResource() {
         return this.resource;
+    }
+
+    public void increaseResource(int diff) {
+        this.resource += diff;
+        this.emitResourceChange();
+    }
+
+    public void increaseResource(int diff, GameObject source) {
+        try {
+            this.increaseResource(diff);
+            this.stage.addAnimation(new SummonAnimation(stage, source));
+            SoundUtil.playSE(GameConstants.SUMMON_SE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void decreaseResource(int diff) {
@@ -79,6 +95,7 @@ public class VirtualSystem {
     public void emitLifeChange() {
         for (SystemListener listener : this.listeners)
             listener.onLifeChange(this.hp);
+        System.out.println("system@" + owner + " : " + this.hp);
     }
 
     public void emitResourceChange() {

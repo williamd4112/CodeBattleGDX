@@ -7,62 +7,72 @@
 
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="5" y="11" >
-		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		    <pointlight color="FF9933" radius="300" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="39" y="11" >
-		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		    <pointlight color="FF9933" radius="300" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="5" y="37" >
-		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		    <pointlight color="FF9933" radius="300" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="39" y="37" >
-		    <pointlight color="33FF66" radius="300" x="0" y="0" />
+		    <pointlight color="FF9933" radius="300" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="15" y="28" >
-		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		    <pointlight color="FF9933" radius="150" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="15" y="20" >
-		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		    <pointlight color="FF9933" radius="150" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="28" y="28" >
-		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		    <pointlight color="FF9933" radius="150" x="0" y="0" />
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="28" y="20" >
-		    <pointlight color="33FF66" radius="150" x="0" y="0" />
+		    <pointlight color="FF9933" radius="150" x="0" y="0" />
 		</gameobject>
 
-		<pointlight color="33FF66" radius="600" x="22" y="22" />
-		<pointlight color="33FF66" radius="600" x="21" y="3" />
-		<pointlight color="33FF66" radius="600" x="21" y="40" />
+		<pointlight color="FF9933" radius="600" x="22" y="22" />
+		<pointlight color="FF9933" radius="600" x="21" y="3" />
+		<pointlight color="FF9933" radius="600" x="21" y="40" />
 
 		
 		<gameobject class="GameActor" owner="Red" name="Wizard"
 			type="light" x="8" y="28" />
 		<gameobject class="GameActor" owner="Blue" name="Wizard"
 			type="light" x="35" y="21" />
+		<gameobject class="GameActor" owner="Blue" name="Knight"
+			type="light" x="35" y="22" />
+		<gameobject class="GameActor" owner="Blue" name="Lancer"
+			type="light" x="35" y="20" />
+		<gameobject class="GameActor" owner="Red" name="Lancer"
+			type="heavy" x="35" y="19" />
 		
 		<gameobject class="LevelObject" owner="Red" name="Crystal"
 			type="normal" x="5" y="28" >
 		    <pointlight color="FF3333" radius="600" x="0" y="0" />
+		    <script>self.generateResource();</script>
+		    <fixed>true</fixed>
 		</gameobject>
 		
 		<gameobject class="LevelObject" owner="Blue" name="Crystal"
 			type="normal" x="39" y="21" >
 		    <pointlight color="33CCCC" radius="600" x="0" y="0" />
+		    <script>self.generateResource();</script>
+		    <fixed>true</fixed>
 		</gameobject>
 	</init>
 	

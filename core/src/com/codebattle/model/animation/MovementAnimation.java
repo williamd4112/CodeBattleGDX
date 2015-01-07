@@ -2,6 +2,7 @@ package com.codebattle.model.animation;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.units.Direction;
@@ -12,8 +13,8 @@ public class MovementAnimation extends BaseAnimation {
 
     final public GameStage stage;
 
-    private final MoveableGameObject obj;
-    private final Speed speed;
+    private final GameObject obj;
+    private Speed speed;
     private final float dx, dy;
     private float pixelDiff;
 
@@ -28,6 +29,16 @@ public class MovementAnimation extends BaseAnimation {
         this.stage = stage;
         this.obj = actor;
         this.speed = actor.getSpeed();
+        this.dx = direction.udx * this.speed.value;
+        this.dy = direction.udy * this.speed.value;
+        this.pixelDiff = steps * GameConstants.CELL_SIZE;
+    }
+
+    public MovementAnimation(GameStage stage, GameObject obj, Direction direction, int steps,
+            Speed speed) {
+        this.stage = stage;
+        this.obj = obj;
+        this.speed = speed;
         this.dx = direction.udx * this.speed.value;
         this.dy = direction.udy * this.speed.value;
         this.pixelDiff = steps * GameConstants.CELL_SIZE;
@@ -59,12 +70,17 @@ public class MovementAnimation extends BaseAnimation {
 
     @Override
     public void finished() {
-        this.obj.setDirection(Direction.HOLD_DEF);
+        if (this.obj instanceof MoveableGameObject)
+            ((MoveableGameObject) this.obj).setDirection(Direction.HOLD_DEF);
     }
 
     @Override
     public void draw(Batch batch, Camera camera, float delta) {
 
+    }
+
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
     }
 
 }

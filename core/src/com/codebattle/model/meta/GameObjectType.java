@@ -1,33 +1,37 @@
 package com.codebattle.model.meta;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.gameactor.GameObjectProperties;
 
 public class GameObjectType {
     public boolean through;
+    public int cost;
     public GameObjectProperties prop;
     public Region region;
     private Attack attack;
     private Skill skill;
-    private String select_sound;
-    private Map<String, String> soundMap;
+
+    private List<String> selectSoundList;
 
     public GameObjectType(XmlReader.Element type) throws NoSuchMethodException,
             SecurityException {
-        // Initialize sound map
-        this.soundMap = new HashMap<String, String>();
-
         // Read through ability
         this.through = Boolean.parseBoolean(type.getChildByName("through").getText());
+
+        // Read cost
+        this.cost = Integer.parseInt(type.getChildByName("cost").getText());
 
         // Read basic info
         this.prop = new GameObjectProperties(type);
 
         // Read selct_sound name
-        this.select_sound = type.getChildByName("sound").getText();
+        this.selectSoundList = new LinkedList<String>();
+        for (XmlReader.Element soundElement : type.getChildrenByName("sound")) {
+            this.selectSoundList.add(soundElement.getText());
+        }
 
         // Read actors movement animation region
         XmlReader.Element regionElement = type.getChildByName("region");
@@ -49,7 +53,7 @@ public class GameObjectType {
         return this.skill;
     }
 
-    public String getSelectSoundName() {
-        return this.select_sound;
+    public List<String> getSelectSoundNames() {
+        return this.selectSoundList;
     }
 }

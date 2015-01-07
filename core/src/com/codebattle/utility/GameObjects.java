@@ -17,17 +17,23 @@ public class GameObjects {
                 * GameConstants.CELL_SIZE;
         final float y = Float.parseFloat(gameobjectElement.getAttribute("y"))
                 * GameConstants.CELL_SIZE;
+
         PointLightMeta lightMeta = null;
         XmlReader.Element pointlightElement = gameobjectElement.getChildByName("pointlight");
         if (pointlightElement != null)
             lightMeta = new PointLightMeta(pointlightElement);
+
+        String readonlyScript = (gameobjectElement.getChildByName("script") == null) ? null
+                : gameobjectElement.getChildByName("script").getText();
+        boolean isFixed = (gameobjectElement.getChildByName("fixed") == null) ? false
+                : Boolean.parseBoolean(gameobjectElement.getChildByName("fixed").getText());
 
         if (clazz.equals("GameActor")) {
             return GameObjectFactory.getInstance().createGameActor(stage, owner, name, type,
                     x, y);
         } else if (clazz.equals("LevelObject")) {
             return GameObjectFactory.getInstance().createLevelObject(stage, name, type,
-                    lightMeta, x, y);
+                    owner, lightMeta, x, y, readonlyScript, isFixed);
         } else {
             return null;
         }

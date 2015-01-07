@@ -11,7 +11,7 @@
 		<range>3</range>
 		<maxsteps>10</maxsteps>
 		<maxoperation>2</maxoperation>
-		<sound>other-05-soldiers-f_SaberClickSound.mp3</sound>
+		<sound key="select">other-05-soldiers-f_SaberClickSound.mp3</sound>
 		<attack>
 			<animation class="AttackAnimation" source="007-Weapon02"
 				duration="1" interval="10">

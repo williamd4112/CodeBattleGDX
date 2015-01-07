@@ -3,8 +3,11 @@ package com.codebattle.scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.codebattle.game.CodeBattle;
@@ -12,12 +15,15 @@ import com.codebattle.gui.GameSceneGUI;
 import com.codebattle.gui.StateShowable;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.Owner;
+import com.codebattle.model.VirtualSystem;
 import com.codebattle.model.event.Events;
 import com.codebattle.model.event.GameEvent;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.scriptprocessor.ScriptProcessor;
 import com.codebattle.utility.GameObjects;
+import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.SoundUtil;
+import com.codebattle.utility.TextureFactory;
 
 public class SinglePlayerGameScene extends GameScene {
 
@@ -125,6 +131,9 @@ public class SinglePlayerGameScene extends GameScene {
             } else {
                 this.gui.resetShowable();
             }
+        } else if (this.stage.getSelectedCell() != null) {
+            this.gui.getControlGroup().getPanel().setShowable(this.stage.getSelectedCell());
+
         } else {
             this.gui.resetShowable();
         }
@@ -138,21 +147,59 @@ public class SinglePlayerGameScene extends GameScene {
 
     @Override
     public void onRoundComplete() {
-
+        VirtualSystem[] players = this.stage.getVirtualSystems();
+        Owner winner = null;
+        for (VirtualSystem player : players) {
+            if (player.getHP() <= 0) {
+                if (players[Owner.RED.index].getHP() > players[Owner.BLUE.index].getHP()) {
+                    System.out.println("Red win");
+                    winner = Owner.RED;
+                } else if (players[Owner.RED.index].getHP() < players[Owner.BLUE.index].getHP()) {
+                    System.out.println("Blue win");
+                    winner = Owner.BLUE;
+                } else {
+                    System.out.println("Tie !");
+                    winner = Owner.GREEN;
+                }
+                this.onStageComplete(winner);
+                break;
+            }
+        }
     }
 
     @Override
     public void onStageComplete(Owner winner) {
-        this.stage.addAction(Actions.sequence(Actions.fadeOut(1.5f),
-                Actions.run(new Runnable() {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                SinglePlayerGameScene.this.putWinnerImage();
+                SinglePlayerGameScene.this.stage.addAction(Actions.sequence(
+                        Actions.delay(1.5f), Actions.fadeOut(3.5f),
+                        Actions.run(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        parent.setScene(new StartupScene(parent));
+                            @Override
+                            public void run() {
+                                parent.setScene(new StartupScene(parent));
 
-                    }
+                            }
 
-                })));
+                        })));
+            }
+        });
     }
 
+    private void putWinnerImage() {
+        try {
+            Image image = new Image(TextureFactory.getInstance().loadDrawable(
+                    "Title_Win.png", ResourceType.PICTURE));
+            image.setTouchable(Touchable.disabled);
+            image.setScaling(Scaling.fit);
+            image.setWidth(Gdx.graphics.getWidth());
+            image.setHeight(Gdx.graphics.getHeight());
+            this.stage.addGUI(image);
+            image.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(3.0f)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

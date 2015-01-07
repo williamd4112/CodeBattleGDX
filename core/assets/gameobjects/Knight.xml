@@ -2,48 +2,46 @@
 	<source>Knight</source>
 	<type name="light">
 		<through>false</through>
-		<cost>15</cost>
+		<cost>320</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
-		<hp>150</hp>
+		<hp>350</hp>
 		<mp>120</mp>
 		<atk>20</atk>
-		<def>5</def>
-		<range>3</range>
+		<def>80</def>
+		<range>1</range>
 		<maxsteps>15</maxsteps>
 		<maxoperation>2</maxoperation>
-		<sound>other-01-bosses-a_KnightClickSound.mp3</sound>
+		<sound>knight/knight_click.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="006-Weapon01"
-				duration="1" interval="5">
+				duration="1" interval="10">
 				<region x="0" y="192" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
+			<sound>knight/knight_attack.mp3</sound>
 			<sound>097-Attack09.ogg</sound>
 			<atk>20</atk>
-			<range>3</range>
 		</attack>
 
-		<skill range="10">
+		<skill range="2">
 			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011"
-				duration="1" interval="5">
+				duration="1" interval="10">
 				<region x="0" y="0" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
+			<sound>knight/knight_skill.mp3</sound>
 			<sound>117-Fire01.ogg</sound>
 			<method name="skillAttack">
 				<arg key="Attack">
 					<attack>
 						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="5">
+							duration="1" interval="10">
 							<region x="0" y="192" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
-						<sound>4-18-champion_KnightAttackMusic.mp3</sound>
+						<sound>knight/knight_attack.mp3</sound>
 						<sound>097-Attack09.ogg</sound>
 						<atk>20</atk>
-						<range>3</range>
 					</attack>
 				</arg>
 			</method>
@@ -62,26 +60,25 @@
 		<range>5</range>
 		<maxsteps>12</maxsteps>
 		<maxoperation>1</maxoperation>
-		<sound>other-01-bosses-a_KnightClickSound.mp3</sound>
+		<sound>knight/knight_click.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="006-Weapon01"
 				duration="1" interval="5">
-				<region x="0" y="384" width="960" height="192" hTile="192"
+				<region x="0" y="192" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
+			<sound>knight/knight_attack.mp3</sound>
 			<sound>097-Attack09.ogg</sound>
-			<atk>50</atk>
-			<range>5</range>
+			<atk>20</atk>
 		</attack>
-		<skill range="8">
+		<skill range="2">
 			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011"
 				duration="2" interval="5">
 				<region x="0" y="576" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-18-champion_KnightAttackMusic.mp3</sound>
-			<sound>119-Fire03.ogg</sound>
+			<sound>knight/knight_skill.mp3</sound>
+			<sound>117-Fire01.ogg</sound>
 			<method name="areaAttack">
 				<arg key="Attack">
 					<attack>
@@ -90,10 +87,9 @@
 							<region x="0" y="384" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
-						<sound>4-18-champion_KnightAttackMusic.mp3</sound>
+						<sound>knight/knight_attack.mp3</sound>
 						<sound>097-Attack09.ogg</sound>
 						<atk>50</atk>
-						<range>5</range>
 					</attack>
 				</arg>
 			</method>

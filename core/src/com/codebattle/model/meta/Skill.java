@@ -10,7 +10,7 @@ import com.codebattle.utility.XMLUtil;
 
 public class Skill {
     public Animation animMeta;
-    public String soundName;
+    private List<String> soundNames;
     private int range;
 
     private List<GameMethod> methods;
@@ -23,7 +23,10 @@ public class Skill {
         this.animMeta = new Animation(XMLUtil.childByName(skillElement, "animation"));
 
         // Read sound element
-        this.soundName = XMLUtil.childByName(skillElement, "sound").getText();
+        this.soundNames = new LinkedList<String>();
+        for (XmlReader.Element soundElement : skillElement.getChildrenByName("sound")) {
+            this.soundNames.add(soundElement.getText());
+        }
 
         // Read range element
         this.range = Integer.parseInt(skillElement.getAttribute("range"));
@@ -35,13 +38,15 @@ public class Skill {
 
     }
 
-    public void execute(GameObject target, GameObject emitter) {
+    public void execute(GameObject target, GameObject emitter, int x, int y) {
         try {
             for (GameMethod m : methods) {
                 m.bind("Target", target);
+                m.bind("tx", x);
+                m.bind("ty", y);
                 m.bind("Emitter", emitter);
                 m.bind("Skill", this);
-                m.bind("Stage", target.getGameStage());
+                m.bind("Stage", emitter.getGameStage());
                 m.bind("Source", emitter.getOwner());
                 m.execute();
             }
@@ -58,5 +63,9 @@ public class Skill {
 
     public int getRange() {
         return this.range;
+    }
+
+    public List<String> getSoundNames() {
+        return this.soundNames;
     }
 }

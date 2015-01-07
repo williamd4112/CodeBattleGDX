@@ -1,5 +1,7 @@
 package com.codebattle.utility;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
@@ -10,6 +12,11 @@ public class SoundUtil {
 
     public static void playSE(final String name) {
         playSound(GameConstants.SE_DIR + name);
+    }
+
+    public static void playSES(final List<String> names) {
+        for (String name : names)
+            playSE(name);
     }
 
     public static void playBGS(final String name) {

@@ -1,6 +1,10 @@
 package com.codebattle.model;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.codebattle.gui.StateShowable;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.meta.Attack;
+import com.codebattle.model.meta.Skill;
 import com.codebattle.model.scriptprocessor.CellScriptProcessor;
 import com.codebattle.utility.GameConstants;
 
@@ -11,7 +15,7 @@ import com.codebattle.utility.GameConstants;
  * @author williamd
  *
  */
-public class VirtualCell {
+public class VirtualCell implements StateShowable, Affectable {
 
     final int x, y;
 
@@ -77,6 +81,14 @@ public class VirtualCell {
         return this.y * GameConstants.CELL_SIZE;
     }
 
+    public int getVX() {
+        return this.x;
+    }
+
+    public int getVY() {
+        return this.y;
+    }
+
     public boolean isPassible() {
         if (this.obj != null) {
             return (obj.isBlock()) ? false : true;
@@ -91,6 +103,17 @@ public class VirtualCell {
             this.script_exit = script;
         else if (type.equals("Update"))
             this.script_update = script;
+    }
+
+    @Override
+    public void onSkill(Skill skill, GameObject emitter) {
+        System.out.println(String.format("cell(%d ,% d)@ onSkill:\n", x, y));
+        skill.execute(getObject(), emitter, x, y);
+    }
+
+    @Override
+    public void onAttacked(Attack attack) {
+
     }
 
     public void onUpdate() {
@@ -121,5 +144,31 @@ public class VirtualCell {
             processor.run();
             this.script_exit = "";
         }
+    }
+
+    @Override
+    public String[] getKeys() {
+
+        return new String[] { "--", "--", "--", "--", "--" };
+    }
+
+    @Override
+    public String[] getValues() {
+        return new String[] { "--", "--", "--", "--", "--" };
+    }
+
+    @Override
+    public Drawable getPortrait() {
+        return null;
+    }
+
+    @Override
+    public String getNameInfo() {
+        return String.format("%s", "Cell");
+    }
+
+    @Override
+    public String getPositionInfo() {
+        return String.format("(%d , %d)", x, y);
     }
 }

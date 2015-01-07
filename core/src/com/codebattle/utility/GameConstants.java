@@ -60,8 +60,12 @@ public class GameConstants {
     public final static Interval ONSELECT_CURSOR_INTERVAL = Interval.VERYHIGH;
     public final static String ONSELECT_SE = "002-System02.ogg";
 
-    public final static int INIT_HP = 4000;
-    public final static int INIT_RES = 4000;
+    public final static int INIT_HP = 1500;
+    public final static int INIT_RES = 300;
+    public final static int VIRTUAL_SYSTEM_RESOURCE_ADDING = 20;
+
+    public final static String SKILL_EFFECT_ANIM = "effect";
+    public final static int SKILL_EFFECT_COUNT = 6;
 
     public final static Skin DEFAULT_SKIN = new Skin(
             Gdx.files.internal("skin/demo/uiskin.json"));

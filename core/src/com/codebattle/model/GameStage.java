@@ -280,10 +280,12 @@ public class GameStage extends Stage {
         int vx = (int) (worldCoord.x / 32);
         int vy = (int) (worldCoord.y / 32);
 
+        if (this.hit(worldCoord.x, worldCoord.y, true) != null)
+            return super.touchDown(screenX, screenY, pointer, button);
+
         if (!isOutBoundInVirtualMap(vx, vy)) {
             VirtualCell cell = this.virtualMap.getCell(vx, vy);
-            if (cell.getObject() != null)
-                this.emitSelectEvent(cell);
+            this.emitSelectEvent(cell);
 
         }
 
@@ -341,7 +343,7 @@ public class GameStage extends Stage {
             this.animQueue.poll();
             anim.finished();
         } else {
-            anim.update(0);
+            anim.update(delta);
             anim.draw(batch, this.camera, delta);
         }
 
@@ -388,10 +390,7 @@ public class GameStage extends Stage {
     public void emitSkillEvent(GameObject emitter, Skill skill, int x, int y) {
         try {
             if (!this.isOutBoundInVirtualMap(x, y)) {
-                GameObject target = this.virtualMap.getCell(x, y).getObject();
-                if (target != null) {
-                    target.onSkill(skill, emitter);
-                }
+                this.getVirtualMap().getCell(x, y).onSkill(skill, emitter);
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -520,6 +519,13 @@ public class GameStage extends Stage {
         return this.virtualSystems;
     }
 
+    public VirtualSystem getVirtualSystem(Owner owner) {
+        if (owner.index < this.virtualSystems.length)
+            return this.virtualSystems[owner.index];
+        else
+            return null;
+    }
+
     public GameStageEventManager getEventManager() {
         return this.eventManager;
     }
@@ -556,6 +562,12 @@ public class GameStage extends Stage {
         if (this.selectCell == null)
             return null;
         return this.selectCell.getObject();
+    }
+
+    public VirtualCell getSelectedCell() {
+        if (this.selectCell == null)
+            return null;
+        return this.selectCell;
     }
 
     public Group getGUILayer() {
@@ -711,6 +723,7 @@ public class GameStage extends Stage {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         this.debugRender.setAutoShapeType(true);
+
         this.debugRender.setColor(1, 0, 0, 0.2f);
 
         for (int i = 0; i < this.getMapWidth() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
@@ -724,34 +737,58 @@ public class GameStage extends Stage {
         int mapHeight = this.mapProperties.get("height", Integer.class);
         for (int row = 0; row < mapHeight; row++) {
             for (int col = 0; col < mapWidth; col++) {
-                if (!this.virtualMap.isPassiable(col, row)) {
-                    // this.debugRender.setColor(Color.ORANGE.r, Color.ORANGE.g, Color.ORANGE.b,
-                    // 0.2f);
-                    if (this.virtualMap.getCell(col, row).getObject() != null) {
-                        GameObject obj = this.virtualMap.getCell(col, row).getObject();
-                        switch (obj.getOwner()) {
-                        case RED:
-                            this.debugRender.setColor(1.0f, 0.0f, 0.0f, 0.2f);
-                            break;
-                        case BLUE:
-                            this.debugRender.setColor(0.0f, 0.0f, 1.0f, 0.2f);
-                            break;
-                        case GREEN:
-                            this.debugRender.setColor(0.0f, 1.0f, 0.0f, 0.2f);
-                            break;
-                        default:
-                            break;
-                        }
-                        float x = col * GameConstants.CELL_SIZE;
-                        float y = row * GameConstants.CELL_SIZE;
-                        this.debugRender.rect(x, y, GameConstants.CELL_SIZE,
-                                GameConstants.CELL_SIZE);
-                    }
+                VirtualCell cell = this.virtualMap.getCell(col, row);
 
+                // Draw select object and its range
+                if (this.selectCell != null) {
+                    GameObject obj = this.selectCell.getObject();
+                    if (obj != null) {
+                        if (obj instanceof GameActor) {
+                            GameActor actor = (GameActor) obj;
+                            if (actor.isInRange(actor.getProp().maxsteps, cell.getVX(),
+                                    cell.getVY())) {
+                                this.renderDebugCell(actor.getOwner(), col, row);
+                            }
+                        }
+                    }
+                }
+
+                // Draw object
+                if (!this.virtualMap.isPassiable(col, row)) {
+                    if (this.virtualMap.getCell(col, row).getObject() != null) {
+                        this.renderDebugCell(this.virtualMap.getCell(col, row)
+                                .getObject()
+                                .getOwner(), col, row);
+                    }
+                }
+
+                // Draw select cell
+                if (cell == this.selectCell) {
+                    if (cell.getObject() == null)
+                        this.renderDebugCell(this.parent.getCurrentPlayer(), col, row);
                 }
             }
         }
 
         this.debugRender.end();
+    }
+
+    private void renderDebugCell(Owner owner, int col, int row) {
+        switch (owner) {
+        case RED:
+            this.debugRender.setColor(1.0f, 0.0f, 0.0f, 0.2f);
+            break;
+        case BLUE:
+            this.debugRender.setColor(0.0f, 0.0f, 1.0f, 0.2f);
+            break;
+        case GREEN:
+            this.debugRender.setColor(0.0f, 1.0f, 0.0f, 0.2f);
+            break;
+        default:
+            break;
+        }
+        float x = col * GameConstants.CELL_SIZE;
+        float y = row * GameConstants.CELL_SIZE;
+        this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
     }
 }

@@ -8,7 +8,7 @@ public class DesktopLauncher {
     public static void main(final String[] arg) {
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.vSyncEnabled = true;
-        config.setFromDisplayMode(config.getDesktopDisplayMode());
+        // config.setFromDisplayMode(config.getDesktopDisplayMode());
         config.title = "CodeBattleGDX";
 
         new LwjglApplication(new CodeBattle(), config);

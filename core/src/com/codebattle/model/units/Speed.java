@@ -8,7 +8,7 @@ package com.codebattle.model.units;
  * @author williamd
  */
 public enum Speed {
-    NORMAL(0.2f), FAST(0.4f), VERYFAST(2.0f);
+    NORMAL(0.2f), FAST(0.4f), VERYFAST(2.0f), CHARGE(16.0f);
 
     final public float value;
 

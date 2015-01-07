@@ -1,5 +1,8 @@
 package com.codebattle.model.meta;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.Owner;
 
@@ -10,7 +13,7 @@ import com.codebattle.model.Owner;
  */
 public class Attack {
     public Animation animMeta;
-    public String soundName;
+    public List<String> soundName;
 
     private int atk;
     private Owner owner;
@@ -19,8 +22,10 @@ public class Attack {
         XmlReader.Element animElement = attackElement.getChildByName("animation");
         this.animMeta = new Animation(animElement);
 
-        XmlReader.Element soundElement = attackElement.getChildByName("sound");
-        this.soundName = soundElement.getText();
+        this.soundName = new LinkedList<String>();
+        for (XmlReader.Element soundElement : attackElement.getChildrenByName("sound")) {
+            this.soundName.add(soundElement.getText());
+        }
 
         XmlReader.Element atkElement = attackElement.getChildByName("atk");
         this.atk = Integer.parseInt(atkElement.getText());
@@ -32,5 +37,9 @@ public class Attack {
 
     public Owner getOwner() {
         return owner;
+    }
+
+    public List<String> getSoundNames() {
+        return this.soundName;
     }
 }

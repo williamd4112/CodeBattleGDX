@@ -13,7 +13,8 @@ public class AttackAnimation extends TargetBasedAnimation {
 
     final public Attack attack;
 
-    public AttackAnimation(GameStage stage, Attack attack, GameObject target) throws Exception {
+    public AttackAnimation(GameStage stage, Attack attack, GameObject target)
+            throws Exception {
         super(stage, attack.animMeta, target);
         this.attack = attack;
 
@@ -30,8 +31,9 @@ public class AttackAnimation extends TargetBasedAnimation {
 
     @Override
     public void draw(Batch batch, Camera camera, float delta) {
-        batch.draw(this.frames[frame], target.getX() + GameConstants.CELL_SIZE / 2 - frameWidth
-                / 2, target.getY() + GameConstants.CELL_SIZE / 2 - frameHeight / 2);
+        batch.draw(this.frames[frame], target.getX() + GameConstants.CELL_SIZE / 2
+                - frameWidth / 2, target.getY() + GameConstants.CELL_SIZE / 2 - frameHeight
+                / 2);
 
     }
 
@@ -44,7 +46,7 @@ public class AttackAnimation extends TargetBasedAnimation {
     @Override
     public void setup() {
         super.setup();
-        SoundUtil.playSE(attack.soundName);
+        SoundUtil.playSES(attack.getSoundNames());
     }
 
 }

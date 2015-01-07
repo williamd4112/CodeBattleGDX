@@ -14,6 +14,7 @@ import com.codebattle.model.MoveableGameObject;
 import com.codebattle.model.Owner;
 import com.codebattle.model.VirtualCell;
 import com.codebattle.model.animation.OnAttackAnimation;
+import com.codebattle.model.animation.PortraitAnimation;
 import com.codebattle.model.animation.SkillAnimation;
 import com.codebattle.model.levelobject.ScriptableObject;
 import com.codebattle.model.meta.Attack;
@@ -86,7 +87,7 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public void onSelected(Owner owner) {
-        SoundUtil.playSE(type.getSelectSoundName());
+        SoundUtil.playSES(type.getSelectSoundNames());
         SoundUtil.playSE(GameConstants.ONSELECT_SE);
     }
 
@@ -130,9 +131,10 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     public void skill(int x, int y) {
         if (this.isInRange(this.type.getSkill().getRange(), x, y)) {
             System.out.println(this.getName() + " emit skill at " + x + " , " + y);
-            this.stage.emitSkillEvent(this, this.type.getSkill(), x, y);
             try {
+                this.stage.addAnimation(new PortraitAnimation(stage, this));
                 this.stage.addAnimation(new SkillAnimation(stage, type.getSkill(), this));
+                this.stage.emitSkillEvent(this, this.type.getSkill(), x, y);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -143,12 +145,13 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     @Override
     public void onSkill(Skill skill, GameObject emitter) {
         System.out.println("onSkill: " + skill.animMeta.source);
-        skill.execute(this, emitter);
+        skill.execute(this, emitter, this.vx, this.vy);
     }
 
     @Override
     public void onDestroyed() {
         System.out.println(this.getName() + " is dead.");
+        this.stage.getVirtualSystem(owner).decreaseLift(this.type.prop.hp);
     }
 
     public boolean isInRange(int x, int y) {
