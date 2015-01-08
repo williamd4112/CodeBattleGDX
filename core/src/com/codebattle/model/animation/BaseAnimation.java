@@ -1,5 +1,8 @@
 package com.codebattle.model.animation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
@@ -13,6 +16,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 
 abstract public class BaseAnimation {
+
+    // Sound variable
+    protected List<String> sounds;
+
+    public BaseAnimation() {
+        this.sounds = new LinkedList<String>();
+    }
 
     abstract public void update(float delta);
 

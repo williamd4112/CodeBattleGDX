@@ -5,17 +5,26 @@
 	<ambient color="000000" intensity="0.1f" />
 	<init>
 
-		<gameobject class="GameActor" owner="Red" name="Saber"
-			type="light" x="23" y="24" />
+		<gameobject class="GameActor" owner="Red" name="Wizard"
+			type="light" x="22" y="23" />
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="light" x="21" y="24" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
 			type="light" x="22" y="24" />
-
+		<gameobject class="GameActor" owner="Blue" name="Saber"
+			type="light" x="23" y="24" />
+		
+		
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
 			type="normal" x="32" y="24" >
 		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
 		</gameobject>
 		<gameobject class="LevelObject" owner="Green" name="Crystal"
-			type="normal" x="22" y="29" >
+			type="normal" x="22" y="25" >
+		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="12" y="24" >
 		    <pointlight color="33CCCC" radius="100" x="0" y="0" />
 		</gameobject>
 		<pointlight color="33CCCC" radius="600" x="22" y="22" />
@@ -61,7 +70,7 @@
 				</method>
 				<method name="showDialog">
 					<arg key="Context">
-						We need to check obstacle in the path manually so that we can get more effective movements. 
+						We need to check obstacle in the path manually so that we can get more effective movements. So, we take obstacle avoidance as example. You want to go through the row in front of your wizard. How do you think b
 					</arg>
 					<arg key="Source">Lancer_dialog</arg>
 					<arg key="Region">
@@ -69,9 +78,67 @@
 							vTile="256" />
 					</arg>
 				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Go left,left,left,up right? How to do this. Never enter moveLeft,moveLeft,moveLeft... There is a more effective method. I'll show you the code template in your editor.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="256" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="insertEditorHint">
+					<arg key="Hint">
+						while(!Wizard.isOverstep()){
+							if(Wizard.isPassable("Up",1)){
+								Wizard.moveUp(1);
+							}else{
+								Wizard.moveLeft(1);
+							}
+						}
+					</arg>
+				</method>
 				<method name="lookAt">
 					<arg key="x">22</arg>
 					<arg key="y">24</arg>
+				</method>
+			</effect>
+		</event>
+		<event name="InPosition" trigger="onRoundComplete" type="ONCE">
+			<condition>
+				<method name="isGameObjectAtPosition">
+					<arg key="Target">Wizard</arg>
+					<arg key="Owner">Red</arg>
+					<arg key="x">20</arg>
+					<arg key="y">24</arg>
+				</method>
+			</condition>
+			<effect>
+				<method name="showDialog">
+					<arg key="Context">
+						Well done, you have learned how to use while-loop and if-else to control the character more wisely
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="0" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="showDialog">
+					<arg key="Context">
+						Let's try to play more tricks. In this world, wizard is a special unit. Only wizard can write script into object and heal,recharge unit. Let's give it a try ! I'have shown the code template in your editor.
+					</arg>
+					<arg key="Source">Lancer_dialog</arg>
+					<arg key="Region">
+						<region x="512" y="0" width="256" height="256" hTile="256"
+							vTile="256" />
+					</arg>
+				</method>
+				<method name="insertEditorHint">
+					<arg key="Hint">
+						Wizard.writeObject(22,25,"onUpdate","self.scan()\;");
+					</arg>
 				</method>
 			</effect>
 		</event>

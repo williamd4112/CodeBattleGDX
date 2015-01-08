@@ -149,12 +149,12 @@ public class VirtualCell implements StateShowable, Affectable {
     @Override
     public String[] getKeys() {
 
-        return new String[] { "--", "--", "--", "--", "--" };
+        return new String[] { "Pass", "--", "--", "--", "--" };
     }
 
     @Override
     public String[] getValues() {
-        return new String[] { "--", "--", "--", "--", "--" };
+        return new String[] { String.valueOf(passiable), "--", "--", "--", "--" };
     }
 
     @Override

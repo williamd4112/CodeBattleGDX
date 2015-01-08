@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.gameactor.GameObjectProperties;
 
 public class GameObjectType {
+    private String name;
+    private int level;
     public boolean through;
     public int cost;
     public GameObjectProperties prop;
@@ -18,6 +20,12 @@ public class GameObjectType {
 
     public GameObjectType(XmlReader.Element type) throws NoSuchMethodException,
             SecurityException {
+        // Read type name
+        this.name = type.getAttribute("name");
+
+        // Read Level
+        this.level = Integer.parseInt(type.getAttribute("level"));
+
         // Read through ability
         this.through = Boolean.parseBoolean(type.getChildByName("through").getText());
 
@@ -51,6 +59,14 @@ public class GameObjectType {
 
     public Skill getSkill() {
         return this.skill;
+    }
+
+    public int getLevel() {
+        return this.level;
+    }
+
+    public String getTypeName() {
+        return this.name;
     }
 
     public List<String> getSelectSoundNames() {

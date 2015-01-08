@@ -12,12 +12,16 @@ public class Skill {
     public Animation animMeta;
     private List<String> soundNames;
     private int range;
+    private int cost;
 
     private List<GameMethod> methods;
 
     public Skill(XmlReader.Element skillElement) throws NoSuchMethodException,
             SecurityException {
         this.methods = new LinkedList<GameMethod>();
+
+        // Read cost
+        this.cost = Integer.parseInt(skillElement.getAttribute("cost"));
 
         // Read animation element
         this.animMeta = new Animation(XMLUtil.childByName(skillElement, "animation"));
@@ -63,6 +67,10 @@ public class Skill {
 
     public int getRange() {
         return this.range;
+    }
+
+    public int getCost() {
+        return this.cost;
     }
 
     public List<String> getSoundNames() {

@@ -3,6 +3,7 @@ package com.codebattle.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.utils.Array;
 import com.codebattle.model.animation.SummonAnimation;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.utility.GameConstants;
@@ -50,10 +51,11 @@ public class VirtualSystem {
         this.decreaseResource(actor.type.cost);
 
         SummonAnimation anim = new SummonAnimation(this.stage, actor);
+        anim.addSound(GameConstants.SUMMON_SE);
+        for (String s : actor.type.getSelectSoundNames())
+            anim.addSound(s);
         this.stage.addAnimation(anim);
 
-        SoundUtil.playSE(GameConstants.SUMMON_SE);
-        SoundUtil.playSES(actor.type.getSelectSoundNames());
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
     }
 
@@ -63,6 +65,10 @@ public class VirtualSystem {
 
     public int getResource() {
         return this.resource;
+    }
+
+    public Array<GameActor> getSortedActorList() {
+        return this.stage.getGameActorsByOwner(owner);
     }
 
     public void increaseResource(int diff) {

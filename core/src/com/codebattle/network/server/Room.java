@@ -55,7 +55,7 @@ public class Room implements ConnectionListener {
     private Map<String, Boolean> playersReadyStates;
 
     public Room(int ID, String name, RoomListener server) {
-    	this.ID = ID;
+        this.ID = ID;
         this.name = name;
         this.server = server;
         this.playersReadyStates = new HashMap<String, Boolean>();
@@ -98,9 +98,7 @@ public class Room implements ConnectionListener {
             } else if (msg.opt.equals("Leave")) {
                 this.removeConnection(connection);
                 this.connectionNum--;
-                ClientItem clientItem = ((Server)server).clientItems.get(connection);
-                clientItem.setStatus("Player Number: " + this.connectionNum);
-                ((Server)server).clientListPresenter.updateItem("Rooms", clientItem);
+                this.updateRoomStatus("Waiting");
                 connection.unbindRoom();
                 server.addIdleConnection(connection);
                 if (this.connectionNum == 0) {
@@ -136,12 +134,14 @@ public class Room implements ConnectionListener {
                 } else if (msg.opt.equals("Close")) {
                     toDestination.send(rawMessage);
                     this.resetGameVariable();
+                    this.updatePlayerStatus(this.connection_red, "Connected");
+                    this.updatePlayerStatus(this.connection_blue, "Connected");
                 }
             }
         }
     }
 
-    public Connection getDestination(Connection connection) {
+    private Connection getDestination(Connection connection) {
         return (connection == this.connection_red) ? this.connection_blue
                 : this.connection_red;
     }
@@ -191,6 +191,18 @@ public class Room implements ConnectionListener {
         this.playing = true;
     }
 
+    private void updateRoomStatus(String status) {
+        ClientItem clientItem = ((Server) server).roomItems.get(this);
+        clientItem.setStatus("Player Number: " + this.connectionNum + "  Status: " + status);
+        ((Server) server).clientListPresenter.updateItem("Rooms", clientItem);
+    }
+
+    private void updatePlayerStatus(Connection connection, String status) {
+        ClientItem clientItem = ((Server) server).connectionItems.get(connection);
+        clientItem.setStatus(status);
+        ((Server) server).clientListPresenter.updateItem("Players", clientItem);
+    }
+
     private void setReady(String team) {
         if (this.playersReadyStates.containsKey(team)) {
             this.playersReadyStates.put(team, true);
@@ -201,6 +213,9 @@ public class Room implements ConnectionListener {
     private void checkReady() {
         if (this.playersReadyStates.get("Red") && this.playersReadyStates.get("Blue")) {
             this.broadcastStartGame();
+            this.updateRoomStatus("Playing");
+            this.updatePlayerStatus(this.connection_red, "Playing");
+            this.updatePlayerStatus(this.connection_blue, "Playing");
         }
     }
 
@@ -216,18 +231,18 @@ public class Room implements ConnectionListener {
         // message to another connection
         connection.unbindRoom();
         this.closeGame(this.getDestination(connection));
-        this.removeConnection(connection);
         this.connectionNum--;
-        ClientItem clientItem = ((Server)server).clientItems.get(connection);
-        System.out.println(clientItem.getStatus());
-        clientItem.setStatus("Player Number: " + this.connectionNum);
-        ((Server)server).clientListPresenter.updateItem("Rooms", clientItem);
-        ((Server)server).clientListPresenter.removeItem("Players", clientItem);
         if (this.connectionNum == 0) {
             emitDestroyRoom(this.name);
-            ((Server)server).clientListPresenter.removeItem("Rooms", clientItem);
+            ((Server) server).clientListPresenter.removeItem("Rooms",
+                    ((Server) server).roomItems.get(this));
         } else {
             resetGameVariable();
+            this.updateRoomStatus("Waiting");
+            this.updatePlayerStatus(this.getDestination(connection), "Connected");
+            ((Server) server).clientListPresenter.removeItem("Players",
+                    ((Server) server).connectionItems.get(connection));
+            this.removeConnection(connection);
         }
     }
 
@@ -274,13 +289,13 @@ public class Room implements ConnectionListener {
     public String getName() {
         return this.name;
     }
-    
+
     public int getPlayerNum() {
-    	return this.connectionNum;
+        return this.connectionNum;
     }
-    
-    public int getID(){
-    	return this.ID;
+
+    public int getID() {
+        return this.ID;
     }
 
     public boolean isFull() {

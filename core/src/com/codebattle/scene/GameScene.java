@@ -18,6 +18,8 @@ import com.codebattle.utility.XMLUtil;
 
 abstract public class GameScene implements Screen {
 
+    protected boolean isSuccess = false;
+
     final public CodeBattle parent;
     final public GameStage stage;
 
@@ -100,6 +102,14 @@ abstract public class GameScene implements Screen {
         return this.currentPlayer;
     }
 
+    public void setSuccess(boolean b) {
+        this.isSuccess = b;
+    }
+
+    public boolean isSuccess() {
+        return this.isSuccess;
+    }
+
     abstract public void setupInput();
 
     abstract public void setupGUI();
@@ -125,6 +135,6 @@ abstract public class GameScene implements Screen {
 
     abstract public void onRoundComplete();
 
-    abstract public void onReceiveScript(String script);
+    abstract public boolean onReceiveScript(String script);
 
 }

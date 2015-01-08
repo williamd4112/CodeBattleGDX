@@ -16,13 +16,14 @@ import com.codebattle.model.VirtualCell;
 import com.codebattle.model.animation.OnAttackAnimation;
 import com.codebattle.model.animation.PortraitAnimation;
 import com.codebattle.model.animation.SkillAnimation;
+import com.codebattle.model.animation.TargetBasedAnimation;
 import com.codebattle.model.levelobject.ScriptableObject;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.model.units.Interval;
 import com.codebattle.utility.GameConstants;
-import com.codebattle.utility.GameObjectFactory;
+import com.codebattle.utility.GameMethods;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.SoundUtil;
 import com.codebattle.utility.TextureFactory;
@@ -93,12 +94,15 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public void attack(int x, int y) {
+        if (!this.checkOperation())
+            return;
+        this.addOperation();
         // Suicide avoiding
         if (this.vx == x && this.vy == y)
             return;
 
         // Check in-range
-        if (this.isInRange(x, y)) {
+        if (this.isInRange(x, y) && this.isOutMinRange(this.properties.minrange, x, y)) {
             this.stage.emitAttackEvent(this, this.type.getAttackMode(), x, y);
         }
     }
@@ -111,35 +115,107 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     public void writeCell(int x, int y, String type, String script) {
-        VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
-        if (cell != null) {
-            cell.setScript(type, script);
+        try {
+            if (!this.checkOperation())
+                return;
+            this.addOperation();
+            if (!this.levelCheck(GameConstants.WRITE_LEVEL))
+                return;
+            if (!mpCheck(GameConstants.WRITE_COST))
+                return;
+            if (this.isInRange(this.type.prop.range, x, y)) {
+                VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
+                if (cell != null) {
+                    cell.setScript(type, script);
+                    TargetBasedAnimation anim = new TargetBasedAnimation(stage,
+                            GameConstants.WRITE_ANIMMETA, cell, 0.3f);
+                    anim.setEmitter(this);
+                    anim.setEmitter(this);
+                    anim.addSound(GameConstants.WRITE_SE);
+                    this.stage.addAnimation(anim);
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void writeObject(int x, int y, String type, String script) {
-        VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
-        GameObject obj = cell.getObject();
-        if (obj != null) {
-            if (obj instanceof ScriptableObject) {
-                ((ScriptableObject) obj).setScript(type, script);
+        try {
+            if (!this.checkOperation())
+                return;
+            this.addOperation();
+            if (!this.levelCheck(GameConstants.WRITE_LEVEL))
+                return;
+            if (!mpCheck(GameConstants.WRITE_COST))
+                return;
+            if (this.isInRange(this.type.prop.range, x, y)) {
+                VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
+                GameObject obj = cell.getObject();
+                if (obj != null) {
+                    if (obj instanceof ScriptableObject) {
+                        ((ScriptableObject) obj).setScript(type, script);
+                        TargetBasedAnimation anim = new TargetBasedAnimation(stage,
+                                GameConstants.WRITE_ANIMMETA, obj, 0.3f);
+                        anim.setEmitter(this);
+                        anim.addSound(GameConstants.WRITE_SE);
+                        anim.setEmitter(this);
+                        this.stage.addAnimation(anim);
+                    }
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void skill(int x, int y) {
+        if (!this.checkOperation())
+            return;
+        this.addOperation();
+        if (!mpCheck(this.type.getSkill().getCost()))
+            return;
         if (this.isInRange(this.type.getSkill().getRange(), x, y)) {
             System.out.println(this.getName() + " emit skill at " + x + " , " + y);
             try {
                 this.stage.addAnimation(new PortraitAnimation(stage, this));
                 this.stage.addAnimation(new SkillAnimation(stage, type.getSkill(), this));
                 this.stage.emitSkillEvent(this, this.type.getSkill(), x, y);
+                this.decreaseMP(this.type.getSkill().getCost());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+    }
+
+    public void heal(int x, int y, int diff) {
+        if (!this.checkOperation())
+            return;
+        this.addOperation();
+        if (!this.levelCheck(GameConstants.HEAL_LEVEL))
+            return;
+        try {
+            GameMethods.heal(stage, this, diff, x, y).setEmitter(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void encharge(int x, int y, int diff) {
+        if (!this.checkOperation())
+            return;
+        this.addOperation();
+        if (!this.levelCheck(GameConstants.HEAL_LEVEL))
+            return;
+        try {
+            GameMethods.encharge(stage, this, diff, x, y).setEmitter(this);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -161,6 +237,19 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     public boolean isInRange(int range, int x, int y) {
         int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
         return (distance <= range) ? true : false;
+    }
+
+    public boolean isOutMinRange(int range, int x, int y) {
+        int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
+        return (distance >= range) ? true : false;
+    }
+
+    private boolean levelCheck(int needLevel) {
+        return (this.type.getLevel() >= needLevel);
+    }
+
+    private boolean mpCheck(int needMp) {
+        return (this.properties.mp >= needMp);
     }
 
     @Override
@@ -188,12 +277,12 @@ public class GameActor extends MoveableGameObject implements StateShowable {
         return this.frame;
     }
 
-    public GameObjectProperties getProp() {
-        return this.properties;
-    }
-
     public String getAlias() {
         return this.alias;
+    }
+
+    public int getSteps() {
+        return this.culmuSteps;
     }
 
     /**
@@ -205,23 +294,6 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     public void rename(String alias) {
         this.alias = alias;
-    }
-
-    public int increaseHP(int diff) {
-        int newValue = (this.properties.hp + diff);
-        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.hp;
-        this.properties.hp = (newValue >= max) ? max : newValue;
-        return this.properties.hp;
-    }
-
-    public int decreaseHP(int diff) {
-        int newValue = this.properties.hp - diff;
-        this.properties.hp = (newValue >= 0) ? newValue : 0;
-        if (this.properties.hp == 0) {
-            this.state = GameObjectState.DEATH;
-        }
-
-        return this.properties.hp;
     }
 
     /**

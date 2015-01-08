@@ -1,15 +1,16 @@
 <xml>
 	<source>Saber</source>
-	<type name="light">
+	<type name="light" level="1">
 	    <through>false</through>
 		<cost>120</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
-		<hp>80</hp>
+		<hp>120</hp>
 		<mp>10</mp>
-		<atk>12</atk>
+		<atk>30</atk>
 		<def>10</def>
 		<range>1</range>
-		<maxsteps>10</maxsteps>
+		<minrange>0</minrange>
+		<maxsteps>3</maxsteps>
 		<maxoperation>2</maxoperation>
 		<sound>saber/saber_click.mp3</sound>
 		<attack>
@@ -23,7 +24,7 @@
 			<atk>12</atk>
 		</attack>
 
-		<skill range="4">
+		<skill range="4" cost="5">
 			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002"
 				duration="1" interval="5">
 				<region x="0" y="960" width="960" height="192" hTile="192"
@@ -35,7 +36,7 @@
 				<arg key="Attack">
 					<attack>
 						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="5">
+							duration="1" interval="1">
 							<region x="0" y="192" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
@@ -47,17 +48,18 @@
 		</skill>
 	</type>
 
-	<type name="heavy">
+	<type name="heavy" level="1">
 	    <through>false</through>
 		<cost>200</cost>
 		<region x="0" y="3072" width="128" height="320" hTile="32"
 			vTile="32" />
-		<hp>200</hp>
-		<mp>10</mp>
+		<hp>180</hp>
+		<mp>15</mp>
 		<atk>45</atk>
 		<def>50</def>
 		<range>1</range>
-		<maxsteps>4</maxsteps>
+		<minrange>0</minrange>
+		<maxsteps>2</maxsteps>
 		<maxoperation>1</maxoperation>
 		<sound>saber/saber_click.mp3</sound>
 		<attack>
@@ -69,19 +71,19 @@
 			<sound>other-05-soldiers-f_SaberAttackMusic.mp3</sound>	
 			<atk>40</atk>
 		</attack>
-		<skill range="2">
+		<skill range="2" cost="15">
 			<animation class="GameActorAttackAnimation" source="SaberSkill_slash_effect_002"
 				duration="1" interval="2">
 				<region x="0" y="768" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-						<sound>saber/saber_skill.mp3</sound>
+			<sound>saber/saber_skill.mp3</sound>
 			<sound>saber/saber_skill2.ogg</sound>
 			<method name="areaAttack">
 				<arg key="Attack">
 					<attack>
 						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="5">
+							duration="1" interval="1">
 							<region x="0" y="192" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>

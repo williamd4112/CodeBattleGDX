@@ -1,64 +1,67 @@
 <xml>
 	<source>Knight</source>
-	<type name="light">
+	<type name="light" level="1">
 		<through>false</through>
 		<cost>320</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
-		<hp>350</hp>
-		<mp>120</mp>
-		<atk>20</atk>
+		<hp>260</hp>
+		<mp>30</mp>
+		<atk>45</atk>
 		<def>80</def>
 		<range>1</range>
-		<maxsteps>15</maxsteps>
+		<minrange>0</minrange>
+		<maxsteps>3</maxsteps>
 		<maxoperation>2</maxoperation>
 		<sound>knight/knight_click.mp3</sound>
 		<attack>
-			<animation class="GameActorAttackAnimation" source="006-Weapon01"
-				duration="1" interval="10">
+			<animation class="GameActorAttackAnimation" source="009-Weapon04"
+				duration="1" interval="5">
 				<region x="0" y="192" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
 			<sound>knight/knight_attack.mp3</sound>
-			<sound>097-Attack09.ogg</sound>
+			<sound>098-Attack10.ogg</sound>
 			<atk>20</atk>
 		</attack>
 
-		<skill range="2">
-			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011"
-				duration="1" interval="10">
-				<region x="0" y="0" width="960" height="192" hTile="192"
+		<skill range="5" cost="15">
+			<animation class="GameActorAttackAnimation" source="008-Weapon03"
+				duration="2" interval="3">
+				<region x="0" y="576" width="384" height="192" hTile="192"
 					vTile="192" />
 			</animation>
 			<sound>knight/knight_skill.mp3</sound>
 			<sound>117-Fire01.ogg</sound>
-			<method name="skillAttack">
+			<method name="lineAttack">
 				<arg key="Attack">
 					<attack>
-						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="10">
-							<region x="0" y="192" width="960" height="192" hTile="192"
+						<animation class="GameActorAttackAnimation" source="003-Attack01"
+							duration="1" interval="1">
+							<region x="0" y="0" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
 						<sound>knight/knight_attack.mp3</sound>
-						<sound>097-Attack09.ogg</sound>
-						<atk>20</atk>
+						<sound>098-Attack10.ogg</sound>
+						<atk>50</atk>
 					</attack>
 				</arg>
 			</method>
+			<method name="charge"></method>
 		</skill>
 	</type>
 
-	<type name="heavy">
+	<type name="heavy" level="1">
 		<through>false</through>
-		<cost>30</cost>
+		<cost>500</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32"
 			vTile="32" />
-		<hp>250</hp>
-		<mp>250</mp>
+		<hp>450</hp>
+		<mp>60</mp>
 		<atk>50</atk>
 		<def>20</def>
-		<range>5</range>
-		<maxsteps>12</maxsteps>
+		<range>1</range>
+		<minrange>0</minrange>
+		<maxsteps>2</maxsteps>
 		<maxoperation>1</maxoperation>
 		<sound>knight/knight_click.mp3</sound>
 		<attack>
@@ -68,12 +71,12 @@
 					vTile="192" />
 			</animation>
 			<sound>knight/knight_attack.mp3</sound>
-			<sound>097-Attack09.ogg</sound>
+			<sound>098-Attack10.ogg</sound>
 			<atk>20</atk>
 		</attack>
-		<skill range="2">
+		<skill range="5" cost="20">
 			<animation class="GameActorAttackAnimation" source="KnightSkill_fireball0011"
-				duration="2" interval="5">
+				duration="1" interval="5">
 				<region x="0" y="576" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
@@ -82,13 +85,12 @@
 			<method name="areaAttack">
 				<arg key="Attack">
 					<attack>
-						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="5">
-							<region x="0" y="384" width="960" height="192" hTile="192"
+						<animation class="GameActorAttackAnimation" source="003-Attack01"
+							duration="1" interval="1">
+							<region x="0" y="0" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
-						<sound>knight/knight_attack.mp3</sound>
-						<sound>097-Attack09.ogg</sound>
+						<sound>160-Skill04.ogg</sound>
 						<atk>50</atk>
 					</attack>
 				</arg>

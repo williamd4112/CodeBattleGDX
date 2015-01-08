@@ -31,30 +31,30 @@ public class VirtualMap {
      */
     public void initVirtualMap() {
         MapLayers layers = this.map.getLayers();
-        int mapWidth = this.stage.getMapWidth();
-        int mapHeight = this.stage.getMapHeight();
-
         for (MapLayer layer : layers) {
             TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
             if (tLayer.getName().equals("dye"))
                 continue;
+            this.scanLayer(tLayer);
+        }
+    }
 
-            for (int row = 0; row < mapHeight; row++) {
-                for (int col = 0; col < mapWidth; col++) {
-                    if (this.virtualCells[row][col] == null)
-                        this.virtualCells[row][col] = new VirtualCell(null, col, row, true);
+    private void scanLayer(TiledMapTileLayer tLayer) {
+        for (int row = 0; row < this.stage.getMapWidth(); row++) {
+            for (int col = 0; col < this.stage.getMapHeight(); col++) {
+                if (this.virtualCells[row][col] == null)
+                    this.virtualCells[row][col] = new VirtualCell(null, col, row, true);
 
-                    Cell cell = tLayer.getCell(col, row);
-                    if (cell == null)
-                        continue;
+                Cell cell = tLayer.getCell(col, row);
+                if (cell == null)
+                    continue;
 
-                    TiledMapTile tile = cell.getTile();
-                    String prop = tile.getProperties().get("passiable", String.class);
-                    if (prop == null) {
-                        this.virtualCells[row][col].setPassiable(true);
-                    } else if (prop.equals("0")) {
-                        this.virtualCells[row][col].setPassiable(false);
-                    }
+                TiledMapTile tile = cell.getTile();
+                String prop = tile.getProperties().get("passiable", String.class);
+                if (prop == null) {
+                    this.virtualCells[row][col].setPassiable(true);
+                } else if (prop.equals("0")) {
+                    this.virtualCells[row][col].setPassiable(false);
                 }
             }
         }
@@ -99,6 +99,12 @@ public class VirtualMap {
         }
     }
 
+    public void resetObjectOperation() {
+        for (GameObject obj : this.stage.getGroupByType(GameObject.class)) {
+            obj.resetOperation();
+        }
+    }
+
     /**
      * ClearVirtualMap
      * remove all object on the cell
@@ -133,6 +139,8 @@ public class VirtualMap {
         for (VirtualCell[] row : this.virtualCells) {
             for (VirtualCell cell : row) {
                 cell.onUpdate();
+                if (cell.getObject() != null)
+                    cell.getObject().increaseMP(2);
             }
         }
 

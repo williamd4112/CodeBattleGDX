@@ -15,6 +15,7 @@ public class TransferAnimation extends TargetBasedAnimation {
         super(stage, animMeta, target);
         this.destX = x * GameConstants.CELL_SIZE;
         this.destY = y * GameConstants.CELL_SIZE;
+        this.setScale(0.3f);
     }
 
     @Override

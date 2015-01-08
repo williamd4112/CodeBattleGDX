@@ -1,15 +1,16 @@
 <xml>
 	<source>Lancer</source>
-	<type name="light">
+	<type name="light" level="1">
 		<through>true</through>
-		<cost>10</cost>
+		<cost>130</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
-		<hp>120</hp>
-		<mp>100</mp>
-		<atk>15</atk>
+		<hp>90</hp>
+		<mp>20</mp>
+		<atk>20</atk>
 		<def>15</def>
 		<range>1</range>
-		<maxsteps>12</maxsteps>
+		<minrange>0</minrange>
+		<maxsteps>6</maxsteps>
 		<maxoperation>2</maxoperation>
 		<sound>lancer/Lancer_click.mp3</sound>
 		<attack>
@@ -22,7 +23,7 @@
 			<sound>lancer/Lancer_attack2.mp3</sound>
 			<atk>15</atk>
 		</attack>
-		<skill range="8">
+		<skill range="6" cost="5">
 			<animation class="GameActorAttackAnimation" source="003-Attack01"
 				duration="1" interval="10">
 				<region x="0" y="192" width="960" height="192" hTile="192"
@@ -47,23 +48,24 @@
 		</skill>
 	</type>
 
-	<type name="heavy">
+	<type name="heavy" level="1">
 		<through>true</through>
-		<cost>20</cost>
+		<cost>320</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32"
 			vTile="32" />
-		<hp>200</hp>
-		<mp>250</mp>
-		<atk>30</atk>
-		<def>20</def>
-		<range>8</range>
-		<maxsteps>10</maxsteps>
+		<hp>160</hp>
+		<mp>45</mp>
+		<atk>35</atk>
+		<def>15</def>
+		<range>1</range>
+		<minrange>0</minrange>
+		<maxsteps>6</maxsteps>
 		<maxoperation>1</maxoperation>
 		<sound>lancer/Lancer_click.mp3</sound>
 		<attack>
-			<animation class="GameActorAttackAnimation" source="LancerSkill_022-Darkness01"
+			<animation class="GameActorAttackAnimation" source="006-Weapon01"
 				duration="1" interval="10">
-				<region x="0" y="0" width="960" height="192" hTile="192"
+				<region x="0" y="192" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
 			<sound>lancer/Lancer_attack.mp3</sound>
@@ -71,10 +73,10 @@
 			<atk>30</atk>
 			<range>1</range>
 		</attack>
-		<skill range="8">
-			<animation class="GameActorAttackAnimation" source="003-Attack01"
+		<skill range="6" cost="30">
+			<animation class="GameActorAttackAnimation" source="021-Light01"
 				duration="1" interval="5">
-				<region x="0" y="192" width="960" height="192" hTile="192"
+				<region x="0" y="384" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
 			<sound>lancer/Lancer_skill.mp3</sound>
@@ -82,13 +84,13 @@
 			<method name="lineAttack">
 				<arg key="Attack">
 					<attack>
-						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="1">
-							<region x="0" y="192" width="960" height="192" hTile="192"
+						<animation class="GameActorAttackAnimation" source="020-Wind01"
+							duration="1" interval="2">
+							<region x="0" y="0" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
 						<sound>lancer/Lancer_attack2.mp3</sound>
-						<atk>15</atk>
+						<atk>60</atk>
 					</attack>
 				</arg>
 			</method>

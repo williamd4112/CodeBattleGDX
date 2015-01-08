@@ -49,7 +49,8 @@ public class Server implements RoomListener, ConnectionListener {
     // Idle connection (no room connections
     private final Map<String, Room> rooms;
     private final Map<String, String> roomsInfo;
-    final Map<Connection, ClientItem> clientItems;
+    final Map<Connection, ClientItem> connectionItems;
+    final Map<Room, ClientItem> roomItems;
     private final List<Connection> idleConnections;
     private int roomID = 0;
 
@@ -68,7 +69,8 @@ public class Server implements RoomListener, ConnectionListener {
         this.serverSocket = new ServerSocket(port);
         this.rooms = new HashMap<String, Room>();
         this.roomsInfo = new HashMap<String, String>();
-        this.clientItems = new HashMap<Connection, ClientItem>();
+        this.connectionItems = new HashMap<Connection, ClientItem>();
+        this.roomItems = new HashMap<Room, ClientItem>();
         this.idleConnections = new ArrayList<Connection>();
         this.listenThread = new ListenThread();
         this.peerListeners = new LinkedList<PeerListener>();
@@ -133,7 +135,9 @@ public class Server implements RoomListener, ConnectionListener {
                     roomsInfo.put(room.getName(), room.getScene());
                     room.addConnection(connection);
                     connection.send(DataHandler.accept("CreateRoom").toString());
-                    this.clientListPresenter.addItem("Rooms", new ClientItem(room.getID(), room.getName(), "Player Number: " + room.getPlayerNum()));
+                    ClientItem clientItem = new ClientItem(room.getID(), room.getName(), "Player Number: " + room.getPlayerNum() + "  Status: Waiting");
+                    roomItems.put(room, clientItem);
+                    this.clientListPresenter.addItem("Rooms", clientItem);
                     this.idleConnections.remove(connection);
                 } else if (msg.opt.equals("Join")) {
                     Room room = this.rooms.get(msg.data.toString());
@@ -142,9 +146,9 @@ public class Server implements RoomListener, ConnectionListener {
                     } else if (room.isFull()) { // Room is full
                         connection.send(DataHandler.deny("Full").toString());
                     } else { // Is able to join
-                    	ClientItem clientItem = clientItems.get(room.getDestination(connection));
-                    	clientItem.setStatus("Player Number: " + room.getPlayerNum());
                         room.addConnection(connection);
+                        ClientItem clientItem = roomItems.get(room);
+                    	clientItem.setStatus("Player Number: " + room.getPlayerNum() + "  Status: Waiting");
                         this.clientListPresenter.updateItem("Rooms", clientItem);
                         connection.send(DataHandler.accept("Join").toString());
                         this.idleConnections.remove(connection);
@@ -158,7 +162,7 @@ public class Server implements RoomListener, ConnectionListener {
 
     @Override
     public void onDisconnect(Connection connection) {
-    	ClientItem clientItem = clientItems.get(connection);
+    	ClientItem clientItem = connectionItems.get(connection);
         this.idleConnections.remove(connection);
         this.clientListPresenter.removeItem("Players", clientItem);
         this.emitDisconnectEvent(connection.getSocket());
@@ -225,7 +229,7 @@ public class Server implements RoomListener, ConnectionListener {
                     Connection connection = new Connection(connectionID++, clientSocket);
                     ClientItem clientItem = new ClientItem(connection.getID(), connection.getSocket().getInetAddress().toString().split("/")[1], "Connected");
                     Server.this.clientListPresenter.addItem("Players", clientItem);
-                    clientItems.put(connection, clientItem);
+                    connectionItems.put(connection, clientItem);
                     idleConnections.add(connection);
                     connection.bind(Server.this);
                     connection.start();

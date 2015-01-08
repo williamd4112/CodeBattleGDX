@@ -1,6 +1,6 @@
 <xml>
 	<source>Archer</source>
-	<type name="light">
+	<type name="light" level="1">
 		<through>false</through>
 		<cost>6</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
@@ -9,28 +9,29 @@
 		<atk>15</atk>
 		<def>5</def>
 		<range>8</range>
-		<maxsteps>8</maxsteps>
+		<minrange>2</minrange>
+		<maxsteps>5</maxsteps>
 		<maxoperation>2</maxoperation>
-		<sound>voice-collection-55-sort_ArcherClickSound.mp3</sound>
+		<sound>archer/archer__click.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="003-Attack01"
 				duration="1" interval="10">
 				<region x="0" y="192" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+			<sound>archer/archer__attack.mp3</sound>
 			<sound>096-Attack08.ogg</sound>
 			<atk>15</atk>
 			<range>8</range>
 		</attack>
 
-		<skill range="10">
+		<skill range="8" cost="5">
 			<animation class="GameActorAttackAnimation" source="ArcherSkill_wind_eff_001"
 				duration="1" interval="10">
 				<region x="0" y="768" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+			<sound>archer/archer__skill.mp3</sound>
 			<sound>132-Wind01.ogg</sound>
 			<method name="skillAttack">
 				<arg key="Attack">
@@ -40,9 +41,9 @@
 							<region x="0" y="192" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
-						<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+						<sound>archer/archer__attack.mp3</sound>
 						<sound>096-Attack08.ogg</sound>
-						<atk>15</atk>
+						<atk>30</atk>
 						<range>8</range>
 					</attack>
 				</arg>
@@ -50,37 +51,38 @@
 		</skill>
 	</type>
 
-	<type name="heavy">
+	<type name="heavy" level="1">
 		<through>false</through>
 		<cost>12</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32"
 			vTile="32" />
-		<hp>200</hp>
-		<mp>100</mp>
-		<atk>32</atk>
+		<hp>140</hp>
+		<mp>35</mp>
+		<atk>75</atk>
 		<def>50</def>
-		<range>15</range>
-		<maxsteps>6</maxsteps>
+		<range>12</range>
+		<minrange>3</minrange>
+		<maxsteps>3</maxsteps>
 		<maxoperation>1</maxoperation>
-		<sound>voice-collection-55-sort_ArcherClickSound.mp3</sound>
+		<sound>archer/archer__click.mp3</sound>
 		<attack>
 			<animation class="GameActorAttackAnimation" source="003-Attack01"
 				duration="1" interval="10">
 				<region x="0" y="0" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+			<sound>archer/archer__attack.mp3</sound>
 			<sound>096-Attack08.ogg</sound>
-			<atk>32</atk>
-			<range>15</range>
+			<atk>75</atk>
+			<range>7</range>
 		</attack>
-		<skill range="8">
+		<skill range="8" cost="30">
 			<animation class="GameActorAttackAnimation" source="ArcherSkill_wind_eff_001"
 				duration="2" interval="10">
 				<region x="0" y="384" width="960" height="192" hTile="192"
 					vTile="192" />
 			</animation>
-			<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+			<sound>archer/archer__skill.mp3</sound>
 			<sound>133-Wind02.ogg</sound>
 			<method name="areaAttack">
 				<arg key="Attack">
@@ -90,9 +92,9 @@
 							<region x="0" y="0" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
-						<sound>4-09-monstrosity-intro_AcherAttackMusic.mp3</sound>
+						<sound>archer/archer__attack.mp3</sound>
 						<sound>096-Attack08.ogg</sound>
-						<atk>32</atk>
+						<atk>100</atk>
 						<range>15</range>
 					</attack>
 				</arg>

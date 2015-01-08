@@ -1,0 +1,7 @@
+<xml>
+	<animation class="TargetBasedAnimation" source="001-Action01"
+		duration="1" interval="8">
+		<region x="0" y="0" width="960" height="192" hTile="192"
+			vTile="192" />
+	</animation>
+</xml>

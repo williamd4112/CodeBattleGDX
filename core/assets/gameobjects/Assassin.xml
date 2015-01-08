@@ -1,15 +1,16 @@
 <xml>
 	<source>Assassin</source>
-	<type name="light">
+	<type name="light" level="1">
 		<through>false</through>
 		<cost>8</cost>
 		<region x="0" y="0" width="128" height="320" hTile="32" vTile="32" />
-		<hp>80</hp>
+		<hp>65</hp>
 		<mp>100</mp>
-		<atk>10</atk>
+		<atk>30</atk>
 		<def>10</def>
-		<range>3</range>
-		<maxsteps>8</maxsteps>
+		<range>1</range>
+		<minrange>0</minrange>
+		<maxsteps>2</maxsteps>
 		<maxoperation>2</maxoperation>
 		<sound>assassin/assassin_click.mp3</sound>
 		<attack>
@@ -22,7 +23,7 @@
 			<sound>089-Attack01.ogg</sound>
 			<atk>10</atk>
 		</attack>
-		<skill range="1">
+		<skill range="1" cost="5">
 			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001"
 				duration="1" interval="5">
 				<region x="0" y="576" width="960" height="192" hTile="192"
@@ -30,34 +31,23 @@
 			</animation>
 			<sound>assassin/assassin_skill.mp3</sound>
 			<sound>123-Thunder01.ogg</sound>
-			<method name="skillAttack">
-				<arg key="Attack">
-					<attack>
-						<animation class="GameActorAttackAnimation" source="006-Weapon01"
-							duration="1" interval="10">
-							<region x="0" y="192" width="960" height="192" hTile="192"
-								vTile="192" />
-						</animation>
-						<sound>assassin/assassin_attack.mp3</sound>
-						<sound>089-Attack01.ogg</sound>
-						<atk>10</atk>
-					</attack>
-				</arg>
+			<method name="shadow">
 			</method>
 		</skill>
 	</type>
 
-	<type name="heavy">
+	<type name="heavy" level="1">
 		<through>false</through>
 		<cost>16</cost>
 		<region x="0" y="1024" width="128" height="320" hTile="32"
 			vTile="32" />
-		<hp>300</hp>
+		<hp>150</hp>
 		<mp>100</mp>
 		<atk>48</atk>
-		<def>56</def>
+		<def>10</def>
 		<range>1</range>
-		<maxsteps>8</maxsteps>
+		<minrange>0</minrange>
+		<maxsteps>4</maxsteps>
 		<maxoperation>1</maxoperation>
 		<sound>assassin/assassin_click.mp3</sound>
 		<attack>
@@ -70,7 +60,7 @@
 			<sound>124-Thunder02.ogg</sound>
 			<atk>48</atk>
 		</attack>
-		<skill range="1">
+		<skill range="1" cost="70">
 			<animation class="GameActorAttackAnimation" source="AssassinSkill_dark_effect_001"
 				duration="1" interval="5">
 				<region x="0" y="0" width="960" height="192" hTile="192"
@@ -82,13 +72,13 @@
 				<arg key="Attack">
 					<attack>
 						<animation class="GameActorAttackAnimation" source="007-Weapon02"
-							duration="1" interval="10">
+							duration="1" interval="1">
 							<region x="0" y="192" width="960" height="192" hTile="192"
 								vTile="192" />
 						</animation>
 						<sound>assassin/assassin_attack.mp3</sound>
 						<sound>124-Thunder02.ogg</sound>
-						<atk>48</atk>
+						<atk>110</atk>
 					</attack>
 				</arg>
 			</method>

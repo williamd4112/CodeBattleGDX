@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -33,11 +34,13 @@ import com.codebattle.model.animation.AttackAnimation;
 import com.codebattle.model.animation.BaseAnimation;
 import com.codebattle.model.animation.CursorAnimation;
 import com.codebattle.model.animation.GameActorAttackAnimation;
+import com.codebattle.model.animation.SummonAnimation;
 import com.codebattle.model.event.GameStageEventManager;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Skill;
+import com.codebattle.model.units.Direction;
 import com.codebattle.scene.GameScene;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
@@ -59,6 +62,7 @@ public class GameStage extends Stage {
     private int width, height;
 
     final private TiledMap map;
+    final private TiledMapTileLayer topLayer;
     final private MapProperties mapProperties;
 
     final private OrthogonalTiledMapRenderer mapRenderer;
@@ -117,6 +121,10 @@ public class GameStage extends Stage {
 
         // Create map and camera
         this.map = MapFactory.loadMapFromFile(mapName);
+        if (this.map.getLayers().get("inpassiable") != null)
+            this.map.getLayers().get("inpassiable").setVisible(false);
+
+        this.topLayer = (TiledMapTileLayer) this.map.getLayers().get("most up layer");
         this.mapProperties = this.map.getProperties();
         this.camera = new OrthographicCamera();
         this.mapRenderer = new OrthogonalTiledMapRenderer(map);
@@ -189,6 +197,12 @@ public class GameStage extends Stage {
         // Draw game objects
         this.mapRenderer.getSpriteBatch().begin();
         this.gameObjects.draw(this.mapRenderer.getSpriteBatch(), 1.0f);
+        this.mapRenderer.getSpriteBatch().end();
+
+        // Draw top layer
+        this.mapRenderer.getSpriteBatch().begin();
+        if (this.topLayer != null)
+            this.mapRenderer.renderTileLayer(topLayer);
         this.mapRenderer.getSpriteBatch().end();
 
         // Draw lighting
@@ -351,6 +365,12 @@ public class GameStage extends Stage {
     }
 
     public void resetAnimQueue() {
+        for (BaseAnimation anim : this.animQueue) {
+            if (anim instanceof SummonAnimation) {
+                SummonAnimation summ = (SummonAnimation) anim;
+                summ.removeLight();
+            }
+        }
         this.animQueue.clear();
     }
 
@@ -430,6 +450,11 @@ public class GameStage extends Stage {
 
     public void emitRoundCompleteEvent() {
         this.eventManager.onRoundComplete(this);
+        for (Actor a : this.gameObjects.getChildren()) {
+            if (a instanceof MoveableGameObject) {
+                ((MoveableGameObject) a).setDirection(Direction.HOLD_DEF);
+            }
+        }
         this.parent.onRoundComplete();
     }
 
@@ -496,6 +521,18 @@ public class GameStage extends Stage {
         for (Actor actor : this.gameObjects.getChildren()) {
             if (actor instanceof GameObject) {
                 GameObject obj = (GameObject) actor;
+                if (obj.getOwner() == owner)
+                    objs.add(obj);
+            }
+        }
+        return objs;
+    }
+
+    public SnapshotArray<GameActor> getGameActorsByOwner(Owner owner) {
+        SnapshotArray<GameActor> objs = new SnapshotArray<GameActor>();
+        for (Actor actor : this.gameObjects.getChildren()) {
+            if (actor instanceof GameActor) {
+                GameActor obj = (GameActor) actor;
                 if (obj.getOwner() == owner)
                     objs.add(obj);
             }

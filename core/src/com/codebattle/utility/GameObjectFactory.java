@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
@@ -103,8 +104,8 @@ public class GameObjectFactory {
         return this.pool.get(source).desc.types.get(type);
     }
 
-    public GameObjectType getGameObjectType(GameActor actor) {
-        return getGameObjectType(actor.source, actor.getProp().typeName);
+    public GameObjectType getGameObjectType(GameObject gameObject) {
+        return getGameObjectType(gameObject.source, gameObject.getProp().typeName);
     }
 
     public void resetCount() {

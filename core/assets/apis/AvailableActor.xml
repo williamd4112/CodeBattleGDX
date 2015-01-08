@@ -1,0 +1,43 @@
+<xml>
+	<method name="Saber">
+	    Good at close battle. Normal combat unit. Always used to hold the frontline.
+	    Light: straight line attack
+	    Heavy: area attack
+	</method>
+	
+	<method name="Archer">
+		Good at long distance battle. 
+		It is only one unit with long distance attak.
+		Light: straight line arrow
+		Heavy: sniping
+	</method>
+	
+	<method name="Lancer">
+		Light rider unit. Good at assulting. 
+		It can go through any terrain in the game.
+		Light: charge to somewhere
+		Heavy: charge and stragight line attack
+	</method>
+	
+	<method name="Assasssin">
+	    High damage but low health point unit. 
+	    Good at giving critical hit to enemy high valuable target.
+	    Light: break it self to another one
+	    Heavy: area attack
+	</method>
+	
+	<method name="Knight">
+	    Most valuable unit in the game. 
+	    Due to its high cost, it is the most powerful unit in the game.
+	    Light: good at charging attack
+	    Heavy: good at defense(area attack)
+	</method>
+	
+	<method name="Wizard">
+	    At the same time, only one wizard can in the battle.
+	    This unit can write script into crystal, cell. And heal,recharge the unit.
+	    Light: transimit itself to somewhere
+	    Heavy: sniping thunder(with highest damage in the game.
+	</method>
+	
+</xml>

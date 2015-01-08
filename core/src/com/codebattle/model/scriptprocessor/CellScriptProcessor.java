@@ -15,12 +15,14 @@ public class CellScriptProcessor extends BaseScriptProcessor {
     }
 
     @Override
-    public void run() {
+    public boolean run() {
         try {
             this.engine.eval(script);
         } catch (ScriptException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
 }

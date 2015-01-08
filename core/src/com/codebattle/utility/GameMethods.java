@@ -7,10 +7,13 @@ import com.codebattle.model.GameObject;
 import com.codebattle.model.GameObjectState;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.Owner;
+import com.codebattle.model.VirtualCell;
 import com.codebattle.model.animation.AttackAnimation;
 import com.codebattle.model.animation.MovementAnimation;
+import com.codebattle.model.animation.TargetBasedAnimation;
 import com.codebattle.model.animation.TransferAnimation;
 import com.codebattle.model.gameactor.GameActor;
+import com.codebattle.model.meta.Animation;
 import com.codebattle.model.meta.Attack;
 import com.codebattle.model.meta.Bundle;
 import com.codebattle.model.meta.GameMethod;
@@ -18,6 +21,8 @@ import com.codebattle.model.meta.Region;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.model.units.Direction;
 import com.codebattle.model.units.Speed;
+import com.codebattle.scene.GameScene;
+import com.codebattle.scene.PlayerGameScene;
 
 public class GameMethods {
     public static void increaseHP(GameActor actor, int diff) {
@@ -42,6 +47,86 @@ public class GameMethods {
 
     public static void poison(GameActor actor) {
         actor.setState(GameObjectState.POISIONED);
+    }
+
+    public static void insertEditorHint(Bundle args) {
+        try {
+            GameStage stage = args.extract("Stage", GameStage.class);
+            String hint = args.extract("Hint", String.class);
+            GameScene scene = stage.parent;
+            if (scene instanceof PlayerGameScene) {
+                ((PlayerGameScene) scene).getGui().getEditor().setText(hint);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static TargetBasedAnimation encharge(GameStage stage, GameObject emitter,
+            int diff, int x, int y) {
+        TargetBasedAnimation animation = null;
+        try {
+            VirtualCell cell = stage.getVirtualMap().getCell(x, y);
+            GameObject obj = cell.getObject();
+            Animation anim = GameConstants.HEAL_ANIMMETA;
+            if (obj != null) {
+                if (obj.getOwner() == emitter.getOwner()) {
+                    animation = new TargetBasedAnimation(stage, anim, obj,
+                            GameConstants.SUMMON_TARGETBASEANIMATION_SCALE);
+                    animation.addSound(GameConstants.HEAL_SE);
+                    stage.addAnimation(animation);
+                    obj.increaseMP(diff);
+                    emitter.decreaseMP(diff);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return animation;
+    }
+
+    public static TargetBasedAnimation heal(GameStage stage, GameObject emitter, int diff,
+            int x, int y) {
+        TargetBasedAnimation animation = null;
+        try {
+            VirtualCell cell = stage.getVirtualMap().getCell(x, y);
+            GameObject obj = cell.getObject();
+            Animation anim = GameConstants.HEAL_ANIMMETA;
+            if (obj != null) {
+                if (obj.getOwner() == emitter.getOwner()) {
+                    animation = new TargetBasedAnimation(stage, anim, obj,
+                            GameConstants.SUMMON_TARGETBASEANIMATION_SCALE);
+                    animation.addSound(GameConstants.HEAL_SE);
+                    stage.addAnimation(animation);
+                    obj.increaseHP(diff);
+                    emitter.decreaseMP(diff);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return animation;
+    }
+
+    public static void shadow(Bundle args) {
+        try {
+            Skill skill = args.extract("Skill", Skill.class);
+            GameStage stage = args.extract("Stage", GameStage.class);
+            GameObject emitter = args.extract("Emitter", GameObject.class);
+            int tx = args.extract("tx", int.class);
+            int ty = args.extract("ty", int.class);
+            if (stage.isOutBoundInVirtualMap(tx, ty))
+                return;
+            tx *= GameConstants.CELL_SIZE;
+            ty *= GameConstants.CELL_SIZE;
+            GameActor actor = GameObjectFactory.getInstance().createGameActor(stage,
+                    emitter.getOwner(), emitter.source, emitter.type.getTypeName(), tx, ty);
+            stage.addGameObject(actor);
+            actor.decreaseHP(emitter.getProp().hp / 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void areaAttack(Bundle args) {

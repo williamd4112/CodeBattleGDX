@@ -20,7 +20,7 @@ import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.NetworkManager;
 
-public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerListener {
+public class MultiPlayerGameScene extends PlayerGameScene implements PeerListener {
 
     final public Client client;
     final public MultiPlayerRoom room;
@@ -39,13 +39,18 @@ public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerL
         this.localPlayer = GameUtil.toOwner(team);
 
         this.extendView = new MultiPlayerExtend(GameConstants.DEFAULT_SKIN);
-        this.multiPlayerHandler = new MultiPlayerEditorHandler();
-        this.gui.getEditor().addHandler(multiPlayerHandler);
 
         this.stage.addGUI(extendView);
 
         this.gui.getEditor().setDisable(!this.isLocalTurn());
         this.extendView.setTeamLabel(team, GameUtil.ownerToString(currentPlayer));
+    }
+
+    @Override
+    public void setupGUI() {
+        super.setupGUI();
+        this.multiPlayerHandler = new MultiPlayerEditorHandler();
+        this.gui.getEditor().addHandler(multiPlayerHandler);
     }
 
     @Override
@@ -55,9 +60,16 @@ public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerL
 
     @Override
     public void onRoundComplete() {
+        // System.out.println("Result:" + this.isSuccess);
+        if (!this.isSuccess)
+            return;
+        this.setSuccess(false);
         this.switchPlayer();
-        if (this.isLocalTurn())
+        if (this.isLocalTurn()) {
             this.gui.getEditor().setDisable(false);
+        } else {
+            this.gui.getEditor().setDisable(true);
+        }
     }
 
     public void switchPlayer() {
@@ -65,6 +77,8 @@ public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerL
             this.currentPlayer = Owner.BLUE;
         else
             this.currentPlayer = Owner.RED;
+        this.extendView.setTeamLabel(GameUtil.ownerToString(localPlayer),
+                GameUtil.ownerToString(currentPlayer));
     }
 
     public boolean isLocalTurn() {
@@ -120,15 +134,17 @@ public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerL
     }
 
     private class MultiPlayerEditorHandler extends ClickListener {
-
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
-            gui.getEditor().setDisable(true);
-            String script = gui.getEditor().getText();
-
-            if (script != null)
+            System.out.println("submit");
+            final String script = gui.getEditor().getText();
+            boolean result = onReceiveScript(script);
+            setSuccess(result);
+            if (result) {
                 client.send(DataHandler.script(script).toString());
+            }
+
         }
 
     }
@@ -151,7 +167,8 @@ public class MultiPlayerGameScene extends SinglePlayerGameScene implements PeerL
         }
 
         public void setTeamLabel(String team, String current) {
-            this.team_label.setText(team + " / " + current);
+            this.team_label.setText("Team: " + team + "  "
+                    + ((current.equals(team)) ? "Your turn" : "Wait for opponent..."));
         }
     }
 }

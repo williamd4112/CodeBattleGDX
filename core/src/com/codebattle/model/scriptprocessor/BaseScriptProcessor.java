@@ -17,5 +17,5 @@ public abstract class BaseScriptProcessor {
         this.script = script;
     }
 
-    abstract public void run();
+    abstract public boolean run();
 }

@@ -41,7 +41,7 @@ public class ScriptProcessor extends BaseScriptProcessor {
     }
 
     @Override
-    public void run() {
+    public boolean run() {
         try {
             this.stage.getVirtualMap().preUpdate();
             // Processing script (put animation object into queue
@@ -51,11 +51,15 @@ public class ScriptProcessor extends BaseScriptProcessor {
             this.stage.printAllVirtualObjects();
             this.stage.setState(GameState.ANIM);
             this.stage.getVirtualMap().resetActorsCulmuSteps();
+            this.stage.getVirtualMap().resetObjectOperation();
 
         } catch (final ScriptException e) {
             System.out.println("------Exception occurred------");
             this.stage.reset();
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 }

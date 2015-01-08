@@ -9,8 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.codebattle.scene.StartupScene;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.ResourceType;
+import com.codebattle.utility.TextureFactory;
 
 public class MainMenuStage extends Stage {
     final StartupScene parent;
@@ -24,12 +27,19 @@ public class MainMenuStage extends Stage {
 
     private ButtonHandler buttonHandler;
 
+    private Drawable background;
+
     public MainMenuStage(StartupScene parent) {
         super();
         this.parent = parent;
         this.table = new Table();
         this.buttonHandler = new ButtonHandler();
-
+        try {
+            this.background = TextureFactory.getInstance().loadDrawable(
+                    "StartupSceneBackground.png", ResourceType.PICTURE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.table = new Table();
         this.table.setFillParent(true);
         this.addActor(table);
@@ -48,11 +58,18 @@ public class MainMenuStage extends Stage {
         this.buttons.add(btn_exit);
 
         for (TextButton b : buttons) {
-            this.table.add(b)
-                    .prefWidth(Gdx.graphics.getWidth() * 0.2f)
-                    .row();
+            this.table.add(b).prefWidth(Gdx.graphics.getWidth() * 0.2f).row();
         }
         Gdx.input.setInputProcessor(this);
+    }
+
+    @Override
+    public void draw() {
+        this.getBatch().begin();
+        this.background.draw(this.getBatch(), 0, 0, Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight());
+        this.getBatch().end();
+        super.draw();
     }
 
     private class ButtonHandler extends ClickListener {

@@ -24,4 +24,8 @@ public class SummonAnimation extends TargetBasedAnimation {
     public void finished() {
         this.light.remove();
     }
+
+    public void removeLight() {
+        this.light.remove();
+    }
 }

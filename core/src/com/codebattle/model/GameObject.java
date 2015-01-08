@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.codebattle.model.gameactor.GameObjectProperties;
 import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameObjectFactory;
 
 /**
  * Define a general object over this game
@@ -32,6 +33,9 @@ abstract public class GameObject extends Actor implements Affectable {
 
     // Controller
     protected Owner owner;
+
+    // Operation times
+    protected int operation = 0;
 
     public GameObject(GameStage stage, Owner owner, String source, String name, int id,
             GameObjectType type, float sx, float sy) {
@@ -64,6 +68,49 @@ abstract public class GameObject extends Actor implements Affectable {
         System.out.printf("Restore %s to (%d , %d)\n", this.getName(), this.vx, this.vy);
     }
 
+    public int increaseHP(int diff) {
+        int newValue = (this.properties.hp + diff);
+        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.hp;
+        this.properties.hp = (newValue >= max) ? max : newValue;
+        return this.properties.hp;
+    }
+
+    public int decreaseHP(int diff) {
+        int newValue = this.properties.hp - diff;
+        this.properties.hp = (newValue >= 0) ? newValue : 0;
+        if (this.properties.hp == 0) {
+            this.state = GameObjectState.DEATH;
+        }
+
+        return this.properties.hp;
+    }
+
+    public int increaseMP(int diff) {
+        int newValue = (this.properties.mp + diff);
+        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.mp;
+        this.properties.mp = (newValue >= max) ? max : newValue;
+        return this.properties.mp;
+    }
+
+    public int decreaseMP(int diff) {
+        int newValue = this.properties.mp - diff;
+        this.properties.mp = (newValue >= 0) ? newValue : 0;
+
+        return this.properties.mp;
+    }
+
+    public void addOperation() {
+        this.operation++;
+    }
+
+    public void resetOperation() {
+        this.operation = 0;
+    }
+
+    public boolean checkOperation() {
+        return (this.operation < this.type.prop.maxoperation);
+    }
+
     public boolean isInbounding(int x, int y) {
         return (x >= 0 && x < this.stage.getMapWidth() && y >= 0 && y < this.stage.getMapHeight()) ? true
                 : false;
@@ -76,6 +123,10 @@ abstract public class GameObject extends Actor implements Affectable {
     @Override
     public String getName() {
         return (this.id == 0) ? super.getName() : super.getName() + String.valueOf(id);
+    }
+
+    public GameObjectProperties getProp() {
+        return this.properties;
     }
 
     public int getVX() {

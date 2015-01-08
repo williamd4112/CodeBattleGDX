@@ -1,7 +1,6 @@
 package com.codebattle.gui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.codebattle.model.GameStage;
 import com.codebattle.utility.GameConstants;
 
@@ -12,11 +11,11 @@ public class GameSceneGUI extends Table implements Resizeable {
     private ControlGroup controlGroup;
     private Editor editor;
 
-    public GameSceneGUI(GameStage stage, ClickListener handler) {
+    public GameSceneGUI(GameStage stage) {
         super();
         this.stage = stage;
         this.controlGroup = new ControlGroup(stage, GameConstants.DEFAULT_SKIN);
-        this.editor = new Editor(stage, handler, GameConstants.DEFAULT_SKIN);
+        this.editor = new Editor(stage, GameConstants.DEFAULT_SKIN);
     }
 
     @Override
@@ -27,10 +26,6 @@ public class GameSceneGUI extends Table implements Resizeable {
         this.controlGroup.resize(width, height);
         this.add(controlGroup).expand().fill();
         this.add(editor).width(width * 0.3f).fill();
-    }
-
-    public void addEditorHandler(ClickListener handler) {
-        this.editor.addHandler(handler);
     }
 
     public Editor getEditor() {

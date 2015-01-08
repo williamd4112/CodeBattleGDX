@@ -18,6 +18,7 @@ import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Skill;
 import com.codebattle.utility.GameConstants;
+import com.codebattle.utility.GameMethods;
 import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.SoundUtil;
 
@@ -124,7 +125,7 @@ public class LevelObject extends ScriptableObject implements StateShowable {
 
     @Override
     public void onSkill(Skill skill, GameObject emitter) {
-        System.out.println("onSkill: " + skill.animMeta.source);
+        // System.out.println("onSkill: " + skill.animMeta.source);
         skill.execute(this, emitter, this.vx, this.vy);
     }
 
@@ -139,6 +140,44 @@ public class LevelObject extends ScriptableObject implements StateShowable {
 
     public void transmitDamage(int damage) {
         this.stage.getVirtualSystem(owner).decreaseLift(damage);
+    }
+
+    public void scan() {
+        int lbx = this.vx - this.properties.range, lby = this.vy - this.properties.range;
+        int rtx = this.vx + this.properties.range, rty = this.vy + this.properties.range;
+        for (int y = lby; y < rty; y++) {
+            for (int x = lbx; x < rtx; x++) {
+                this.attack(x, y);
+            }
+        }
+    }
+
+    public void heal(int val) {
+        int leftTopX = this.vx - this.properties.range;
+        int leftTopY = this.vy + this.properties.range;
+        int rightBottomX = this.vx + this.properties.range;
+        int rightBottomY = this.vy - this.properties.range;
+        for (int y = leftTopY; y > rightBottomY; y--) {
+            for (int x = leftTopX; x < rightBottomX; x++) {
+                if (x == vx && y == vy)
+                    continue;
+                GameMethods.heal(stage, this, val, x, y);
+            }
+        }
+    }
+
+    public void encharge(int val) {
+        int leftTopX = this.vx - this.properties.range;
+        int leftTopY = this.vy + this.properties.range;
+        int rightBottomX = this.vx + this.properties.range;
+        int rightBottomY = this.vy - this.properties.range;
+        for (int y = leftTopY; y > rightBottomY; y--) {
+            for (int x = leftTopX; x < rightBottomX; x++) {
+                if (x == vx && y == vy)
+                    continue;
+                GameMethods.encharge(stage, this, val, x, y);
+            }
+        }
     }
 
     @Override

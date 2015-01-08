@@ -59,6 +59,10 @@ public class GameActorProxy {
         actor.skill(x, y);
     }
 
+    public void heal(int x, int y, int diff) {
+        actor.heal(x, y, diff);
+    }
+
     public void interact(int x, int y) {
         actor.interact(x, y);
     }
@@ -69,6 +73,14 @@ public class GameActorProxy {
 
     public boolean isPassable(String dir, int step) {
         return actor.isPassiable(GameUtil.toDirection(dir), step);
+    }
+
+    public boolean confront(int x, int y) {
+        return (actor.stage.getVirtualMap().getCell(x, y).getObject() == null) ? false : true;
+    }
+
+    public boolean isOverstep() {
+        return (actor.getSteps() >= actor.getProp().maxsteps);
     }
 
     public String getAlias() {

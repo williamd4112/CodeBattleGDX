@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.codebattle.utility.GameConstants;
 
 public class APIList extends Table {
     private Object[] defaultItems = { "" };
@@ -32,8 +33,7 @@ public class APIList extends Table {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                String selection = list.getSelected()
-                        .toString();
+                String selection = list.getSelected().toString();
                 if (map != null) {
                     if (map.containsKey(selection)) {
                         label.addAction(Actions.alpha(0));
@@ -50,16 +50,11 @@ public class APIList extends Table {
         this.reset();
         // this.setDebug(true);
         // this.label.setFontScale(width * 0.0009f);
-        this.add(pane)
-                .height(height * 0.2f)
-                .width(width * 0.2f);
-        this.add(label)
-                .pad(10)
-                .top();
+        this.add(pane).height(height * 0.2f).width(width * 0.2f);
+        this.add(label).pad(10).top();
     }
 
     public void setAPIList(Map<String, String> apiList) {
-        this.resetAPIList();
         this.map = apiList;
         java.util.List<Object> items = new LinkedList<Object>();
         for (String key : apiList.keySet())
@@ -68,7 +63,8 @@ public class APIList extends Table {
     }
 
     public void resetAPIList() {
-        this.list.setItems(this.defaultItems);
+        this.setAPIList(GameConstants.AVAILABLE_GAMEACTORS);
+        // this.list.setItems(this.defaultItems);
         this.label.setText("");
     }
 }
