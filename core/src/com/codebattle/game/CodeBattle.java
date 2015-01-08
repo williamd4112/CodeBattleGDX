@@ -3,7 +3,7 @@ package com.codebattle.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.codebattle.scene.SinglePlayerGameScene;
+import com.codebattle.scene.StartupScene;
 import com.codebattle.utility.GameConstants;
 
 public class CodeBattle extends Game {
@@ -13,9 +13,9 @@ public class CodeBattle extends Game {
         try {
             GameConstants.init();
             ShaderProgram.pedantic = false;
-            // this.setScreen(new StartupScene(this));
+            this.setScreen(new StartupScene(this));
             // this.setScreen(new DemoLayout());
-            this.setScreen(new SinglePlayerGameScene(this, "scene_demo"));
+            // this.setScreen(new SinglePlayerGameScene(this, "shortest_path"));
 
         } catch (final Exception e) {
             // TODO Auto-generated catch block

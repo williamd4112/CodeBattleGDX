@@ -40,8 +40,8 @@ public class VirtualMap {
     }
 
     private void scanLayer(TiledMapTileLayer tLayer) {
-        for (int row = 0; row < this.stage.getMapWidth(); row++) {
-            for (int col = 0; col < this.stage.getMapHeight(); col++) {
+        for (int row = 0; row < this.stage.getMapHeight(); row++) {
+            for (int col = 0; col < this.stage.getMapWidth(); col++) {
                 if (this.virtualCells[row][col] == null)
                     this.virtualCells[row][col] = new VirtualCell(null, col, row, true);
 

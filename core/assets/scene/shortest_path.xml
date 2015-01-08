@@ -1,0 +1,39 @@
+<xml>
+	<map time="noon">Puzzle</map>
+	<bgm>scene_tutorial2.ogg</bgm>
+	<bgs></bgs>
+	<ambient color="000000" intensity="0.1f" />
+	<init>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="3" y="30">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="4" y="21">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="10" y="15">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="14" y="25">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="26" y="31">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<gameobject class="LevelObject" owner="Green" name="Crystal"
+			type="normal" x="14" y="31">
+			<pointlight color="FF9933" radius="300" x="0" y="0" />
+		</gameobject>
+		<pointlight color="FF9933" radius="600" x="20" y="38" />
+		<pointlight color="FF9933" radius="600" x="30" y="13" />
+		
+	</init>
+
+	<events>
+
+	</events>
+</xml>
