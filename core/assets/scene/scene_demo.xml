@@ -66,21 +66,21 @@
 			type="heavy" x="19" y="21" />
 
 		<gameobject class="GameActor" owner="Red" name="Knight"
-			type="light" x="13" y="11" />
+			type="light" x="10" y="11" />
 		<gameobject class="GameActor" owner="Red" name="Wizard"
-			type="heavy" x="12" y="10" />
+			type="heavy" x="9" y="10" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="14" y="10" />
+			type="heavy" x="11" y="10" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="14" y="11" />
+			type="heavy" x="11" y="11" />
 		<gameobject class="GameActor" owner="Blue" name="Knight"
-			type="light" x="14" y="12" />
+			type="light" x="11" y="12" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="14" y="10" />
+			type="heavy" x="11" y="10" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="14" y="11" />
+			type="heavy" x="11" y="11" />
 		<gameobject class="GameActor" owner="Blue" name="Saber"
-			type="heavy" x="14" y="12" />
+			type="heavy" x="11" y="12" />
 
 		<gameobject class="LevelObject" owner="Red" name="Crystal"
 			type="normal" x="5" y="28">
