@@ -4,27 +4,37 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.codebattle.gui.editor.JSCodeEditorContainer;
+import com.codebattle.gui.editor.JSCodeEditorMode;
+import com.codebattle.gui.editor.JSCodeEditorStateListener;
 import com.codebattle.model.GameStage;
 
-public class Editor extends Table {
+public class Editor extends Table implements JSCodeEditorStateListener {
     final public GameStage stage;
 
     private boolean isShow = true;
     private final EditorBar bar;
-    private final TextArea editText;
+
+    private final JSCodeEditorContainer editor;
+    private final ScrollPane editorPane;
+    private final Bar editorStateBar;
+
     private final TextButton button;
 
     public Editor(GameStage stage, final Skin skin) {
         super();
         this.stage = stage;
         this.bar = new EditorBar(skin);
-        this.editText = new TextArea("Editor", skin);
-        this.editText.addAction(Actions.alpha(0.8f));
+
+        this.editor = new JSCodeEditorContainer(skin);
+        this.editor.addStateListener(this);
+        this.editorPane = new ScrollPane(this.editor, skin);
+        this.editorStateBar = new Bar("VISUAL Row: 0 Col: 0", skin);
 
         this.button = new TextButton("Submit", skin);
     }
@@ -34,26 +44,28 @@ public class Editor extends Table {
     }
 
     public String getText() {
-        return this.editText.getText();
+        return this.editor.getText();
     }
 
     public void setText(String text) {
-        this.editText.setText(text);
+        this.editor.setText(text);
     }
 
     public void setDisable(boolean b) {
-        this.editText.setDisabled(b);
+        // this.editor.setDisabled(b);
         this.button.setDisabled(b);
-        this.editText.setVisible(!b);
+        this.editor.setVisible(!b);
         this.setVisible(!b);
     }
 
     public void resize(final int width, final int height) {
         this.reset();
         this.bar.resize(width, height);
+        this.editorStateBar.resize(width, height);
         this.add(this.bar).expandX().fillX().row();
-        this.add(this.editText).expand().fill();
+        this.add(this.editorPane).expand().fill();
         this.row();
+        this.add(this.editorStateBar).expandX().fillX().row();
         this.add(this.button).fill();
     }
 
@@ -71,13 +83,13 @@ public class Editor extends Table {
                     super.clicked(event, x, y);
                     Editor.this.isShow = !Editor.this.isShow;
                     if (!Editor.this.isShow) {
-                        editText.addAction((Actions.sequence(Actions.fadeOut(0.8f),
+                        editorPane.addAction((Actions.sequence(Actions.fadeOut(0.8f),
                                 Actions.hide())));
                         button.addAction(Actions.sequence(Actions.moveBy(0,
                                 Gdx.graphics.getHeight() - 2 * button.getHeight(), 0.8f),
                                 Actions.hide()));
                     } else {
-                        editText.addAction((Actions.sequence(Actions.show(),
+                        editorPane.addAction((Actions.sequence(Actions.show(),
                                 Actions.alpha(0.8f, 0.8f))));
                         button.addAction(Actions.sequence(Actions.show(), Actions.moveBy(0,
                                 -(Gdx.graphics.getHeight() - 2 * button.getHeight()), 0.8f)));
@@ -94,5 +106,23 @@ public class Editor extends Table {
             this.add(this.minBtn).fill().right();
         }
 
+    }
+
+    @Override
+    public void onCursorExceedHeight(int lines) {
+        this.editorPane.setScrollY(100);
+
+    }
+
+    @Override
+    public void onCursorExceedWidth(float width) {
+        this.editorPane.setScrollX(100);
+
+    }
+
+    @Override
+    public void onCursorChange(JSCodeEditorMode mode, int col, int row) {
+        this.editorStateBar.setText(String.format("%s   Row: %d Col: %d", mode.name(), row,
+                col));
     }
 }

@@ -20,9 +20,7 @@ public class LabelPanel extends BasePanel implements Resizeable {
     public void resize(int width, int height) {
         this.reset();
         this.pad(5);
-        this.add(this.textArea)
-                .prefWidth(width * 0.95f)
-                .prefHeight(height * 0.3f);
+        this.add(this.textArea).prefWidth(width * 0.95f).prefHeight(height * 0.3f);
     }
 
     public void setText(String text) {

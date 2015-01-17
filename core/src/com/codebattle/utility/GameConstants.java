@@ -15,7 +15,6 @@ public class GameConstants {
 
     /**
      * Constants of the global game
-     * (be able to modified in config file)
      */
     public final static int FRAMERATE = 25;
     public final static int CELL_SIZE = 32;
@@ -48,6 +47,8 @@ public class GameConstants {
     public final static String BGS_DIR = "audio/BGS/";
     public final static String SE_DIR = "audio/SE/";
     public final static String DEFAULT_META_DIR = "default/";
+    public final static String EDITOR_KEYWORD_REF = "editor/keywords.xml";
+    public final static String EDITOR_COLOR_REF = "editor/color.xml";
 
     public final static String DEFAULT_TEXTURE_EXTENSION = ".png";
     public final static String DEFAULT_GAMEACTORDESC_EXTENSION = ".xml";

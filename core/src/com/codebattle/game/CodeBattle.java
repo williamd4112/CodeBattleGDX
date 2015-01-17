@@ -14,8 +14,8 @@ public class CodeBattle extends Game {
             GameConstants.init();
             ShaderProgram.pedantic = false;
             this.setScreen(new StartupScene(this));
-            // this.setScreen(new DemoLayout());
-            // this.setScreen(new SinglePlayerGameScene(this, "shortest_path"));
+            // this.setScreen(new DemoEditor());
+            // this.setScreen(new SinglePlayerGameScene(this, "scene_demo"));
 
         } catch (final Exception e) {
             // TODO Auto-generated catch block

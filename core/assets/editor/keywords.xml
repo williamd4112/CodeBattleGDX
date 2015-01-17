@@ -1,0 +1,12 @@
+<xml>
+	<keyword type="Identifier">var</keyword> 
+	<keyword type="Identifier">function</keyword> 
+	<keyword type="Identifier">if</keyword> 
+	<keyword type="Identifier">else</keyword> 
+	<keyword type="Identifier">while</keyword> 
+	<keyword type="Identifier">do</keyword> 
+	<keyword type="Identifier">for</keyword> 
+	<keyword type="Identifier">try</keyword> 
+	<keyword type="Identifier">catch</keyword>
+	<keyword type="Identifier">finally</keyword>  
+</xml>
