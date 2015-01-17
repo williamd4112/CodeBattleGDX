@@ -1,10 +1,5 @@
 package com.codebattle.utility;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
@@ -15,6 +10,11 @@ import com.codebattle.model.meta.GameObjectDescription;
 import com.codebattle.model.meta.GameObjectType;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Region;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameObjectFactory {
 
@@ -78,9 +78,11 @@ public class GameObjectFactory {
         return new GameActor(stage, owner, id, source, name, actorType, frames, sx, sy);
     }
 
-    public LevelObject createLevelObject(GameStage stage, String name, String type,
-            Owner owner, PointLightMeta lightMeta, float sx, float sy, String readonlyScript,
-            boolean isFixed) throws Exception {
+    public LevelObject createLevelObject(final GameStage stage, final String name,
+            final String type,
+            final Owner owner, final PointLightMeta lightMeta, final float sx,
+            final float sy, final String readonlyScript,
+            final boolean isFixed) throws Exception {
         if (!this.pool.containsKey(name)) {
             this.pool.put(name, new Record(name));
         }
@@ -104,12 +106,13 @@ public class GameObjectFactory {
         return this.pool.get(source).desc.types.get(type);
     }
 
-    public GameObjectType getGameObjectType(GameObject gameObject) {
-        return getGameObjectType(gameObject.source, gameObject.getProp().typeName);
+    public GameObjectType getGameObjectType(final GameObject gameObject) {
+        return this.getGameObjectType(gameObject.source, gameObject.getProp().typeName);
     }
 
     public void resetCount() {
-        for (String key : this.pool.keySet())
+        for (final String key : this.pool.keySet()) {
             this.pool.get(key).resetCount();
+        }
     }
 }

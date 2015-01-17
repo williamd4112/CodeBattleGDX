@@ -32,7 +32,8 @@ public class DemoUi implements Screen {
         // TODO This variable is unused.
         this.shapeRenderer = new ShapeRenderer();
 
-        final ScrollPane pane2 = new ScrollPane(new Image(new Texture("badlogic.jpg")), this.skin);
+        final ScrollPane pane2 =
+                new ScrollPane(new Image(new Texture("badlogic.jpg")), this.skin);
         pane2.setScrollingDisabled(false, true);
         // pane2.setCancelTouchFocus(false);
         pane2.addListener(new InputListener() {

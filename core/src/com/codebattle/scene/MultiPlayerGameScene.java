@@ -1,7 +1,5 @@
 package com.codebattle.scene;
 
-import java.net.Socket;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,18 +18,21 @@ import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameUtil;
 import com.codebattle.utility.NetworkManager;
 
+import java.net.Socket;
+
 public class MultiPlayerGameScene extends PlayerGameScene implements PeerListener {
 
     final public Client client;
     final public MultiPlayerRoom room;
 
-    private Owner localPlayer;
+    private final Owner localPlayer;
 
-    private MultiPlayerExtend extendView;
+    private final MultiPlayerExtend extendView;
     private MultiPlayerEditorHandler multiPlayerHandler;
 
-    public MultiPlayerGameScene(CodeBattle parent, MultiPlayerRoom room, String sceneName,
-            String team) throws Exception {
+    public MultiPlayerGameScene(final CodeBattle parent, final MultiPlayerRoom room,
+            final String sceneName,
+            final String team) throws Exception {
         super(parent, sceneName);
         this.room = room;
         this.client = NetworkManager.getInstance().getClient();
@@ -40,29 +41,30 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
 
         this.extendView = new MultiPlayerExtend(GameConstants.DEFAULT_SKIN);
 
-        this.stage.addGUI(extendView);
+        this.stage.addGUI(this.extendView);
 
         this.gui.getEditor().setDisable(!this.isLocalTurn());
-        this.extendView.setTeamLabel(team, GameUtil.ownerToString(currentPlayer));
+        this.extendView.setTeamLabel(team, GameUtil.ownerToString(this.currentPlayer));
     }
 
     @Override
     public void setupGUI() {
         super.setupGUI();
         this.multiPlayerHandler = new MultiPlayerEditorHandler();
-        this.gui.getEditor().addHandler(multiPlayerHandler);
+        this.gui.getEditor().addHandler(this.multiPlayerHandler);
     }
 
     @Override
-    public void onStageComplete(Owner winner) {
+    public void onStageComplete(final Owner winner) {
 
     }
 
     @Override
     public void onRoundComplete() {
         // System.out.println("Result:" + this.isSuccess);
-        if (!this.isSuccess)
+        if (!this.isSuccess) {
             return;
+        }
         this.setSuccess(false);
         this.switchPlayer();
         if (this.isLocalTurn()) {
@@ -73,16 +75,17 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
     }
 
     public void switchPlayer() {
-        if (this.currentPlayer == Owner.RED)
+        if (this.currentPlayer == Owner.RED) {
             this.currentPlayer = Owner.BLUE;
-        else
+        } else {
             this.currentPlayer = Owner.RED;
-        this.extendView.setTeamLabel(GameUtil.ownerToString(localPlayer),
-                GameUtil.ownerToString(currentPlayer));
+        }
+        this.extendView.setTeamLabel(GameUtil.ownerToString(this.localPlayer),
+                GameUtil.ownerToString(this.currentPlayer));
     }
 
     public boolean isLocalTurn() {
-        return (this.localPlayer == this.currentPlayer);
+        return this.localPlayer == this.currentPlayer;
     }
 
     @Override
@@ -93,16 +96,16 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
             @Override
             public void run() {
                 try {
-                    Message msg = new Message(rawMessage);
+                    final Message msg = new Message(rawMessage);
                     if (msg.type.equals("Game")) {
                         if (msg.opt.equals("Script")) {
-                            String script = (String) msg.data;
-                            onReceiveScript(script);
+                            final String script = (String) msg.data;
+                            MultiPlayerGameScene.this.onReceiveScript(script);
                         } else if (msg.opt.equals("Close")) {
-                            backtoRoom();
+                            MultiPlayerGameScene.this.backtoRoom();
                         }
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
 
@@ -112,25 +115,25 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
     }
 
     @Override
-    public void onConnected(Socket socket) {
+    public void onConnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onDisconnected(Socket socket) {
+    public void onDisconnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
 
     public void backtoRoom() {
-        StartupScene startup = new StartupScene(parent);
-        client.popPeerListener();
-        room.getPlayerState();
-        Gdx.input.setInputProcessor(room);
-        startup.setStage(room);
-        parent.setScene(startup);
-        dispose();
+        final StartupScene startup = new StartupScene(this.parent);
+        this.client.popPeerListener();
+        this.room.getPlayerState();
+        Gdx.input.setInputProcessor(this.room);
+        startup.setStage(this.room);
+        this.parent.setScene(startup);
+        this.dispose();
     }
 
     private class MultiPlayerEditorHandler extends ClickListener {
@@ -138,11 +141,11 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
         public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
             System.out.println("submit");
-            final String script = gui.getEditor().getText();
-            boolean result = onReceiveScript(script);
-            setSuccess(result);
+            final String script = MultiPlayerGameScene.this.gui.getEditor().getText();
+            final boolean result = MultiPlayerGameScene.this.onReceiveScript(script);
+            MultiPlayerGameScene.this.setSuccess(result);
             if (result) {
-                client.send(DataHandler.script(script).toString());
+                MultiPlayerGameScene.this.client.send(DataHandler.script(script).toString());
             }
 
         }
@@ -150,25 +153,27 @@ public class MultiPlayerGameScene extends PlayerGameScene implements PeerListene
     }
 
     private class MultiPlayerExtend extends Table implements Resizeable {
-        private Label team_label;
+        private final Label team_label;
 
-        public MultiPlayerExtend(Skin skin) {
+        public MultiPlayerExtend(final Skin skin) {
             super();
-            this.team_label = new Label(GameUtil.ownerToString(localPlayer), skin);
+            this.team_label =
+                    new Label(GameUtil.ownerToString(MultiPlayerGameScene.this.localPlayer),
+                            skin);
             this.setFillParent(true);
             this.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
 
         @Override
-        public void resize(int width, int height) {
+        public void resize(final int width, final int height) {
             this.reset();
             this.setFillParent(true);
-            this.add(team_label).expand().top();
+            this.add(this.team_label).expand().top();
         }
 
-        public void setTeamLabel(String team, String current) {
+        public void setTeamLabel(final String team, final String current) {
             this.team_label.setText("Team: " + team + "  "
-                    + ((current.equals(team)) ? "Your turn" : "Wait for opponent..."));
+                    + (current.equals(team) ? "Your turn" : "Wait for opponent..."));
         }
     }
 }

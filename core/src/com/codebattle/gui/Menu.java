@@ -1,8 +1,5 @@
 package com.codebattle.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.codebattle.model.GameStage;
 import com.codebattle.scene.StartupScene;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menu extends Table implements Resizeable {
     final GameStage stage;
@@ -45,11 +45,11 @@ public class Menu extends Table implements Resizeable {
             btn.setVisible(false);
         }
 
-        this.btn_exit = btnList.get(3);
+        this.btn_exit = this.btnList.get(3);
         this.btn_exit.addListener(new ClickListener() {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
                 stage.parent.parent.setScene(new StartupScene(stage.parent.parent));
                 stage.parent.dispose();

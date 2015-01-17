@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 
 public class LabelPanel extends BasePanel implements Resizeable {
 
-    private TextArea textArea;
+    private final TextArea textArea;
 
     // private Label l;
 
-    public LabelPanel(String content, Skin skin) {
+    public LabelPanel(final String content, final Skin skin) {
         super(skin);
         // this.l = new Label("Hello World", skin);
         this.textArea = new TextArea(content, skin);
@@ -17,13 +17,13 @@ public class LabelPanel extends BasePanel implements Resizeable {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.reset();
         this.pad(5);
         this.add(this.textArea).prefWidth(width * 0.95f).prefHeight(height * 0.3f);
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.textArea.setText(text);
     }
 }

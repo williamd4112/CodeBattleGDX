@@ -31,11 +31,11 @@ abstract public class GameScene implements Screen {
      * @param sceneName
      * @throws Exception
      */
-    public GameScene(CodeBattle parent, String sceneName) throws Exception {
+    public GameScene(final CodeBattle parent, final String sceneName) throws Exception {
         this.parent = parent;
-        XmlReader.Element context = XMLUtil.readXMLFromFile(GameConstants.SCENE_DIR
+        final XmlReader.Element context = XMLUtil.readXMLFromFile(GameConstants.SCENE_DIR
                 + sceneName + ".xml");
-        String mapName = context.getChildByName("map").getText();
+        final String mapName = context.getChildByName("map").getText();
 
         this.stage = new GameStage(this, mapName);
         this.setupGUI();
@@ -50,14 +50,14 @@ abstract public class GameScene implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(final float delta) {
         // TODO Auto-generated method stub
         this.stage.draw();
         this.stage.act(delta);
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         // TODO Auto-generated method stub
         this.stage.resize(width, height);
         this.resizeGUI(width, height);
@@ -94,7 +94,7 @@ abstract public class GameScene implements Screen {
         GameObjectFactory.getInstance().resetCount();
     }
 
-    public void setCurrentPlayer(Owner owner) {
+    public void setCurrentPlayer(final Owner owner) {
         this.currentPlayer = owner;
     }
 
@@ -102,7 +102,7 @@ abstract public class GameScene implements Screen {
         return this.currentPlayer;
     }
 
-    public void setSuccess(boolean b) {
+    public void setSuccess(final boolean b) {
         this.isSuccess = b;
     }
 

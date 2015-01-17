@@ -1,39 +1,39 @@
 package com.codebattle.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StateTable extends Table implements Resizeable {
-    private String[] list = { "", "", "", "", "" };
-    private String[] values = { "", "", "", "", "" };
+    private final String[] list = { "", "", "", "", "" };
+    private final String[] values = { "", "", "", "", "" };
 
-    private List<Label> keyLabels;
-    private List<Label> valLabels;
+    private final List<Label> keyLabels;
+    private final List<Label> valLabels;
 
-    public StateTable(Skin skin) {
+    public StateTable(final Skin skin) {
         super();
         this.keyLabels = new ArrayList<Label>();
         this.valLabels = new ArrayList<Label>();
-        for (String s : list) {
+        for (final String s : this.list) {
             this.keyLabels.add(new Label(s, skin));
         }
-        for (String v : values) {
+        for (final String v : this.values) {
             this.valLabels.add(new Label(v, skin));
         }
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.reset();
         this.setDebug(true);
 
         for (int i = 0; i < this.keyLabels.size(); i++) {
-            Label key = keyLabels.get(i);
-            Label val = valLabels.get(i);
+            final Label key = this.keyLabels.get(i);
+            final Label val = this.valLabels.get(i);
             // key.setFontScale(width * 0.0009f);
             // val.setFontScale(width * 0.0009f);
             this.add(key)
@@ -47,7 +47,7 @@ public class StateTable extends Table implements Resizeable {
         }
     }
 
-    public void setKeys(String[] keys) {
+    public void setKeys(final String[] keys) {
         this.resetKeys();
         for (int i = 0; i < keys.length; i++) {
             this.keyLabels.get(i)
@@ -55,7 +55,7 @@ public class StateTable extends Table implements Resizeable {
         }
     }
 
-    public void setValues(String[] values) {
+    public void setValues(final String[] values) {
         this.resetValues();
         for (int i = 0; i < values.length; i++) {
             this.valLabels.get(i)
@@ -66,14 +66,14 @@ public class StateTable extends Table implements Resizeable {
     public void resetKeys() {
         for (int i = 0; i < this.keyLabels.size(); i++) {
             this.keyLabels.get(i)
-                    .setText(list[i]);
+                    .setText(this.list[i]);
         }
     }
 
     public void resetValues() {
         for (int i = 0; i < this.valLabels.size(); i++) {
             this.valLabels.get(i)
-                    .setText(values[i]);
+                    .setText(this.values[i]);
         }
     }
 

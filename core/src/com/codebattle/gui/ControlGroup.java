@@ -7,11 +7,11 @@ import com.codebattle.model.GameStage;
 public class ControlGroup extends Table {
     final GameStage stage;
 
-    private Menu menu;
-    private SystemIndicator sysIndicator;
-    private Panel panel;
+    private final Menu menu;
+    private final SystemIndicator sysIndicator;
+    private final Panel panel;
 
-    public ControlGroup(GameStage stage, Skin skin) {
+    public ControlGroup(final GameStage stage, final Skin skin) {
         super();
         this.stage = stage;
         this.menu = new Menu(stage, skin);
@@ -19,21 +19,21 @@ public class ControlGroup extends Table {
         this.panel = new Panel(skin);
     }
 
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.reset();
         this.sysIndicator.resize(width, height);
         this.menu.resize(width, height);
         this.panel.resize(width, height);
 
-        this.add(menu)
+        this.add(this.menu)
                 .expand()
                 .top()
                 .left();
         this.row();
-        this.add(sysIndicator)
+        this.add(this.sysIndicator)
                 .left()
                 .row();
-        this.add(panel)
+        this.add(this.panel)
                 .bottom()
                 .left();
     }

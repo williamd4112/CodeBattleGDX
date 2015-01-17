@@ -6,7 +6,8 @@ import com.codebattle.game.CodeBattle;
 
 public class SinglePlayerGameScene extends PlayerGameScene {
 
-    public SinglePlayerGameScene(CodeBattle parent, final String sceneName) throws Exception {
+    public SinglePlayerGameScene(final CodeBattle parent, final String sceneName)
+            throws Exception {
         super(parent, sceneName);
     }
 
@@ -14,7 +15,7 @@ public class SinglePlayerGameScene extends PlayerGameScene {
     public void setupGUI() {
         super.setupGUI();
         this.handler = new Handler();
-        this.gui.getEditor().addHandler(handler);
+        this.gui.getEditor().addHandler(this.handler);
     }
 
     /* Handling script interpretation */
@@ -24,7 +25,7 @@ public class SinglePlayerGameScene extends PlayerGameScene {
             super.clicked(event, x, y);
             System.out.println("click");
             final String script = SinglePlayerGameScene.this.gui.getEditor().getText();
-            onReceiveScript(script);
+            SinglePlayerGameScene.this.onReceiveScript(script);
         }
     }
 

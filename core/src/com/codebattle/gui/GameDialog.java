@@ -1,9 +1,5 @@
 package com.codebattle.gui;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,15 +8,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.meta.GameMethod;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameDialog extends Table implements Resizeable {
     final public GameStage stage;
-    private LabelPanel content;
+    private final LabelPanel content;
     public String context;
     private Image image = null;
     private int index = 0;
     private List<GameMethod> callbacks = null;
 
-    public GameDialog(GameStage stage, TextureRegion portrait, String context, Skin skin) {
+    public GameDialog(final GameStage stage, final TextureRegion portrait,
+            final String context, final Skin skin) {
         super();
         this.callbacks = new LinkedList<GameMethod>();
         this.stage = stage;
@@ -29,7 +30,7 @@ public class GameDialog extends Table implements Resizeable {
         if (portrait != null) {
             try {
                 this.image = new Image(portrait);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
                 this.image = null;
             }
@@ -38,47 +39,49 @@ public class GameDialog extends Table implements Resizeable {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.reset();
         this.setFillParent(true);
         this.index = 0;
         this.content.resize(width, height);
         if (this.image != null) {
-            this.add(image)
+            this.add(this.image)
                     .expand()
                     .bottom()
                     .left()
                     .padLeft(0.01f * width)
                     .row();
         }
-        this.add(content)
+        this.add(this.content)
                 .bottom();
     }
 
     @Override
-    public void act(float delta) {
+    public void act(final float delta) {
         super.act(delta);
-        if (this.index < this.context.length())
-            this.content.setText(context.substring(0, this.index++));
+        if (this.index < this.context.length()) {
+            this.content.setText(this.context.substring(0, this.index++));
+        }
 
     }
 
-    public void setCallback(GameMethod method) {
+    public void setCallback(final GameMethod method) {
         this.callbacks.add(method);
         method.bind("Stage", this.stage);
     }
 
     public void callback() {
         try {
-            for (GameMethod m : this.callbacks)
+            for (final GameMethod m : this.callbacks) {
                 m.execute();
-        } catch (IllegalAccessException e) {
+            }
+        } catch (final IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

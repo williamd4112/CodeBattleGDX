@@ -1,9 +1,5 @@
 package com.codebattle.model;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
@@ -46,6 +42,10 @@ import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.MapFactory;
 import com.codebattle.utility.ShaderLoader;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
+
 /*
  * GameStage
  * 1. @maprenderer: used to render the game map
@@ -55,7 +55,7 @@ import com.codebattle.utility.ShaderLoader;
 public class GameStage extends Stage {
     private Owner winner = null;
     private boolean isInit = false;
-    private boolean[] switches = new boolean[1000];
+    private final boolean[] switches = new boolean[1000];
 
     final public GameScene parent;
     private GameState state;
@@ -67,8 +67,8 @@ public class GameStage extends Stage {
 
     final private OrthogonalTiledMapRenderer mapRenderer;
     final private OrthographicCamera camera;
-    private ShaderProgram shader;
-    private float zoom = 1.0f;
+    private final ShaderProgram shader;
+    private final float zoom = 1.0f;
 
     // Layers
     final private Group gameObjects;
@@ -76,42 +76,42 @@ public class GameStage extends Stage {
     final private Group popLayer;
 
     // Dialog queue
-    private GameDialogQueue dialogQueue;
+    private final GameDialogQueue dialogQueue;
 
     /* Debug shape render */
     final ShapeRenderer debugRender;
 
     // Animation queue, actors in the stage will add animation object to this
     // Stage will process it sequentially , not parallelly
-    private Queue<BaseAnimation> animQueue;
+    private final Queue<BaseAnimation> animQueue;
     private BaseAnimation currentAnimation = null;
 
     // Used to detect blocking, when actor use its move series function
-    private VirtualMap virtualMap;
-    private VirtualSystem[] virtualSystems;
+    private final VirtualMap virtualMap;
+    private final VirtualSystem[] virtualSystems;
 
     // Camera sliding direction
     private int camDirection = GameConstants.CAMERA_HOLD;
 
     // Lighting Variables
-    private World world;
-    private RayHandler rayHandler;
-    private float ambientLightIntensity = 0.15f;
-    private float generalLightIntensity = 0.5f;
+    private final World world;
+    private final RayHandler rayHandler;
+    private final float ambientLightIntensity = 0.15f;
+    private final float generalLightIntensity = 0.5f;
 
     // Assistant GUI
-    private CursorAnimation cursor;
+    private final CursorAnimation cursor;
     private VirtualCell selectCell = null;
 
     // EventManager
-    private GameStageEventManager eventManager;
+    private final GameStageEventManager eventManager;
 
     /*
      * GameStage Constructor
-     *
+     * 
      * @param - mapName : used to create map and map renderer , camera
      */
-    public GameStage(GameScene parent, String mapName) throws Exception {
+    public GameStage(final GameScene parent, final String mapName) throws Exception {
         super();
         Arrays.fill(this.switches, false);
         this.parent = parent;
@@ -121,20 +121,21 @@ public class GameStage extends Stage {
 
         // Create map and camera
         this.map = MapFactory.loadMapFromFile(mapName);
-        if (this.map.getLayers().get("inpassiable") != null)
+        if (this.map.getLayers().get("inpassiable") != null) {
             this.map.getLayers().get("inpassiable").setVisible(false);
+        }
 
         this.topLayer = (TiledMapTileLayer) this.map.getLayers().get("most up layer");
         this.mapProperties = this.map.getProperties();
         this.camera = new OrthographicCamera();
-        this.mapRenderer = new OrthogonalTiledMapRenderer(map);
+        this.mapRenderer = new OrthogonalTiledMapRenderer(this.map);
         this.mapRenderer.setView(this.camera);
-        this.mapRenderer.getSpriteBatch().setShader(shader);
-        this.getViewport().setCamera(camera);
+        this.mapRenderer.getSpriteBatch().setShader(this.shader);
+        this.getViewport().setCamera(this.camera);
 
         // Create Lighting
         this.world = new World(new Vector2(0, -10), true);
-        this.rayHandler = new RayHandler(world);
+        this.rayHandler = new RayHandler(this.world);
         this.rayHandler.setAmbientLight(0f, 0f, 0f, this.ambientLightIntensity);
         this.rayHandler.setBlur(true);
 
@@ -150,7 +151,7 @@ public class GameStage extends Stage {
         this.eventManager = new GameStageEventManager(this);
 
         // Virtual world
-        this.virtualMap = new VirtualMap(this, map);
+        this.virtualMap = new VirtualMap(this, this.map);
         this.virtualSystems = new VirtualSystem[] { new VirtualSystem(this, Owner.RED),
                 new VirtualSystem(this, Owner.BLUE) };
 
@@ -201,12 +202,13 @@ public class GameStage extends Stage {
 
         // Draw top layer
         this.mapRenderer.getSpriteBatch().begin();
-        if (this.topLayer != null)
-            this.mapRenderer.renderTileLayer(topLayer);
+        if (this.topLayer != null) {
+            this.mapRenderer.renderTileLayer(this.topLayer);
+        }
         this.mapRenderer.getSpriteBatch().end();
 
         // Draw lighting
-        this.rayHandler.setCombinedMatrix(camera.combined);
+        this.rayHandler.setCombinedMatrix(this.camera.combined);
         this.rayHandler.updateAndRender();
         this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
@@ -229,7 +231,7 @@ public class GameStage extends Stage {
     }
 
     @Override
-    public void act(float delta) {
+    public void act(final float delta) {
         super.act(delta);
         this.gameObjects.act(delta);
     }
@@ -239,16 +241,17 @@ public class GameStage extends Stage {
      * @param width
      * @param height
      */
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.width = width;
         this.height = height;
-        this.camera.setToOrtho(false, width * zoom, height * zoom);
+        this.camera.setToOrtho(false, width * this.zoom, height * this.zoom);
         this.camera.update();
-        this.getViewport().setScreenBounds(0, 0, (int) (width * zoom), (int) (height * zoom));
+        this.getViewport().setScreenBounds(0, 0, (int) (width * this.zoom),
+                (int) (height * this.zoom));
 
         // Resize GUI
-        this.resizeLayer(guiLayer);
-        this.resizeLayer(popLayer);
+        this.resizeLayer(this.guiLayer);
+        this.resizeLayer(this.popLayer);
 
         this.dialogQueue.resize(width, height);
 
@@ -258,10 +261,10 @@ public class GameStage extends Stage {
         this.shader.end();
     }
 
-    public void resizeLayer(Group layer) {
-        for (Actor ui : layer.getChildren()) {
+    public void resizeLayer(final Group layer) {
+        for (final Actor ui : layer.getChildren()) {
             if (ui instanceof Resizeable) {
-                ((Resizeable) ui).resize(width, height);
+                ((Resizeable) ui).resize(this.width, this.height);
             }
         }
     }
@@ -273,9 +276,9 @@ public class GameStage extends Stage {
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
-        camera.unproject(worldCoordinates);
+    public boolean mouseMoved(final int screenX, final int screenY) {
+        final Vector3 worldCoordinates = new Vector3(screenX, screenY, 0);
+        this.camera.unproject(worldCoordinates);
 
         this.isMouseOutBound(worldCoordinates.x, worldCoordinates.y);
 
@@ -283,22 +286,25 @@ public class GameStage extends Stage {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(final int amount) {
         return super.scrolled(amount);
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(final int screenX, final int screenY, final int pointer,
+            final int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        Vector2 worldCoord = this.screenToStageCoordinates(new Vector2(screenX, screenY));
-        int vx = (int) (worldCoord.x / 32);
-        int vy = (int) (worldCoord.y / 32);
+        final Vector2 worldCoord =
+                this.screenToStageCoordinates(new Vector2(screenX, screenY));
+        final int vx = (int) (worldCoord.x / 32);
+        final int vy = (int) (worldCoord.y / 32);
 
-        if (this.hit(worldCoord.x, worldCoord.y, true) != null)
+        if (this.hit(worldCoord.x, worldCoord.y, true) != null) {
             return super.touchDown(screenX, screenY, pointer, button);
+        }
 
-        if (!isOutBoundInVirtualMap(vx, vy)) {
-            VirtualCell cell = this.virtualMap.getCell(vx, vy);
+        if (!this.isOutBoundInVirtualMap(vx, vy)) {
+            final VirtualCell cell = this.virtualMap.getCell(vx, vy);
             this.emitSelectEvent(cell);
 
         }
@@ -307,7 +313,7 @@ public class GameStage extends Stage {
     }
 
     @Override
-    public boolean keyDown(int keyCode) {
+    public boolean keyDown(final int keyCode) {
         this.dialogQueue.keyDown(keyCode);
         return super.keyDown(keyCode);
     }
@@ -318,10 +324,11 @@ public class GameStage extends Stage {
      * when completed, call this animation's finished method once to finish the final stage
      * poll out this animation from queue
      */
-    public void processAnimation(Batch batch, float delta) {
+    public void processAnimation(final Batch batch, final float delta) {
         // Only work at ANIM state
-        if (this.state != GameState.ANIM)
+        if (this.state != GameState.ANIM) {
             return;
+        }
 
         // No animation in the queue
         if (this.animQueue.isEmpty()) {
@@ -344,7 +351,7 @@ public class GameStage extends Stage {
         this.guiLayer.addAction(Actions.sequence(Actions.fadeOut(0.3f)));
 
         // Process the top animation
-        BaseAnimation anim = this.animQueue.peek();
+        final BaseAnimation anim = this.animQueue.peek();
 
         // Setup
         if (anim != this.currentAnimation) {
@@ -365,9 +372,9 @@ public class GameStage extends Stage {
     }
 
     public void resetAnimQueue() {
-        for (BaseAnimation anim : this.animQueue) {
+        for (final BaseAnimation anim : this.animQueue) {
             if (anim instanceof SummonAnimation) {
-                SummonAnimation summ = (SummonAnimation) anim;
+                final SummonAnimation summ = (SummonAnimation) anim;
                 summ.removeLight();
             }
         }
@@ -383,42 +390,46 @@ public class GameStage extends Stage {
     /**
      * Event handling
      */
-    public void emitAttackEvent(GameObject attacker, Attack attack, int x, int y) {
+    public void emitAttackEvent(final GameObject attacker, final Attack attack, final int x,
+            final int y) {
         try {
-            GameObject target = this.virtualMap.getCell(x, y).getObject();
+            final GameObject target = this.virtualMap.getCell(x, y).getObject();
             if (target != null) {
                 // Different type of attack animation
-                if (attacker instanceof GameActor)
+                if (attacker instanceof GameActor) {
                     this.addAnimation(new GameActorAttackAnimation(this, attack,
                             (GameActor) attacker, target));
-                else
+                } else {
                     this.addAnimation(new AttackAnimation(this, attack, target));
+                }
                 target.onAttacked(attack);
 
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void emitInteractEvent(GameObject contacter, int x, int y) {
-        GameObject target = this.virtualMap.getCell(x, y).getObject();
-        if (target != null)
+    public void emitInteractEvent(final GameObject contacter, final int x, final int y) {
+        final GameObject target = this.virtualMap.getCell(x, y).getObject();
+        if (target != null) {
             target.onInteract(contacter);
+        }
     }
 
-    public void emitSkillEvent(GameObject emitter, Skill skill, int x, int y) {
+    public void emitSkillEvent(final GameObject emitter, final Skill skill, final int x,
+            final int y) {
         try {
             if (!this.isOutBoundInVirtualMap(x, y)) {
                 this.getVirtualMap().getCell(x, y).onSkill(skill, emitter);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public void emitSelectEvent(VirtualCell cell) {
+    public void emitSelectEvent(final VirtualCell cell) {
         this.selectCell = cell;
         if (this.selectCell.getObject() != null) {
             this.selectCell.getObject().onSelected(this.parent.getCurrentPlayer());
@@ -438,7 +449,7 @@ public class GameStage extends Stage {
         this.parent.onGUIChange();
     }
 
-    public void emitDestroyedEvent(GameObject obj) {
+    public void emitDestroyedEvent(final GameObject obj) {
         obj.onDestroyed();
         this.eventManager.onGameObjectDestroyed(obj);
         this.gameObjects.removeActor(obj);
@@ -450,7 +461,7 @@ public class GameStage extends Stage {
 
     public void emitRoundCompleteEvent() {
         this.eventManager.onRoundComplete(this);
-        for (Actor a : this.gameObjects.getChildren()) {
+        for (final Actor a : this.gameObjects.getChildren()) {
             if (a instanceof MoveableGameObject) {
                 ((MoveableGameObject) a).setDirection(Direction.HOLD_DEF);
             }
@@ -462,7 +473,7 @@ public class GameStage extends Stage {
         this.eventManager.onStageStart();
     }
 
-    public void emitStageCompleteEvent(Owner winner) {
+    public void emitStageCompleteEvent(final Owner winner) {
         this.winner = winner;
         this.parent.onStageComplete(winner);
     }
@@ -470,35 +481,36 @@ public class GameStage extends Stage {
     /**
      * Add elements of stage
      */
-    public GameStage addGameObject(GameObject obj) {
+    public GameStage addGameObject(final GameObject obj) {
         this.gameObjects.addActor(obj);
         return this;
     }
 
-    public GameStage addGUI(Actor actor) {
+    public GameStage addGUI(final Actor actor) {
         this.guiLayer.addActor(actor);
         return this;
     }
 
-    public void addDialog(GameDialog dlg) {
+    public void addDialog(final GameDialog dlg) {
         this.popLayer.addActor(dlg);
     }
 
-    public void addAnimation(BaseAnimation animation) {
+    public void addAnimation(final BaseAnimation animation) {
         this.animQueue.add(animation);
     }
 
-    public PointLight addPointLight(Color color, float x, float y, int radius) {
-        return new PointLight(rayHandler, 1000, new Color(color.r, color.g, color.b,
+    public PointLight addPointLight(final Color color, final float x, final float y,
+            final int radius) {
+        return new PointLight(this.rayHandler, 1000, new Color(color.r, color.g, color.b,
                 this.generalLightIntensity + 0.3f), radius, x, y);
     }
 
-    public PointLight addPointLight(PointLightMeta light) {
+    public PointLight addPointLight(final PointLightMeta light) {
         System.out.printf("add light at %d , %d\n", light.x, light.y);
         return this.addPointLight(light.color, light.x, light.y, light.radius);
     }
 
-    public void putDialog(GameDialog dialog) {
+    public void putDialog(final GameDialog dialog) {
         this.dialogQueue.add(dialog);
     }
 
@@ -506,35 +518,38 @@ public class GameStage extends Stage {
      * Getters
      */
     @SuppressWarnings("unchecked")
-    public <T> SnapshotArray<T> getGroupByType(Class<T> type) {
-        SnapshotArray<T> objs = new SnapshotArray<T>();
-        for (Actor actor : this.gameObjects.getChildren()) {
-            if (type.isInstance(actor))
+    public <T> SnapshotArray<T> getGroupByType(final Class<T> type) {
+        final SnapshotArray<T> objs = new SnapshotArray<T>();
+        for (final Actor actor : this.gameObjects.getChildren()) {
+            if (type.isInstance(actor)) {
                 objs.add((T) actor);
+            }
         }
 
         return objs;
     }
 
-    public SnapshotArray<GameObject> getGameObjectsByOwner(Owner owner) {
-        SnapshotArray<GameObject> objs = new SnapshotArray<GameObject>();
-        for (Actor actor : this.gameObjects.getChildren()) {
+    public SnapshotArray<GameObject> getGameObjectsByOwner(final Owner owner) {
+        final SnapshotArray<GameObject> objs = new SnapshotArray<GameObject>();
+        for (final Actor actor : this.gameObjects.getChildren()) {
             if (actor instanceof GameObject) {
-                GameObject obj = (GameObject) actor;
-                if (obj.getOwner() == owner)
+                final GameObject obj = (GameObject) actor;
+                if (obj.getOwner() == owner) {
                     objs.add(obj);
+                }
             }
         }
         return objs;
     }
 
-    public SnapshotArray<GameActor> getGameActorsByOwner(Owner owner) {
-        SnapshotArray<GameActor> objs = new SnapshotArray<GameActor>();
-        for (Actor actor : this.gameObjects.getChildren()) {
+    public SnapshotArray<GameActor> getGameActorsByOwner(final Owner owner) {
+        final SnapshotArray<GameActor> objs = new SnapshotArray<GameActor>();
+        for (final Actor actor : this.gameObjects.getChildren()) {
             if (actor instanceof GameActor) {
-                GameActor obj = (GameActor) actor;
-                if (obj.getOwner() == owner)
+                final GameActor obj = (GameActor) actor;
+                if (obj.getOwner() == owner) {
                     objs.add(obj);
+                }
             }
         }
         return objs;
@@ -556,54 +571,59 @@ public class GameStage extends Stage {
         return this.virtualSystems;
     }
 
-    public VirtualSystem getVirtualSystem(Owner owner) {
-        if (owner.index < this.virtualSystems.length)
+    public VirtualSystem getVirtualSystem(final Owner owner) {
+        if (owner.index < this.virtualSystems.length) {
             return this.virtualSystems[owner.index];
-        else
+        } else {
             return null;
+        }
     }
 
     public GameStageEventManager getEventManager() {
         return this.eventManager;
     }
 
-    public GameObject findGameObjectByNameAndOwner(String name, Owner owner) {
-        for (Actor actor : this.gameObjects.getChildren()) {
+    public GameObject findGameObjectByNameAndOwner(final String name, final Owner owner) {
+        for (final Actor actor : this.gameObjects.getChildren()) {
             if (actor instanceof GameObject) {
-                GameObject obj = (GameObject) actor;
-                if (obj.getOwner() == owner && obj.getName().equals(name))
+                final GameObject obj = (GameObject) actor;
+                if (obj.getOwner() == owner && obj.getName().equals(name)) {
                     return obj;
+                }
             }
         }
         return null;
     }
 
-    public boolean isExistGameObject(String name, Owner owner) {
-        GameObject obj = this.findGameObjectByNameAndOwner(name, owner);
+    public boolean isExistGameObject(final String name, final Owner owner) {
+        final GameObject obj = this.findGameObjectByNameAndOwner(name, owner);
         if (obj == null) {
             System.out.println("Target is null");
             return false;
         } else {
             System.out.println("Target: " + obj.getName() + "State: " + obj.getState());
-            return (obj.isAlive()) ? true : false;
+            return obj.isAlive() ? true : false;
         }
     }
 
-    public GameObject findGameObject(int vx, int vy) {
-        if (vx < 0 || vx >= this.getMapWidth() || vy < 0 || vy >= this.getMapHeight())
+    public GameObject findGameObject(final int vx, final int vy) {
+        if (vx < 0 || vx >= this.getMapWidth() || vy < 0 || vy >= this.getMapHeight()) {
             return null;
+        }
         return this.virtualMap.getCell(vx, vy).getObject();
     }
 
     public GameObject getSelectedObject() {
-        if (this.selectCell == null)
+        if (this.selectCell == null) {
             return null;
+        }
         return this.selectCell.getObject();
     }
 
     public VirtualCell getSelectedCell() {
-        if (this.selectCell == null)
+        if (this.selectCell == null) {
             return null;
+        }
         return this.selectCell;
     }
 
@@ -611,50 +631,54 @@ public class GameStage extends Stage {
         return this.guiLayer;
     }
 
-    public boolean getSwitchState(int index) {
-        if (index < this.switches.length)
+    public boolean getSwitchState(final int index) {
+        if (index < this.switches.length) {
             return this.switches[index];
+        }
         return false;
     }
 
     /**
      * Setters
      */
-    public void setState(GameState state) {
+    public void setState(final GameState state) {
         this.state = state;
     }
 
-    public void setCameraTarget(GameObject target) {
+    public void setCameraTarget(final GameObject target) {
         this.camera.position.set(target.getX(), target.getY(), 0);
         this.camera.update();
     }
 
-    public void setCameraTarget(VirtualCell target) {
+    public void setCameraTarget(final VirtualCell target) {
         this.camera.position.set(target.getX(), target.getY(), 0);
         this.camera.update();
     }
 
-    public void setCameraTarget(int x, int y) {
+    public void setCameraTarget(final int x, final int y) {
         this.camera.position.set(x, y, 0);
         this.camera.update();
     }
 
-    public void setGUIVisiable(boolean flag) {
+    public void setGUIVisiable(final boolean flag) {
         this.guiLayer.setVisible(flag);
     }
 
-    public void setGUILayerPosition(float x, float y) {
-        this.guiLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
-        this.popLayer.setBounds(x - (width / 2), y - (height / 2), width, height);
+    public void setGUILayerPosition(final float x, final float y) {
+        this.guiLayer.setBounds(x - this.width / 2, y - this.height / 2, this.width,
+                this.height);
+        this.popLayer.setBounds(x - this.width / 2, y - this.height / 2, this.width,
+                this.height);
     }
 
-    public void setSwitch(int index, boolean val) {
-        if (index >= this.switches.length)
+    public void setSwitch(final int index, final boolean val) {
+        if (index >= this.switches.length) {
             return;
+        }
         this.switches[index] = val;
     }
 
-    public void setAmbientLight(Color color, float intensity) {
+    public void setAmbientLight(final Color color, final float intensity) {
         this.rayHandler.setAmbientLight(color.r * 1.0f / 255, color.g * 1.0f / 255,
                 color.b * 1.0f / 255, intensity);
     }
@@ -663,35 +687,39 @@ public class GameStage extends Stage {
         this.setGUILayerPosition(this.camera.position.x, this.camera.position.y);
     }
 
-    public void removeDialog(GameDialog dlg) {
+    public void removeDialog(final GameDialog dlg) {
         this.guiLayer.removeActor(dlg);
     }
 
-    public void fadeOutLayer(Group layer) {
+    public void fadeOutLayer(final Group layer) {
         layer.addAction(Actions.sequence(Actions.fadeOut(0.5f), Actions.hide()));
     }
 
-    public void fadeInLayer(Group layer) {
+    public void fadeInLayer(final Group layer) {
         layer.addAction(Actions.sequence(Actions.show(), Actions.fadeIn(0.5f)));
     }
 
     public void moveCamera() {
         switch (this.camDirection) {
         case GameConstants.CAMERA_UP:// up
-            if (this.camera.position.y < this.getMapHeight() * GameConstants.CELL_SIZE)
+            if (this.camera.position.y < this.getMapHeight() * GameConstants.CELL_SIZE) {
                 this.camera.position.y += GameConstants.CAMERA_SPEED;
+            }
             break;
         case GameConstants.CAMERA_DOWN:// down
-            if (this.camera.position.y > 0)
+            if (this.camera.position.y > 0) {
                 this.camera.position.y -= GameConstants.CAMERA_SPEED;
+            }
             break;
         case GameConstants.CAMERA_LEFT:// left
-            if (this.camera.position.x > 0)
+            if (this.camera.position.x > 0) {
                 this.camera.position.x -= GameConstants.CAMERA_SPEED;
+            }
             break;
         case GameConstants.CAMERA_RIGHT:// right
-            if (this.camera.position.x < this.getMapWidth() * GameConstants.CELL_SIZE)
+            if (this.camera.position.x < this.getMapWidth() * GameConstants.CELL_SIZE) {
                 this.camera.position.x += GameConstants.CAMERA_SPEED;
+            }
             break;
         default:
             break;
@@ -701,43 +729,41 @@ public class GameStage extends Stage {
     /**
      * Condition checkingS
      */
-    public void isMouseOutBound(float x, float y) {
-        int cx = (int) this.camera.position.x;
-        int cy = (int) this.camera.position.y;
+    public void isMouseOutBound(final float x, final float y) {
+        final int cx = (int) this.camera.position.x;
+        final int cy = (int) this.camera.position.y;
 
         // Up
-        if (y >= cy + (height / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+        if (y >= cy + this.height / 2 - GameConstants.CAMERA_SLIDING_MARGIN) {
             this.camDirection = GameConstants.CAMERA_UP;
-        // Down
-        else if (y <= cy - (height / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+        } else if (y <= cy - (this.height / 2 - GameConstants.CAMERA_SLIDING_MARGIN)) {
             this.camDirection = GameConstants.CAMERA_DOWN;
-        // Left
-        else if (x <= cx - (width / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+        } else if (x <= cx - (this.width / 2 - GameConstants.CAMERA_SLIDING_MARGIN)) {
             this.camDirection = GameConstants.CAMERA_LEFT;
-        // Right
-        else if (x >= cx + (width / 2 - GameConstants.CAMERA_SLIDING_MARGIN))
+        } else if (x >= cx + this.width / 2 - GameConstants.CAMERA_SLIDING_MARGIN) {
             this.camDirection = GameConstants.CAMERA_RIGHT;
-        else
+        } else {
             this.camDirection = GameConstants.CAMERA_HOLD;
+        }
 
     }
 
-    public boolean isOutBoundInVirtualMap(int x, int y) {
-        return (x < 0 || x >= this.getMapWidth() || y < 0 || y >= this.getMapHeight());
+    public boolean isOutBoundInVirtualMap(final int x, final int y) {
+        return x < 0 || x >= this.getMapWidth() || y < 0 || y >= this.getMapHeight();
     }
 
     /**
      * Debugging
      */
     public void printAllAnimation() {
-        for (BaseAnimation anim : this.animQueue) {
+        for (final BaseAnimation anim : this.animQueue) {
             System.out.println(anim);
         }
     }
 
     public void printAllVirtualObjects() {
-        int mapWidth = this.mapProperties.get("width", Integer.class);
-        int mapHeight = this.mapProperties.get("height", Integer.class);
+        final int mapWidth = this.mapProperties.get("width", Integer.class);
+        final int mapHeight = this.mapProperties.get("height", Integer.class);
         for (int row = 0; row < mapHeight; row++) {
             for (int col = 0; col < mapWidth; col++) {
                 if (this.virtualMap.getCell(col, row).getObject() != null) {
@@ -753,7 +779,7 @@ public class GameStage extends Stage {
      * @param delta
      */
     public void renderDebug() {
-        this.debugRender.setProjectionMatrix(camera.combined);
+        this.debugRender.setProjectionMatrix(this.camera.combined);
         this.debugRender.begin(ShapeType.Line);
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -763,25 +789,29 @@ public class GameStage extends Stage {
 
         this.debugRender.setColor(1, 0, 0, 0.2f);
 
-        for (int i = 0; i < this.getMapWidth() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
+        for (int i = 0; i < this.getMapWidth() * GameConstants.CELL_SIZE; i +=
+                GameConstants.CELL_SIZE) {
             this.debugRender.line(i, 0, i, this.getMapHeight() * GameConstants.CELL_SIZE);
-        for (int i = 0; i < this.getMapHeight() * GameConstants.CELL_SIZE; i += GameConstants.CELL_SIZE)
+        }
+        for (int i = 0; i < this.getMapHeight() * GameConstants.CELL_SIZE; i +=
+                GameConstants.CELL_SIZE) {
             this.debugRender.line(0, i, this.getMapWidth() * GameConstants.CELL_SIZE, i);
+        }
 
         this.debugRender.set(ShapeType.Filled);
 
-        int mapWidth = this.mapProperties.get("width", Integer.class);
-        int mapHeight = this.mapProperties.get("height", Integer.class);
+        final int mapWidth = this.mapProperties.get("width", Integer.class);
+        final int mapHeight = this.mapProperties.get("height", Integer.class);
         for (int row = 0; row < mapHeight; row++) {
             for (int col = 0; col < mapWidth; col++) {
-                VirtualCell cell = this.virtualMap.getCell(col, row);
+                final VirtualCell cell = this.virtualMap.getCell(col, row);
 
                 // Draw select object and its range
                 if (this.selectCell != null) {
-                    GameObject obj = this.selectCell.getObject();
+                    final GameObject obj = this.selectCell.getObject();
                     if (obj != null) {
                         if (obj instanceof GameActor) {
-                            GameActor actor = (GameActor) obj;
+                            final GameActor actor = (GameActor) obj;
                             if (actor.isInRange(actor.getProp().maxsteps, cell.getVX(),
                                     cell.getVY())) {
                                 this.renderDebugCell(actor.getOwner(), col, row);
@@ -801,8 +831,9 @@ public class GameStage extends Stage {
 
                 // Draw select cell
                 if (cell == this.selectCell) {
-                    if (cell.getObject() == null)
+                    if (cell.getObject() == null) {
                         this.renderDebugCell(this.parent.getCurrentPlayer(), col, row);
+                    }
                 }
             }
         }
@@ -810,7 +841,7 @@ public class GameStage extends Stage {
         this.debugRender.end();
     }
 
-    private void renderDebugCell(Owner owner, int col, int row) {
+    private void renderDebugCell(final Owner owner, final int col, final int row) {
         switch (owner) {
         case RED:
             this.debugRender.setColor(1.0f, 0.0f, 0.0f, 0.2f);
@@ -824,8 +855,8 @@ public class GameStage extends Stage {
         default:
             break;
         }
-        float x = col * GameConstants.CELL_SIZE;
-        float y = row * GameConstants.CELL_SIZE;
+        final float x = col * GameConstants.CELL_SIZE;
+        final float y = row * GameConstants.CELL_SIZE;
         this.debugRender.rect(x, y, GameConstants.CELL_SIZE, GameConstants.CELL_SIZE);
     }
 }

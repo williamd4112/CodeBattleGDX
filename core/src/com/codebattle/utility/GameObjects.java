@@ -7,7 +7,8 @@ import com.codebattle.model.Owner;
 import com.codebattle.model.meta.PointLightMeta;
 
 public class GameObjects {
-    public static GameObject create(GameStage stage, XmlReader.Element gameobjectElement)
+    public static GameObject create(final GameStage stage,
+            final XmlReader.Element gameobjectElement)
             throws Exception {
         final String clazz = gameobjectElement.getAttribute("class");
         final Owner owner = GameUtil.toOwner(gameobjectElement.getAttribute("owner"));
@@ -19,13 +20,16 @@ public class GameObjects {
                 * GameConstants.CELL_SIZE;
 
         PointLightMeta lightMeta = null;
-        XmlReader.Element pointlightElement = gameobjectElement.getChildByName("pointlight");
-        if (pointlightElement != null)
+        final XmlReader.Element pointlightElement =
+                gameobjectElement.getChildByName("pointlight");
+        if (pointlightElement != null) {
             lightMeta = new PointLightMeta(pointlightElement);
+        }
 
-        String readonlyScript = (gameobjectElement.getChildByName("script") == null) ? null
-                : gameobjectElement.getChildByName("script").getText();
-        boolean isFixed = (gameobjectElement.getChildByName("fixed") == null) ? false
+        final String readonlyScript =
+                gameobjectElement.getChildByName("script") == null ? null
+                        : gameobjectElement.getChildByName("script").getText();
+        final boolean isFixed = gameobjectElement.getChildByName("fixed") == null ? false
                 : Boolean.parseBoolean(gameobjectElement.getChildByName("fixed").getText());
 
         if (clazz.equals("GameActor")) {

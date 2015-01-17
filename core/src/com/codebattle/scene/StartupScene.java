@@ -14,7 +14,7 @@ public class StartupScene implements Screen {
 
     private Stage stage;
 
-    public StartupScene(CodeBattle parent) {
+    public StartupScene(final CodeBattle parent) {
         super();
         this.parent = parent;
         this.stage = new MainMenuStage(this);
@@ -23,7 +23,7 @@ public class StartupScene implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(final float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -34,7 +34,7 @@ public class StartupScene implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.stage.getViewport().update(width, height);
     }
 
@@ -72,7 +72,7 @@ public class StartupScene implements Screen {
 
     }
 
-    public void setStage(Stage stage) {
+    public void setStage(final Stage stage) {
         this.stage = stage;
     }
 

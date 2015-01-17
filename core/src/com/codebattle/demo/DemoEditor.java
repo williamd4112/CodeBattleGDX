@@ -12,9 +12,9 @@ import com.codebattle.utility.GameConstants;
 public class DemoEditor implements Screen {
 
     // private CodeEditor editor;
-    private JSCodeEditorCore editor;
-    private Stage stage;
-    private Table root;
+    private final JSCodeEditorCore editor;
+    private final Stage stage;
+    private final Table root;
     private ScrollPane pane;
 
     public DemoEditor() {
@@ -23,18 +23,18 @@ public class DemoEditor implements Screen {
         this.root = new Table();
 
         this.editor = new JSCodeEditorCore(GameConstants.DEFAULT_SKIN);
-        this.root.add((pane = new ScrollPane(editor, GameConstants.DEFAULT_SKIN)))
+        this.root.add(this.pane = new ScrollPane(this.editor, GameConstants.DEFAULT_SKIN))
                 .expand()
                 .fill();
 
-        this.stage.addActor(root);
+        this.stage.addActor(this.root);
         this.root.setFillParent(true);
 
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this.stage);
     }
 
     @Override
-    public void render(float delta) {
+    public void render(final float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -45,7 +45,7 @@ public class DemoEditor implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         // TODO Auto-generated method stub
 
     }

@@ -1,14 +1,14 @@
 package com.codebattle.model;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.utils.Array;
 import com.codebattle.model.animation.SummonAnimation;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.GameObjectFactory;
 import com.codebattle.utility.SoundUtil;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * In Game System
@@ -27,9 +27,9 @@ public class VirtualSystem {
     private int hp;
     private int resource;
 
-    private List<SystemListener> listeners;
+    private final List<SystemListener> listeners;
 
-    public VirtualSystem(GameStage stage, Owner owner) {
+    public VirtualSystem(final GameStage stage, final Owner owner) {
         this.listeners = new LinkedList<SystemListener>();
         this.stage = stage;
         this.hp = GameConstants.INIT_HP;
@@ -37,23 +37,28 @@ public class VirtualSystem {
         this.owner = owner;
     }
 
-    public void createGameActor(String source, String type, int vx, int vy) throws Exception {
-        if (stage.isOutBoundInVirtualMap(vx, vy))
+    public void createGameActor(final String source, final String type, final int vx,
+            final int vy) throws Exception {
+        if (this.stage.isOutBoundInVirtualMap(vx, vy)) {
             return;
-        if (!stage.getVirtualMap().getCell(vx, vy).isPassible()
-                || stage.getVirtualMap().getCell(vx, vy).getObject() != null)
+        }
+        if (!this.stage.getVirtualMap().getCell(vx, vy).isPassible()
+                || this.stage.getVirtualMap().getCell(vx, vy).getObject() != null) {
             return;
+        }
 
-        int x = GameConstants.CELL_SIZE * vx, y = GameConstants.CELL_SIZE * vy;
-        GameActor actor = GameObjectFactory.getInstance().createGameActor(stage, owner,
-                source, type, x, y);
+        final int x = GameConstants.CELL_SIZE * vx, y = GameConstants.CELL_SIZE * vy;
+        final GameActor actor =
+                GameObjectFactory.getInstance().createGameActor(this.stage, this.owner,
+                        source, type, x, y);
         this.stage.addGameObject(actor);
         this.decreaseResource(actor.type.cost);
 
-        SummonAnimation anim = new SummonAnimation(this.stage, actor);
+        final SummonAnimation anim = new SummonAnimation(this.stage, actor);
         anim.addSound(GameConstants.SUMMON_SE);
-        for (String s : actor.type.getSelectSoundNames())
+        for (final String s : actor.type.getSelectSoundNames()) {
             anim.addSound(s);
+        }
         this.stage.addAnimation(anim);
 
         System.out.println("system@" + this.owner + ": createGameActor " + actor.getName());
@@ -68,48 +73,50 @@ public class VirtualSystem {
     }
 
     public Array<GameActor> getSortedActorList() {
-        return this.stage.getGameActorsByOwner(owner);
+        return this.stage.getGameActorsByOwner(this.owner);
     }
 
-    public void increaseResource(int diff) {
+    public void increaseResource(final int diff) {
         this.resource += diff;
         this.emitResourceChange();
     }
 
-    public void increaseResource(int diff, GameObject source) {
+    public void increaseResource(final int diff, final GameObject source) {
         try {
             this.increaseResource(diff);
-            this.stage.addAnimation(new SummonAnimation(stage, source));
+            this.stage.addAnimation(new SummonAnimation(this.stage, source));
             SoundUtil.playSE(GameConstants.SUMMON_SE);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void decreaseResource(int diff) {
-        int newValue = (this.resource - diff);
-        this.resource = (newValue <= 0) ? 0 : newValue;
+    public void decreaseResource(final int diff) {
+        final int newValue = this.resource - diff;
+        this.resource = newValue <= 0 ? 0 : newValue;
         this.emitResourceChange();
     }
 
-    public void decreaseLift(int diff) {
-        int newValue = (this.hp - diff);
-        this.hp = (newValue <= 0) ? 0 : newValue;
+    public void decreaseLift(final int diff) {
+        final int newValue = this.hp - diff;
+        this.hp = newValue <= 0 ? 0 : newValue;
         this.emitLifeChange();
     }
 
     public void emitLifeChange() {
-        for (SystemListener listener : this.listeners)
+        for (final SystemListener listener : this.listeners) {
             listener.onLifeChange(this.hp);
-        System.out.println("system@" + owner + " : " + this.hp);
+        }
+        System.out.println("system@" + this.owner + " : " + this.hp);
     }
 
     public void emitResourceChange() {
-        for (SystemListener listener : this.listeners)
+        for (final SystemListener listener : this.listeners) {
             listener.onResourceChange(this.resource);
+        }
     }
 
-    public void addSystemListener(SystemListener listener) {
+    public void addSystemListener(final SystemListener listener) {
         this.listeners.add(listener);
     }
 }

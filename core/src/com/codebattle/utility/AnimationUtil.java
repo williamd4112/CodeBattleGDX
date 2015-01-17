@@ -1,6 +1,5 @@
 package com.codebattle.utility;
 
-
 public class AnimationUtil {
 
     public static int frameOscillate(final int current, final int lowerBound,

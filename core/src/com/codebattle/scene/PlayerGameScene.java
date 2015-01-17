@@ -29,7 +29,7 @@ abstract public class PlayerGameScene extends GameScene {
     protected GameSceneGUI gui;
     protected ClickListener handler;
 
-    public PlayerGameScene(CodeBattle parent, final String sceneName) throws Exception {
+    public PlayerGameScene(final CodeBattle parent, final String sceneName) throws Exception {
         super(parent, sceneName);
     }
 
@@ -44,26 +44,27 @@ abstract public class PlayerGameScene extends GameScene {
     @Override
     public void setupGameObjects(final XmlReader.Element context) throws Exception {
         for (final XmlReader.Element element : context.getChildrenByNameRecursively("gameobject")) {
-            final GameObject obj = GameObjects.create(stage, element);
-            if (obj != null)
+            final GameObject obj = GameObjects.create(this.stage, element);
+            if (obj != null) {
                 this.stage.addGameObject(obj);
+            }
         }
     }
 
     @Override
-    public void setupAmbientLight(Element context) throws Exception {
-        XmlReader.Element ambientElement = context.getChildByName("ambient");
-        Color color = Color.valueOf(ambientElement.getAttribute("color"));
-        float intensity = Float.parseFloat(ambientElement.getAttribute("intensity"));
+    public void setupAmbientLight(final Element context) throws Exception {
+        final XmlReader.Element ambientElement = context.getChildByName("ambient");
+        final Color color = Color.valueOf(ambientElement.getAttribute("color"));
+        final float intensity = Float.parseFloat(ambientElement.getAttribute("intensity"));
         this.stage.setAmbientLight(color, intensity);
 
     }
 
     @Override
-    public void setupPointLight(Element context) {
-        XmlReader.Element initElement = context.getChildByName("init");
-        for (XmlReader.Element lightElement : initElement.getChildrenByName("pointlight")) {
-            PointLightMeta light = new PointLightMeta(lightElement);
+    public void setupPointLight(final Element context) {
+        final XmlReader.Element initElement = context.getChildByName("init");
+        for (final XmlReader.Element lightElement : initElement.getChildrenByName("pointlight")) {
+            final PointLightMeta light = new PointLightMeta(lightElement);
             System.out.println("Scene init: " + light.x + " , " + light.y);
             this.stage.addPointLight(light);
         }
@@ -95,10 +96,11 @@ abstract public class PlayerGameScene extends GameScene {
     }
 
     @Override
-    public void setupEvents(Element context) throws NoSuchMethodException, SecurityException {
-        XmlReader.Element eventsElement = context.getChildByName("events");
-        for (XmlReader.Element eventElement : eventsElement.getChildrenByName("event")) {
-            GameEvent e = Events.create(this.stage, eventElement);
+    public void setupEvents(final Element context) throws NoSuchMethodException,
+            SecurityException {
+        final XmlReader.Element eventsElement = context.getChildByName("events");
+        for (final XmlReader.Element eventElement : eventsElement.getChildrenByName("event")) {
+            final GameEvent e = Events.create(this.stage, eventElement);
             System.out.println("setup event: " + e.getName());
             this.stage.getEventManager().addGameEvent(e);
         }
@@ -112,7 +114,7 @@ abstract public class PlayerGameScene extends GameScene {
 
     @Override
     public void onGUIChange() {
-        GameObject selectObject = this.stage.getSelectedObject();
+        final GameObject selectObject = this.stage.getSelectedObject();
         if (selectObject != null) {
             if (selectObject instanceof StateShowable) {
                 this.gui.getControlGroup()
@@ -130,19 +132,20 @@ abstract public class PlayerGameScene extends GameScene {
     }
 
     @Override
-    public boolean onReceiveScript(String script) {
+    public boolean onReceiveScript(final String script) {
         System.out.println();
-        boolean result = new ScriptProcessor(this.stage, PlayerGameScene.this.currentPlayer,
-                script).run();
+        final boolean result =
+                new ScriptProcessor(this.stage, PlayerGameScene.this.currentPlayer,
+                        script).run();
         this.setSuccess(result);
         return result;
     }
 
     @Override
     public void onRoundComplete() {
-        VirtualSystem[] players = this.stage.getVirtualSystems();
+        final VirtualSystem[] players = this.stage.getVirtualSystems();
         Owner winner = null;
-        for (VirtualSystem player : players) {
+        for (final VirtualSystem player : players) {
             if (player.getHP() <= 0) {
                 if (players[Owner.RED.index].getHP() > players[Owner.BLUE.index].getHP()) {
                     System.out.println("Red win");
@@ -161,7 +164,7 @@ abstract public class PlayerGameScene extends GameScene {
     }
 
     @Override
-    public void onStageComplete(Owner winner) {
+    public void onStageComplete(final Owner winner) {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
@@ -171,7 +174,8 @@ abstract public class PlayerGameScene extends GameScene {
 
                             @Override
                             public void run() {
-                                parent.setScene(new StartupScene(parent));
+                                PlayerGameScene.this.parent.setScene(new StartupScene(
+                                        PlayerGameScene.this.parent));
 
                             }
 
@@ -182,7 +186,7 @@ abstract public class PlayerGameScene extends GameScene {
 
     private void putWinnerImage() {
         try {
-            Image image = new Image(TextureFactory.getInstance().loadDrawable(
+            final Image image = new Image(TextureFactory.getInstance().loadDrawable(
                     "Title_Win.png", ResourceType.PICTURE));
             image.setTouchable(Touchable.disabled);
             image.setScaling(Scaling.fit);
@@ -190,7 +194,7 @@ abstract public class PlayerGameScene extends GameScene {
             image.setHeight(Gdx.graphics.getHeight());
             this.stage.addGUI(image);
             image.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(3.0f)));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

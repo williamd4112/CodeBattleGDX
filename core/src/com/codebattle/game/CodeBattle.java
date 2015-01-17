@@ -28,7 +28,7 @@ public class CodeBattle extends Game {
         super.render();
     }
 
-    public void setScene(Screen screen) {
+    public void setScene(final Screen screen) {
         this.setScreen(screen);
     }
 }

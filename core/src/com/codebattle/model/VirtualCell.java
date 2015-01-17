@@ -24,22 +24,23 @@ public class VirtualCell implements StateShowable, Affectable {
 
     private String script_enter = null, script_exit = null, script_update = null;
 
-    public VirtualCell(GameObject actor, int x, int y, boolean passiable) {
+    public VirtualCell(final GameObject actor, final int x, final int y,
+            final boolean passiable) {
         this.obj = actor;
         this.passiable = passiable;
         this.x = x;
         this.y = y;
     }
 
-    public VirtualCell(GameObject actor, int x, int y) {
+    public VirtualCell(final GameObject actor, final int x, final int y) {
         this(actor, x, y, true);
     }
 
-    public VirtualCell(int x, int y) {
+    public VirtualCell(final int x, final int y) {
         this(null, x, y, true);
     }
 
-    public void setObject(GameObject obj, int x, int y) {
+    public void setObject(final GameObject obj, final int x, final int y) {
         this.obj = obj;
         if (obj != null) {
             this.onEnter(obj);
@@ -48,14 +49,14 @@ public class VirtualCell implements StateShowable, Affectable {
         }
     }
 
-    public void setPassiable(boolean flag) {
+    public void setPassiable(final boolean flag) {
         // System.out.printf("setPassiable@cell(%d , %d): %b\n", x, y, flag);
         this.passiable = flag;
     }
 
-    public void removeObject(int x, int y) {
+    public void removeObject(final int x, final int y) {
         if (this.obj != null) {
-            this.onExit(obj);
+            this.onExit(this.obj);
             // System.out.printf("remove %s(%d , %d) from (%d , %d)\n", this.obj.getName(),
             // this.obj.getVX(), this.obj.getVY(), x, y);
         }
@@ -67,10 +68,11 @@ public class VirtualCell implements StateShowable, Affectable {
     }
 
     public GameActor getGameActor() {
-        if (obj instanceof GameActor)
-            return (GameActor) obj;
-        else
+        if (this.obj instanceof GameActor) {
+            return (GameActor) this.obj;
+        } else {
             return null;
+        }
     }
 
     public float getX() {
@@ -91,56 +93,57 @@ public class VirtualCell implements StateShowable, Affectable {
 
     public boolean isPassible() {
         if (this.obj != null) {
-            return (obj.isBlock()) ? false : true;
+            return this.obj.isBlock() ? false : true;
         }
         return this.passiable;
     }
 
-    public void setScript(String type, String script) {
-        if (type.equals("Enter"))
+    public void setScript(final String type, final String script) {
+        if (type.equals("Enter")) {
             this.script_enter = script;
-        else if (type.equals("Exit"))
+        } else if (type.equals("Exit")) {
             this.script_exit = script;
-        else if (type.equals("Update"))
+        } else if (type.equals("Update")) {
             this.script_update = script;
+        }
     }
 
     @Override
-    public void onSkill(Skill skill, GameObject emitter) {
-        System.out.println(String.format("cell(%d ,% d)@ onSkill:\n", x, y));
-        skill.execute(getObject(), emitter, x, y);
+    public void onSkill(final Skill skill, final GameObject emitter) {
+        System.out.println(String.format("cell(%d ,% d)@ onSkill:\n", this.x, this.y));
+        skill.execute(this.getObject(), emitter, this.x, this.y);
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public void onAttacked(final Attack attack) {
 
     }
 
     public void onUpdate() {
         // System.out.printf("onUpdate@cell(%d , %d):\n ", x, y);
         if (this.script_update != null) {
-            CellScriptProcessor processor = new CellScriptProcessor(this);
-            processor.setScript(script_update);
+            final CellScriptProcessor processor = new CellScriptProcessor(this);
+            processor.setScript(this.script_update);
             processor.run();
             this.script_update = "";
         }
     }
 
-    public void onEnter(GameObject obj) {
+    public void onEnter(final GameObject obj) {
         // System.out.printf("onEnter@cell(%d , %d):\n ", x, y);
         if (this.script_enter != null) {
-            CellScriptProcessor processor = new CellScriptProcessor(this);
-            processor.setScript(script_enter);
+            final CellScriptProcessor processor = new CellScriptProcessor(this);
+            processor.setScript(this.script_enter);
             processor.run();
             this.script_enter = "";
         }
     }
 
-    public void onExit(GameObject obj) {
+    public void onExit(final GameObject obj) {
         // System.out.printf("onExit@cell(%d , %d):\n ", x, y);
         if (this.script_exit != null) {
-            CellScriptProcessor processor = new CellScriptProcessor(this);
-            processor.setScript(script_exit);
+            final CellScriptProcessor processor = new CellScriptProcessor(this);
+            processor.setScript(this.script_exit);
             processor.run();
             this.script_exit = "";
         }
@@ -154,7 +157,7 @@ public class VirtualCell implements StateShowable, Affectable {
 
     @Override
     public String[] getValues() {
-        return new String[] { String.valueOf(passiable), "--", "--", "--", "--" };
+        return new String[] { String.valueOf(this.passiable), "--", "--", "--", "--" };
     }
 
     @Override
@@ -169,6 +172,6 @@ public class VirtualCell implements StateShowable, Affectable {
 
     @Override
     public String getPositionInfo() {
-        return String.format("(%d , %d)", x, y);
+        return String.format("(%d , %d)", this.x, this.y);
     }
 }

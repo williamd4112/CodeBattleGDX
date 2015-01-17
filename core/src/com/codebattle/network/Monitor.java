@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Monitor extends JPanel {
-    private JTextArea readerBoard, writerBoard;
+    private final JTextArea readerBoard, writerBoard;
 
     public Monitor() {
         super();
@@ -21,7 +21,7 @@ public class Monitor extends JPanel {
         this.writerBoard = new JTextArea();
         this.writerBoard.setPreferredSize(new Dimension(600, 200));
 
-        JScrollPane pane = new JScrollPane(this.readerBoard);
+        final JScrollPane pane = new JScrollPane(this.readerBoard);
         pane.setPreferredSize(new Dimension(600, 200));
 
         this.add(new JLabel("Received"));
@@ -30,7 +30,7 @@ public class Monitor extends JPanel {
         this.add(this.writerBoard);
     }
 
-    public void printMessage(String msg) {
+    public void printMessage(final String msg) {
         this.readerBoard.append(msg + "\n");
     }
 

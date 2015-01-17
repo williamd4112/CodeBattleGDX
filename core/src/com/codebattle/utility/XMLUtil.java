@@ -1,12 +1,12 @@
 package com.codebattle.utility;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.meta.GameObjectDescription;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class XMLUtil {
 
@@ -26,23 +26,24 @@ public class XMLUtil {
     }
 
     public static Map<String, String> readAPIFromFile(final String path) throws IOException {
-        HashMap<String, String> map = new HashMap<String, String>();
-        XmlReader.Element context = readXMLFromFile(path);
-        for (XmlReader.Element methodElement : context.getChildrenByName("method")) {
-            String name = methodElement.getAttribute("name");
-            String doc = methodElement.getText();
+        final HashMap<String, String> map = new HashMap<String, String>();
+        final XmlReader.Element context = readXMLFromFile(path);
+        for (final XmlReader.Element methodElement : context.getChildrenByName("method")) {
+            final String name = methodElement.getAttribute("name");
+            final String doc = methodElement.getText();
             map.put(name, doc);
         }
 
         return map;
     }
 
-    public static XmlReader.Element childByName(XmlReader.Element root, String name) {
+    public static XmlReader.Element childByName(final XmlReader.Element root,
+            final String name) {
         return root.getChildByName(name);
     }
 
-    public static XmlReader.Element stringToElement(String str) {
-        XmlReader reader = new XmlReader();
+    public static XmlReader.Element stringToElement(final String str) {
+        final XmlReader reader = new XmlReader();
         return reader.parse(str);
     }
 }

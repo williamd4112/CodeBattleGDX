@@ -1,8 +1,5 @@
 package com.codebattle.utility;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,10 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.codebattle.model.meta.Region;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TextureFactory {
     private static TextureFactory instance = null;
 
-    private Map<String, Texture> pool;
+    private final Map<String, Texture> pool;
 
     private TextureFactory() {
         this.pool = new HashMap<String, Texture>();
@@ -54,7 +54,7 @@ public class TextureFactory {
                             * vTileSize, hTileSize, vTileSize);
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
@@ -63,25 +63,27 @@ public class TextureFactory {
 
     public TextureRegion[][] loadCharacterFramesFromFile(final String resName,
             final Region region) throws Exception {
-        int x = region.x;
-        int y = region.y;
-        int horizontal = region.width / region.hTile;
-        int vertical = region.height / region.vTile;
-        int hTileSize = region.hTile;
-        int vTileSize = region.vTile;
+        final int x = region.x;
+        final int y = region.y;
+        final int horizontal = region.width / region.hTile;
+        final int vertical = region.height / region.vTile;
+        final int hTileSize = region.hTile;
+        final int vTileSize = region.vTile;
 
-        return loadCharacterFramesFromFile(resName, x, y, horizontal, vertical, hTileSize,
+        return this.loadCharacterFramesFromFile(resName, x, y, horizontal, vertical,
+                hTileSize,
                 vTileSize);
     }
 
-    public TextureRegion[] loadAnimationFramesFromFile(String resName, Region region)
+    public TextureRegion[] loadAnimationFramesFromFile(final String resName,
+            final Region region)
             throws Exception {
-        int x = region.x;
-        int y = region.y;
-        int horizontal = region.width / region.hTile;
-        int vertical = region.height / region.vTile;
-        int hTileSize = region.hTile;
-        int vTileSize = region.vTile;
+        final int x = region.x;
+        final int y = region.y;
+        final int horizontal = region.width / region.hTile;
+        final int vertical = region.height / region.vTile;
+        final int hTileSize = region.hTile;
+        final int vTileSize = region.vTile;
 
         TextureRegion[] regions;
         int index = 0;
@@ -97,17 +99,18 @@ public class TextureFactory {
         return regions;
     }
 
-    public TextureRegion[] loadSelectCursorFromFile(String resName, Region region)
-            throws Exception {
-        int x = region.x;
-        int y = region.y;
-        int horizontal = region.width / region.hTile;
-        int vertical = region.height / region.vTile;
-        int hTileSize = region.hTile;
-        int vTileSize = region.vTile;
+    public TextureRegion[]
+            loadSelectCursorFromFile(final String resName, final Region region)
+                    throws Exception {
+        final int x = region.x;
+        final int y = region.y;
+        final int horizontal = region.width / region.hTile;
+        final int vertical = region.height / region.vTile;
+        final int hTileSize = region.hTile;
+        final int vTileSize = region.vTile;
 
         int index = 0;
-        TextureRegion[] regions = new TextureRegion[horizontal * 2];
+        final TextureRegion[] regions = new TextureRegion[horizontal * 2];
         final Texture texture = this.loadTextureFromFile(resName, ResourceType.CURSOR);
         for (int v = 0; v < vertical; v++) {
             for (int h = 0; h < horizontal; h++) {
@@ -119,41 +122,45 @@ public class TextureFactory {
         return regions;
     }
 
-    public TextureRegion[] loadFrameRow(String resName, Region region, ResourceType type)
+    public TextureRegion[] loadFrameRow(final String resName, final Region region,
+            final ResourceType type)
             throws Exception {
-        Texture texture = loadTextureFromFile(resName, type);
-        int x = region.x;
-        int y = region.y;
-        int horizontal = region.width / region.hTile;
-        int vertical = region.height / region.vTile;
-        int hTileSize = region.hTile;
-        int vTileSize = region.vTile;
+        final Texture texture = this.loadTextureFromFile(resName, type);
+        final int x = region.x;
+        final int y = region.y;
+        final int horizontal = region.width / region.hTile;
+        final int vertical = region.height / region.vTile;
+        final int hTileSize = region.hTile;
+        final int vTileSize = region.vTile;
 
-        TextureRegion[] frames = new TextureRegion[horizontal];
+        final TextureRegion[] frames = new TextureRegion[horizontal];
         for (int i = 0; i < horizontal; i++) {
-            frames[i] = new TextureRegion(texture, x + i * hTileSize, y, hTileSize, vTileSize);
+            frames[i] =
+                    new TextureRegion(texture, x + i * hTileSize, y, hTileSize, vTileSize);
         }
 
         return frames;
     }
 
-    public Drawable loadDrawable(String resName, ResourceType type) throws Exception {
-        Texture tex = loadTextureFromFile(resName, type);
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(tex));
+    public Drawable loadDrawable(final String resName, final ResourceType type)
+            throws Exception {
+        final Texture tex = this.loadTextureFromFile(resName, type);
+        final Drawable drawable = new TextureRegionDrawable(new TextureRegion(tex));
         return drawable;
     }
 
-    public Texture[] loadStripTextureFromFile(String resPrefix, ResourceType type, int count)
+    public Texture[] loadStripTextureFromFile(final String resPrefix,
+            final ResourceType type, final int count)
             throws Exception {
-        Texture[] regions = new Texture[count];
+        final Texture[] regions = new Texture[count];
         for (int id = 0; id < count; id++) {
-            regions[id] = loadTextureFromFile(resPrefix + String.valueOf(id), type);
+            regions[id] = this.loadTextureFromFile(resPrefix + String.valueOf(id), type);
         }
 
         return regions;
     }
 
-    public Texture loadTextureFromFile(final String resName, ResourceType type)
+    public Texture loadTextureFromFile(final String resName, final ResourceType type)
             throws Exception {
         String resPath = "";
         switch (type) {
@@ -188,10 +195,11 @@ public class TextureFactory {
             throw new Exception("not supported resource type");
         }
 
-        if (this.pool.containsKey(resPath))
+        if (this.pool.containsKey(resPath)) {
             return this.pool.get(resPath);
+        }
 
-        Texture texture = new Texture(Gdx.files.internal(resPath));
+        final Texture texture = new Texture(Gdx.files.internal(resPath));
         this.pool.put(resPath, texture);
 
         return texture;

@@ -1,15 +1,15 @@
 package com.codebattle.utility;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.codebattle.model.meta.Animation;
 import com.codebattle.model.meta.PointLightMeta;
 import com.codebattle.model.meta.Region;
 import com.codebattle.model.units.Interval;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameConstants {
 
@@ -102,7 +102,7 @@ public class GameConstants {
                     DEFAULT_META_DIR + "heal_animation.xml").getChildByName("animation"));
             WRITE_ANIMMETA = new Animation(XMLUtil.readXMLFromFile(
                     DEFAULT_META_DIR + "write_animation.xml").getChildByName("animation"));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

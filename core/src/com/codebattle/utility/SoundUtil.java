@@ -1,9 +1,9 @@
 package com.codebattle.utility;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+
+import java.util.List;
 
 public class SoundUtil {
 
@@ -15,8 +15,9 @@ public class SoundUtil {
     }
 
     public static void playSES(final List<String> names) {
-        for (String name : names)
+        for (final String name : names) {
             playSE(name);
+        }
     }
 
     public static void playBGS(final String name) {

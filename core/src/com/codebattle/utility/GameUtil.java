@@ -20,7 +20,7 @@ public class GameUtil {
         }
     }
 
-    public static String ownerToString(Owner owner) {
+    public static String ownerToString(final Owner owner) {
         switch (owner) {
         case RED:
             return "Red";
@@ -33,14 +33,15 @@ public class GameUtil {
         }
     }
 
-    public static Direction toDirection(String dir) {
+    public static Direction toDirection(final String dir) {
         if (dir.equals("Right") || dir.equals("R")) {
             return Direction.RIGHT;
         } else if (dir.equals("Left") || dir.equals("L")) {
             return Direction.LEFT;
         } else if (dir.equals("Up") || dir.equals("U")) {
             return Direction.UP;
-        } else
+        } else {
             return Direction.UP;
+        }
     }
 }

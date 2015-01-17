@@ -37,8 +37,9 @@ abstract public class GameObject extends Actor implements Affectable {
     // Operation times
     protected int operation = 0;
 
-    public GameObject(GameStage stage, Owner owner, String source, String name, int id,
-            GameObjectType type, float sx, float sy) {
+    public GameObject(final GameStage stage, final Owner owner, final String source,
+            final String name, final int id,
+            final GameObjectType type, final float sx, final float sy) {
         super();
         this.source = source;
         this.type = type;
@@ -53,9 +54,10 @@ abstract public class GameObject extends Actor implements Affectable {
         this.resetVirtualCoordinate();
     }
 
-    protected void updateVirtualMap(GameObject obj, int newX, int newY) {
-        if (stage.isOutBoundInVirtualMap(newX, newY))
+    protected void updateVirtualMap(final GameObject obj, final int newX, final int newY) {
+        if (this.stage.isOutBoundInVirtualMap(newX, newY)) {
             return;
+        }
         System.out.printf("update object (%d , %d) to (%d , %d)\n", obj.vx, obj.vy, newX,
                 newY);
 
@@ -68,16 +70,16 @@ abstract public class GameObject extends Actor implements Affectable {
         System.out.printf("Restore %s to (%d , %d)\n", this.getName(), this.vx, this.vy);
     }
 
-    public int increaseHP(int diff) {
-        int newValue = (this.properties.hp + diff);
-        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.hp;
-        this.properties.hp = (newValue >= max) ? max : newValue;
+    public int increaseHP(final int diff) {
+        final int newValue = this.properties.hp + diff;
+        final int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.hp;
+        this.properties.hp = newValue >= max ? max : newValue;
         return this.properties.hp;
     }
 
-    public int decreaseHP(int diff) {
-        int newValue = this.properties.hp - diff;
-        this.properties.hp = (newValue >= 0) ? newValue : 0;
+    public int decreaseHP(final int diff) {
+        final int newValue = this.properties.hp - diff;
+        this.properties.hp = newValue >= 0 ? newValue : 0;
         if (this.properties.hp == 0) {
             this.state = GameObjectState.DEATH;
         }
@@ -85,16 +87,16 @@ abstract public class GameObject extends Actor implements Affectable {
         return this.properties.hp;
     }
 
-    public int increaseMP(int diff) {
-        int newValue = (this.properties.mp + diff);
-        int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.mp;
-        this.properties.mp = (newValue >= max) ? max : newValue;
+    public int increaseMP(final int diff) {
+        final int newValue = this.properties.mp + diff;
+        final int max = GameObjectFactory.getInstance().getGameObjectType(this).prop.mp;
+        this.properties.mp = newValue >= max ? max : newValue;
         return this.properties.mp;
     }
 
-    public int decreaseMP(int diff) {
-        int newValue = this.properties.mp - diff;
-        this.properties.mp = (newValue >= 0) ? newValue : 0;
+    public int decreaseMP(final int diff) {
+        final int newValue = this.properties.mp - diff;
+        this.properties.mp = newValue >= 0 ? newValue : 0;
 
         return this.properties.mp;
     }
@@ -108,21 +110,22 @@ abstract public class GameObject extends Actor implements Affectable {
     }
 
     public boolean checkOperation() {
-        return (this.operation < this.type.prop.maxoperation);
+        return this.operation < this.type.prop.maxoperation;
     }
 
-    public boolean isInbounding(int x, int y) {
-        return (x >= 0 && x < this.stage.getMapWidth() && y >= 0 && y < this.stage.getMapHeight()) ? true
+    public boolean isInbounding(final int x, final int y) {
+        return x >= 0 && x < this.stage.getMapWidth() && y >= 0
+                && y < this.stage.getMapHeight() ? true
                 : false;
     }
 
     public boolean isAlive() {
-        return (this.state == GameObjectState.ALIVE);
+        return this.state == GameObjectState.ALIVE;
     }
 
     @Override
     public String getName() {
-        return (this.id == 0) ? super.getName() : super.getName() + String.valueOf(id);
+        return this.id == 0 ? super.getName() : super.getName() + String.valueOf(this.id);
     }
 
     public GameObjectProperties getProp() {
@@ -168,12 +171,12 @@ abstract public class GameObject extends Actor implements Affectable {
         return this.stage;
     }
 
-    public void setVirtualCoordinate(int x, int y) {
+    public void setVirtualCoordinate(final int x, final int y) {
         this.vx = x;
         this.vy = y;
     }
 
-    public void setState(GameObjectState state) {
+    public void setState(final GameObjectState state) {
         this.state = state;
     }
 

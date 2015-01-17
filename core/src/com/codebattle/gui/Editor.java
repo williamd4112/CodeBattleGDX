@@ -26,7 +26,7 @@ public class Editor extends Table implements JSCodeEditorStateListener {
 
     private final TextButton button;
 
-    public Editor(GameStage stage, final Skin skin) {
+    public Editor(final GameStage stage, final Skin skin) {
         super();
         this.stage = stage;
         this.bar = new EditorBar(skin);
@@ -39,7 +39,7 @@ public class Editor extends Table implements JSCodeEditorStateListener {
         this.button = new TextButton("Submit", skin);
     }
 
-    public void addHandler(ClickListener handler) {
+    public void addHandler(final ClickListener handler) {
         this.button.addListener(handler);
     }
 
@@ -47,11 +47,11 @@ public class Editor extends Table implements JSCodeEditorStateListener {
         return this.editor.getText();
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.editor.setText(text);
     }
 
-    public void setDisable(boolean b) {
+    public void setDisable(final boolean b) {
         // this.editor.setDisabled(b);
         this.button.setDisabled(b);
         this.editor.setVisible(!b);
@@ -83,16 +83,24 @@ public class Editor extends Table implements JSCodeEditorStateListener {
                     super.clicked(event, x, y);
                     Editor.this.isShow = !Editor.this.isShow;
                     if (!Editor.this.isShow) {
-                        editorPane.addAction((Actions.sequence(Actions.fadeOut(0.8f),
-                                Actions.hide())));
-                        button.addAction(Actions.sequence(Actions.moveBy(0,
-                                Gdx.graphics.getHeight() - 2 * button.getHeight(), 0.8f),
+                        Editor.this.editorPane.addAction(Actions.sequence(
+                                Actions.fadeOut(0.8f),
+                                Actions.hide()));
+                        Editor.this.button.addAction(Actions.sequence(
+                                Actions.moveBy(
+                                        0,
+                                        Gdx.graphics.getHeight() - 2
+                                                * Editor.this.button.getHeight(), 0.8f),
                                 Actions.hide()));
                     } else {
-                        editorPane.addAction((Actions.sequence(Actions.show(),
-                                Actions.alpha(0.8f, 0.8f))));
-                        button.addAction(Actions.sequence(Actions.show(), Actions.moveBy(0,
-                                -(Gdx.graphics.getHeight() - 2 * button.getHeight()), 0.8f)));
+                        Editor.this.editorPane.addAction(Actions.sequence(Actions.show(),
+                                Actions.alpha(0.8f, 0.8f)));
+                        Editor.this.button.addAction(Actions.sequence(
+                                Actions.show(),
+                                Actions.moveBy(
+                                        0,
+                                        -(Gdx.graphics.getHeight() - 2 * Editor.this.button.getHeight()),
+                                        0.8f)));
                     }
                 }
 
@@ -109,19 +117,19 @@ public class Editor extends Table implements JSCodeEditorStateListener {
     }
 
     @Override
-    public void onCursorExceedHeight(int lines) {
+    public void onCursorExceedHeight(final int lines) {
         this.editorPane.setScrollY(100);
 
     }
 
     @Override
-    public void onCursorExceedWidth(float width) {
+    public void onCursorExceedWidth(final float width) {
         this.editorPane.setScrollX(100);
 
     }
 
     @Override
-    public void onCursorChange(JSCodeEditorMode mode, int col, int row) {
+    public void onCursorChange(final JSCodeEditorMode mode, final int col, final int row) {
         this.editorStateBar.setText(String.format("%s   Row: %d Col: %d", mode.name(), row,
                 col));
     }

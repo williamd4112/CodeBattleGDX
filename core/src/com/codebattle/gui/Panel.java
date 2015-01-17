@@ -15,15 +15,15 @@ import com.codebattle.utility.TextureFactory;
 
 public class Panel extends BasePanel {
     private Texture portrait;
-    private Image image;
-    private StateTable stateTable;
-    private APIList apiList;
-    private Label nameInfo;
-    private Label positionInfo;
+    private final Image image;
+    private final StateTable stateTable;
+    private final APIList apiList;
+    private final Label nameInfo;
+    private final Label positionInfo;
 
     private StateShowable showable;
 
-    public Panel(Skin skin) {
+    public Panel(final Skin skin) {
         super(skin);
         this.image = new Image();
         this.image.setScaling(Scaling.fit);
@@ -34,40 +34,41 @@ public class Panel extends BasePanel {
         this.positionInfo = new Label("", skin);
     }
 
-    public void resize(int width, int height) {
+    public void resize(final int width, final int height) {
         this.reset();
         this.setDebug(true);
         this.stateTable.resize(width, height);
         this.apiList.resize(width, height);
-        this.add(nameInfo);
-        this.add(positionInfo)
+        this.add(this.nameInfo);
+        this.add(this.positionInfo)
                 .row();
-        this.add(image)
+        this.add(this.image)
                 .prefSize(width * 0.1f)
                 .pad(5)
                 .left()
                 .fill();
-        this.add(stateTable)
+        this.add(this.stateTable)
                 .padLeft(width * 0.01f)
                 .padRight(width * 0.01f)
                 .left();
-        this.add(apiList)
+        this.add(this.apiList)
                 .left();
         this.pad(5);
     }
 
-    public void setImage(String source) {
+    public void setImage(final String source) {
         try {
             this.portrait = TextureFactory.getInstance()
                     .loadTextureFromFile(source + "_portrait", ResourceType.PORTRAIT);
-            Drawable drawable = new TextureRegionDrawable(new TextureRegion(this.portrait));
+            final Drawable drawable =
+                    new TextureRegionDrawable(new TextureRegion(this.portrait));
             this.image.setDrawable(drawable);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setAPI(Class type) {
+    public void setAPI(final Class type) {
         if (type == GameActor.class) {
             this.apiList.setAPIList(GameConstants.API_GAMEACTOR);
         } else {
@@ -79,13 +80,14 @@ public class Panel extends BasePanel {
         this.apiList.resetAPIList();
     }
 
-    public void setShowable(StateShowable showable) {
+    public void setShowable(final StateShowable showable) {
         this.showable = showable;
-        Drawable d = this.showable.getPortrait();
-        if (d != null)
+        final Drawable d = this.showable.getPortrait();
+        if (d != null) {
             this.image.setDrawable(d);
-        else
+        } else {
             this.setImage("default");
+        }
         this.stateTable.setKeys(showable.getKeys());
         this.stateTable.setValues(showable.getValues());
         this.setAPI(showable.getClass());

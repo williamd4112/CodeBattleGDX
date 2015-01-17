@@ -16,13 +16,14 @@ public class VirtualMap {
     final public TiledMap map;
     final public MapProperties mapProperties;
 
-    private VirtualCell[][] virtualCells;
+    private final VirtualCell[][] virtualCells;
 
-    public VirtualMap(GameStage stage, TiledMap map) {
+    public VirtualMap(final GameStage stage, final TiledMap map) {
         this.stage = stage;
         this.map = map;
         this.mapProperties = map.getProperties();
-        this.virtualCells = new VirtualCell[this.stage.getMapHeight()][this.stage.getMapWidth()];
+        this.virtualCells =
+                new VirtualCell[this.stage.getMapHeight()][this.stage.getMapWidth()];
         this.initVirtualMap();
     }
 
@@ -30,27 +31,30 @@ public class VirtualMap {
      * Initialize virtual map
      */
     public void initVirtualMap() {
-        MapLayers layers = this.map.getLayers();
-        for (MapLayer layer : layers) {
-            TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
-            if (tLayer.getName().equals("dye"))
+        final MapLayers layers = this.map.getLayers();
+        for (final MapLayer layer : layers) {
+            final TiledMapTileLayer tLayer = (TiledMapTileLayer) layer;
+            if (tLayer.getName().equals("dye")) {
                 continue;
+            }
             this.scanLayer(tLayer);
         }
     }
 
-    private void scanLayer(TiledMapTileLayer tLayer) {
+    private void scanLayer(final TiledMapTileLayer tLayer) {
         for (int row = 0; row < this.stage.getMapHeight(); row++) {
             for (int col = 0; col < this.stage.getMapWidth(); col++) {
-                if (this.virtualCells[row][col] == null)
+                if (this.virtualCells[row][col] == null) {
                     this.virtualCells[row][col] = new VirtualCell(null, col, row, true);
+                }
 
-                Cell cell = tLayer.getCell(col, row);
-                if (cell == null)
+                final Cell cell = tLayer.getCell(col, row);
+                if (cell == null) {
                     continue;
+                }
 
-                TiledMapTile tile = cell.getTile();
-                String prop = tile.getProperties().get("passiable", String.class);
+                final TiledMapTile tile = cell.getTile();
+                final String prop = tile.getProperties().get("passiable", String.class);
                 if (prop == null) {
                     this.virtualCells[row][col].setPassiable(true);
                 } else if (prop.equals("0")) {
@@ -68,15 +72,16 @@ public class VirtualMap {
     public void resetVirtualMap() {
         this.clearVirtualMap();
         // Reset the object on the cell
-        for (GameObject actor : this.stage.getGroupByType(GameObject.class)) {
-            int cellRow = actor.getVY();
-            int cellCol = actor.getVX();
+        for (final GameObject actor : this.stage.getGroupByType(GameObject.class)) {
+            final int cellRow = actor.getVY();
+            final int cellCol = actor.getVX();
 
             // Clear the dead objects
-            if (actor.isAlive())
+            if (actor.isAlive()) {
                 this.virtualCells[cellRow][cellCol].setObject(actor, cellCol, cellRow);
-            else
+            } else {
                 this.stage.emitDestroyedEvent(actor);
+            }
 
         }
         System.out.println("------Reset completed------");
@@ -87,20 +92,20 @@ public class VirtualMap {
      * set actors virtual coordinate according its real coordinate
      */
     public void resetActorsVirtualCoordinate() {
-        for (GameActor actor : this.stage.getGroupByType(GameActor.class)) {
+        for (final GameActor actor : this.stage.getGroupByType(GameActor.class)) {
             actor.resetVirtualCoordinate();
         }
     }
 
     public void resetActorsCulmuSteps() {
-        for (MoveableGameObject actor : this.stage.getGroupByType(MoveableGameObject.class)) {
+        for (final MoveableGameObject actor : this.stage.getGroupByType(MoveableGameObject.class)) {
             // System.out.println("Reset steps on " + actor.getName());
             actor.resetCulmuSteps();
         }
     }
 
     public void resetObjectOperation() {
-        for (GameObject obj : this.stage.getGroupByType(GameObject.class)) {
+        for (final GameObject obj : this.stage.getGroupByType(GameObject.class)) {
             obj.resetOperation();
         }
     }
@@ -124,7 +129,7 @@ public class VirtualMap {
      * @param newX
      * @param newY
      */
-    public void updateVirtualMap(GameObject obj, int newX, int newY) {
+    public void updateVirtualMap(final GameObject obj, final int newX, final int newY) {
         this.virtualCells[obj.vy][obj.vx].removeObject(obj.vx, obj.vy);
         this.virtualCells[newY][newX].setObject(obj, newX, newY);
         obj.setVirtualCoordinate(newX, newY);
@@ -136,23 +141,25 @@ public class VirtualMap {
     public void preUpdate() {
         System.out.println("Pre-Update");
         // Update cell
-        for (VirtualCell[] row : this.virtualCells) {
-            for (VirtualCell cell : row) {
+        for (final VirtualCell[] row : this.virtualCells) {
+            for (final VirtualCell cell : row) {
                 cell.onUpdate();
-                if (cell.getObject() != null)
+                if (cell.getObject() != null) {
                     cell.getObject().increaseMP(2);
+                }
             }
         }
 
-        for (ScriptableObject obj : this.stage.getGroupByType(ScriptableObject.class))
+        for (final ScriptableObject obj : this.stage.getGroupByType(ScriptableObject.class)) {
             obj.onUpdate();
+        }
     }
 
-    public boolean isPassiable(int x, int y) {
+    public boolean isPassiable(final int x, final int y) {
         return this.virtualCells[y][x].isPassible();
     }
 
-    public VirtualCell getCell(int x, int y) {
+    public VirtualCell getCell(final int x, final int y) {
         return this.virtualCells[y][x];
     }
 
