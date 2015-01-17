@@ -14,26 +14,28 @@ public class Events {
      * @throws SecurityException
      * @throws NoSuchMethodException
      */
-    public static GameEvent create(GameStage stage, XmlReader.Element eventElement)
-            throws NoSuchMethodException, SecurityException {
-        String eventName = eventElement.getAttribute("name");
-        String trigger = eventElement.getAttribute("trigger");
-        String type = eventElement.getAttribute("type");
+    public static GameEvent
+            create(final GameStage stage, final XmlReader.Element eventElement)
+                    throws NoSuchMethodException, SecurityException {
+        final String eventName = eventElement.getAttribute("name");
+        final String trigger = eventElement.getAttribute("trigger");
+        final String type = eventElement.getAttribute("type");
 
-        GameEvent event = new GameEvent(stage, eventName, trigger, toGameEventType(type));
+        final GameEvent event =
+                new GameEvent(stage, eventName, trigger, toGameEventType(type));
 
         // Bind a list of condition
-        XmlReader.Element conditionElement = eventElement.getChildByName("condition");
-        for (XmlReader.Element conditionMethodElement : conditionElement.getChildrenByName("method")) {
-            GameMethod condition = new GameMethod(conditionMethodElement);
+        final XmlReader.Element conditionElement = eventElement.getChildByName("condition");
+        for (final XmlReader.Element conditionMethodElement : conditionElement.getChildrenByName("method")) {
+            final GameMethod condition = new GameMethod(conditionMethodElement);
             condition.bind("Stage", stage);
             event.addConditionMethod(condition);
         }
 
         // Bind a list of effect
-        XmlReader.Element effectElement = eventElement.getChildByName("effect");
-        for (XmlReader.Element effectMethodElement : effectElement.getChildrenByName("method")) {
-            GameMethod effect = new GameMethod(effectMethodElement);
+        final XmlReader.Element effectElement = eventElement.getChildByName("effect");
+        for (final XmlReader.Element effectMethodElement : effectElement.getChildrenByName("method")) {
+            final GameMethod effect = new GameMethod(effectMethodElement);
             effect.bind("Stage", stage);
             event.addEffectMethod(effect);
         }
@@ -41,12 +43,13 @@ public class Events {
         return event;
     }
 
-    public static GameEventType toGameEventType(String type) {
-        if (type.equals("FOREVER"))
+    public static GameEventType toGameEventType(final String type) {
+        if (type.equals("FOREVER")) {
             return GameEventType.FOREVER;
-        else if (type.equals("ONCE"))
+        } else if (type.equals("ONCE")) {
             return GameEventType.ONCE;
-        else
+        } else {
             return GameEventType.ONCE;
+        }
     }
 }

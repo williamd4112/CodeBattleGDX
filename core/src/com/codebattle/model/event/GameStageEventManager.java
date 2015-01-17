@@ -1,15 +1,15 @@
 package com.codebattle.model.event;
 
+import com.codebattle.model.GameObject;
+import com.codebattle.model.GameStage;
+import com.codebattle.model.VirtualMap;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.codebattle.model.GameObject;
-import com.codebattle.model.GameStage;
-import com.codebattle.model.VirtualMap;
 
 public class GameStageEventManager implements GameStageEventListener {
     final public GameStage stage;
@@ -19,7 +19,7 @@ public class GameStageEventManager implements GameStageEventListener {
     // Classify the events to a corresponding list
     private Map<String, List<GameEvent>> eventListMap;
 
-    public GameStageEventManager(GameStage stage) {
+    public GameStageEventManager(final GameStage stage) {
         this.stage = stage;
         this.initEventsMap();
     }
@@ -31,30 +31,30 @@ public class GameStageEventManager implements GameStageEventListener {
     }
 
     @Override
-    public void onGameObjectDestroyed(GameObject obj) {
+    public void onGameObjectDestroyed(final GameObject obj) {
         System.out.println("EventManager_onGameObjectDestroyed: " + obj.getName());
         this.handleEvent("onGameObjectDestroyed");
     }
 
     @Override
-    public void onVirtualMapUpdate(VirtualMap map) {
+    public void onVirtualMapUpdate(final VirtualMap map) {
         System.out.println("EventManager_onVirualMapUpdate");
         this.handleEvent("onVirtualMapUpdate");
     }
 
     @Override
-    public void onRoundComplete(GameStage stage) {
+    public void onRoundComplete(final GameStage stage) {
         System.out.println("EventManager_onRoundComplete");
         this.handleEvent("onRoundComplete");
 
     }
 
-    public void addGameEvent(GameEvent e) {
-        String type = e.getTrigger();
+    public void addGameEvent(final GameEvent e) {
+        final String type = e.getTrigger();
         if (this.eventListMap.containsKey(type)) {
             this.eventListMap.get(type)
                     .add(e);
-            e.setID(id++);
+            e.setID(this.id++);
         }
     }
 
@@ -69,25 +69,26 @@ public class GameStageEventManager implements GameStageEventListener {
         this.eventListMap.put("onRoundComplete", new ArrayList<GameEvent>());
     }
 
-    private void handleEvent(String type) {
+    private void handleEvent(final String type) {
         try {
-            List<GameEvent> list = this.eventListMap.get(type);
-            Iterator<GameEvent> it = list.iterator();
+            final List<GameEvent> list = this.eventListMap.get(type);
+            final Iterator<GameEvent> it = list.iterator();
             while (it.hasNext()) {
-                GameEvent e = it.next();
+                final GameEvent e = it.next();
                 if (e.validate()) {
                     e.execute();
-                    if (e.getGameEventType() == GameEventType.ONCE)
+                    if (e.getGameEventType() == GameEventType.ONCE) {
                         it.remove();
+                    }
                 }
             }
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

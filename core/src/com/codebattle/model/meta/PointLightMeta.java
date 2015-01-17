@@ -11,7 +11,7 @@ public class PointLightMeta {
     public int y;
     public int radius;
 
-    public PointLightMeta(XmlReader.Element lightElement) {
+    public PointLightMeta(final XmlReader.Element lightElement) {
         this.color = Color.valueOf(lightElement.getAttribute("color"));
         this.radius = Integer.parseInt(lightElement.getAttribute("radius"));
         this.x = Integer.parseInt(lightElement.getAttribute("x")) * GameConstants.CELL_SIZE

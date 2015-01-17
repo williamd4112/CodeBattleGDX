@@ -13,8 +13,9 @@ public class GameObjectProperties {
     public int maxsteps;
     public int maxoperation;
 
-    public GameObjectProperties(String type, int hp, int mp, int atk, int def, int range,
-            int minrange, int maxsteps, int operation) {
+    public GameObjectProperties(final String type, final int hp, final int mp, final int atk,
+            final int def, final int range,
+            final int minrange, final int maxsteps, final int operation) {
         this.typeName = type;
         this.hp = hp;
         this.mp = mp;
@@ -26,7 +27,7 @@ public class GameObjectProperties {
         this.maxoperation = operation;
     }
 
-    public GameObjectProperties(XmlReader.Element type) {
+    public GameObjectProperties(final XmlReader.Element type) {
         this.typeName = type.getAttribute("name");
         this.hp = Integer.parseInt(type.getChildByName("hp").getText());
         this.mp = Integer.parseInt(type.getChildByName("mp").getText());
@@ -39,13 +40,14 @@ public class GameObjectProperties {
 
     }
 
-    public GameObjectProperties(GameObjectProperties prop) {
+    public GameObjectProperties(final GameObjectProperties prop) {
         this(prop.typeName, prop.hp, prop.mp, prop.atk, prop.def, prop.range, prop.minrange,
                 prop.maxsteps, prop.maxoperation);
     }
 
     public String[] getPropertyArray() {
-        return new String[] { String.valueOf(hp), String.valueOf(mp), String.valueOf(atk),
-                String.valueOf(def), String.valueOf(range) };
+        return new String[] { String.valueOf(this.hp), String.valueOf(this.mp),
+                String.valueOf(this.atk),
+                String.valueOf(this.def), String.valueOf(this.range) };
     }
 }

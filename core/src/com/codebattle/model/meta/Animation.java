@@ -9,13 +9,13 @@ public class Animation {
     public int interval;
     public Region region;
 
-    public Animation(XmlReader.Element animationElement) {
+    public Animation(final XmlReader.Element animationElement) {
         this.type = animationElement.getAttribute("class");
         this.source = animationElement.getAttribute("source");
         this.repeat = Integer.parseInt(animationElement.getAttribute("duration"));
         this.interval = Integer.parseInt(animationElement.getAttribute("interval"));
 
-        XmlReader.Element regionElement = animationElement.getChildByName("region");
+        final XmlReader.Element regionElement = animationElement.getChildByName("region");
         this.region = new Region(regionElement);
     }
 }

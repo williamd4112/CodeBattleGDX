@@ -14,7 +14,7 @@ public class OnAttackAnimation extends BaseAnimation {
     final public GameObject obj;
     final public SequenceAction action;
 
-    public OnAttackAnimation(GameObject obj) {
+    public OnAttackAnimation(final GameObject obj) {
         this.obj = obj;
         this.action = Actions.sequence(
                 Actions.repeat(8,
@@ -23,12 +23,12 @@ public class OnAttackAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(final float delta) {
 
     }
 
     @Override
-    public void draw(Batch batch, Camera camera, float delta) {
+    public void draw(final Batch batch, final Camera camera, final float delta) {
         // TODO Auto-generated method stub
 
     }
@@ -47,7 +47,7 @@ public class OnAttackAnimation extends BaseAnimation {
     public void setup() {
         this.obj.addAction(Actions.color(new Color(Color.RED.r, Color.RED.g, Color.RED.b,
                 0.5f)));
-        this.obj.addAction(action);
+        this.obj.addAction(this.action);
         SoundUtil.playSE(GameConstants.INJURE_SE);
     }
 

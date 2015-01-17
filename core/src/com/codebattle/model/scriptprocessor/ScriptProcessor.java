@@ -1,13 +1,13 @@
 package com.codebattle.model.scriptprocessor;
 
-import javax.script.ScriptException;
-
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.GameState;
 import com.codebattle.model.Owner;
 import com.codebattle.model.gameactor.GameActor;
 import com.codebattle.model.gameactor.GameActorProxy;
+
+import javax.script.ScriptException;
 
 /**
  * Script processor.
@@ -29,10 +29,10 @@ public class ScriptProcessor extends BaseScriptProcessor {
 
         System.out.println("ScriptProcessor put object : ");
         this.engine.put("vs", this.stage.getVirtualSystems()[currentPlayer.index]);
-        for (GameObject obj : this.stage.getGameObjectsByOwner(currentPlayer)) {
+        for (final GameObject obj : this.stage.getGameObjectsByOwner(currentPlayer)) {
             System.out.println(obj.getName());
             if (obj instanceof GameActor) {
-                GameActorProxy proxy = new GameActorProxy((GameActor) obj);
+                final GameActorProxy proxy = new GameActorProxy((GameActor) obj);
                 this.engine.put(proxy.getAlias(), proxy);
             } else {
                 this.engine.put(obj.getName(), obj);

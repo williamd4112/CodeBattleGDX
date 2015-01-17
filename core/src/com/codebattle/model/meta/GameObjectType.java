@@ -1,24 +1,24 @@
 package com.codebattle.model.meta;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.gameactor.GameObjectProperties;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameObjectType {
-    private String name;
-    private int level;
+    private final String name;
+    private final int level;
     public boolean through;
     public int cost;
     public GameObjectProperties prop;
     public Region region;
-    private Attack attack;
-    private Skill skill;
+    private final Attack attack;
+    private final Skill skill;
 
-    private List<String> selectSoundList;
+    private final List<String> selectSoundList;
 
-    public GameObjectType(XmlReader.Element type) throws NoSuchMethodException,
+    public GameObjectType(final XmlReader.Element type) throws NoSuchMethodException,
             SecurityException {
         // Read type name
         this.name = type.getAttribute("name");
@@ -37,16 +37,16 @@ public class GameObjectType {
 
         // Read selct_sound name
         this.selectSoundList = new LinkedList<String>();
-        for (XmlReader.Element soundElement : type.getChildrenByName("sound")) {
+        for (final XmlReader.Element soundElement : type.getChildrenByName("sound")) {
             this.selectSoundList.add(soundElement.getText());
         }
 
         // Read actors movement animation region
-        XmlReader.Element regionElement = type.getChildByName("region");
+        final XmlReader.Element regionElement = type.getChildByName("region");
         this.region = new Region(regionElement);
 
         // Read actor attack
-        XmlReader.Element attackElement = type.getChildByName("attack");
+        final XmlReader.Element attackElement = type.getChildByName("attack");
         this.attack = new Attack(attackElement);
 
         // Read actor skill

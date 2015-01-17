@@ -1,10 +1,10 @@
 package com.codebattle.model.animation;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @update: change some properties in a fix period

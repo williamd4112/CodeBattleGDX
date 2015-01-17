@@ -1,22 +1,22 @@
 package com.codebattle.model.meta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.model.GameObject;
 import com.codebattle.utility.XMLUtil;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Skill {
     public Animation animMeta;
-    private List<String> soundNames;
-    private int range;
-    private int cost;
+    private final List<String> soundNames;
+    private final int range;
+    private final int cost;
 
-    private List<GameMethod> methods;
+    private final List<GameMethod> methods;
 
-    public Skill(XmlReader.Element skillElement) throws NoSuchMethodException,
+    public Skill(final XmlReader.Element skillElement) throws NoSuchMethodException,
             SecurityException {
         this.methods = new LinkedList<GameMethod>();
 
@@ -28,7 +28,7 @@ public class Skill {
 
         // Read sound element
         this.soundNames = new LinkedList<String>();
-        for (XmlReader.Element soundElement : skillElement.getChildrenByName("sound")) {
+        for (final XmlReader.Element soundElement : skillElement.getChildrenByName("sound")) {
             this.soundNames.add(soundElement.getText());
         }
 
@@ -36,15 +36,16 @@ public class Skill {
         this.range = Integer.parseInt(skillElement.getAttribute("range"));
 
         // Read method element
-        for (XmlReader.Element methodElement : skillElement.getChildrenByName("method")) {
+        for (final XmlReader.Element methodElement : skillElement.getChildrenByName("method")) {
             this.methods.add(new GameMethod(methodElement));
         }
 
     }
 
-    public void execute(GameObject target, GameObject emitter, int x, int y) {
+    public void execute(final GameObject target, final GameObject emitter, final int x,
+            final int y) {
         try {
-            for (GameMethod m : methods) {
+            for (final GameMethod m : this.methods) {
                 m.bind("Target", target);
                 m.bind("tx", x);
                 m.bind("ty", y);
@@ -54,12 +55,12 @@ public class Skill {
                 m.bind("Source", emitter.getOwner());
                 m.execute();
             }
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

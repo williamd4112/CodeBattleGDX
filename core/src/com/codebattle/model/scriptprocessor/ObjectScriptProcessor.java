@@ -1,14 +1,14 @@
 package com.codebattle.model.scriptprocessor;
 
-import javax.script.ScriptException;
-
 import com.codebattle.model.levelobject.ScriptableObject;
+
+import javax.script.ScriptException;
 
 public class ObjectScriptProcessor extends BaseScriptProcessor {
 
-    private ScriptableObject obj;
+    private final ScriptableObject obj;
 
-    public ObjectScriptProcessor(ScriptableObject obj) {
+    public ObjectScriptProcessor(final ScriptableObject obj) {
         super();
         this.obj = obj;
         this.engine.put("self", obj);
@@ -17,8 +17,8 @@ public class ObjectScriptProcessor extends BaseScriptProcessor {
     @Override
     public boolean run() {
         try {
-            this.engine.eval(script);
-        } catch (ScriptException e) {
+            this.engine.eval(this.script);
+        } catch (final ScriptException e) {
             e.printStackTrace();
             return false;
         }

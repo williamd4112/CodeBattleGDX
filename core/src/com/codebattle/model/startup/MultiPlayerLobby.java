@@ -1,12 +1,5 @@
 package com.codebattle.model.startup;
 
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -23,28 +16,35 @@ import com.codebattle.scene.StartupScene;
 import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.NetworkManager;
 
+import org.json.JSONObject;
+
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MultiPlayerLobby extends SelectionStage implements PeerListener {
 
-    private Client client;
+    private final Client client;
 
     private Map<Object, Object> rooms;
 
-    private TextButton btn_refresh;
-    private TextButton btn_create;
-    private TextButton btn_join;
+    private final TextButton btn_refresh;
+    private final TextButton btn_create;
+    private final TextButton btn_join;
 
     private MultiPlayerRoom room = null;
 
-    public MultiPlayerLobby(StartupScene parent) {
+    public MultiPlayerLobby(final StartupScene parent) {
         super(parent);
         this.client = NetworkManager.getInstance().getClient();
         this.btn_refresh = new TextButton("Refresh", GameConstants.DEFAULT_SKIN);
         this.btn_refresh.addListener(new ClickListener() {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
-                refresh();
+                MultiPlayerLobby.this.refresh();
             }
 
         });
@@ -53,9 +53,9 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
         this.btn_create.addListener(new ClickListener() {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
-                popCreateRoomDialog();
+                MultiPlayerLobby.this.popCreateRoomDialog();
             }
 
         });
@@ -64,16 +64,17 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
         this.btn_join.addListener(new ClickListener() {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
-                joinRoom(list.getSelected().toString());
+                MultiPlayerLobby.this.joinRoom(MultiPlayerLobby.this.list.getSelected()
+                        .toString());
             }
 
         });
 
-        this.topbar.addActor(btn_refresh);
-        this.topbar.addActor(btn_create);
-        this.topbar.addActor(btn_join);
+        this.topbar.addActor(this.btn_refresh);
+        this.topbar.addActor(this.btn_create);
+        this.topbar.addActor(this.btn_join);
 
         this.rooms = new HashMap<Object, Object>();
         this.connect();
@@ -85,21 +86,23 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
             @Override
             public void run() {
                 try {
-                    Message msg = new Message(rawMessage);
+                    final Message msg = new Message(rawMessage);
                     if (msg.type.equals("Server")) {
                         if (msg.opt.equals("List")) {
-                            rooms = DataHandler.JsonToMap((JSONObject) msg.data);
-                            setRoomListItems(rooms);
+                            MultiPlayerLobby.this.rooms =
+                                    DataHandler.JsonToMap((JSONObject) msg.data);
+                            MultiPlayerLobby.this.setRoomListItems(MultiPlayerLobby.this.rooms);
                         } else if (msg.opt.equals("Success")) {
                             if (msg.data.equals("CreateRoom") || msg.data.equals("Join")) {
-                                room = new MultiPlayerRoom(MultiPlayerLobby.this);
-                                room.getTeam();
-                                room.getPlayerState();
-                                parent.setStage(room);
+                                MultiPlayerLobby.this.room =
+                                        new MultiPlayerRoom(MultiPlayerLobby.this);
+                                MultiPlayerLobby.this.room.getTeam();
+                                MultiPlayerLobby.this.room.getPlayerState();
+                                MultiPlayerLobby.this.parent.setStage(MultiPlayerLobby.this.room);
                             }
                         }
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -107,13 +110,13 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
     }
 
     @Override
-    public void onConnected(Socket socket) {
+    public void onConnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onDisconnected(Socket socket) {
+    public void onDisconnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
@@ -121,47 +124,49 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
     public void connect() {
         // Create Client
         try {
-            client.addPeerListener(this);
-            client.send(DataHandler.loginServer("Williamd").toString());
-            client.send(DataHandler.requestRoomList().toString());
-        } catch (Exception e) {
+            this.client.addPeerListener(this);
+            this.client.send(DataHandler.loginServer("Williamd").toString());
+            this.client.send(DataHandler.requestRoomList().toString());
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     public void refresh() {
         try {
-            client.send(DataHandler.requestRoomList().toString());
-        } catch (Exception e) {
+            this.client.send(DataHandler.requestRoomList().toString());
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void createRoom(String name) {
+    public void createRoom(final String name) {
         try {
-            client.send(DataHandler.createRoom(name).toString());
-        } catch (Exception e) {
+            this.client.send(DataHandler.createRoom(name).toString());
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void joinRoom(String key) {
+    public void joinRoom(final String key) {
         try {
-            client.send(DataHandler.joinRoom(key).toString());
-        } catch (Exception e) {
+            this.client.send(DataHandler.joinRoom(key).toString());
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     public void popCreateRoomDialog() {
-        CreateRoomDialog dlg = new CreateRoomDialog("Create Room", GameConstants.DEFAULT_SKIN);
+        final CreateRoomDialog dlg =
+                new CreateRoomDialog("Create Room", GameConstants.DEFAULT_SKIN);
         dlg.show(this);
     }
 
-    public void setRoomListItems(Map<Object, Object> map) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        for (Object key : map.keySet())
+    public void setRoomListItems(final Map<Object, Object> map) {
+        final ArrayList<Object> list = new ArrayList<Object>();
+        for (final Object key : map.keySet()) {
             list.add(key);
+        }
         this.list.setItems(list.toArray());
     }
 
@@ -171,13 +176,13 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
 
     private class CreateRoomDialog extends Dialog {
 
-        private TextField txt_RoomName;
-        private TextButton btn_confirm;
-        private TextButton btn_cancel;
+        private final TextField txt_RoomName;
+        private final TextButton btn_confirm;
+        private final TextButton btn_cancel;
 
-        private DialogButtonHandler handler;
+        private final DialogButtonHandler handler;
 
-        public CreateRoomDialog(String title, Skin skin) {
+        public CreateRoomDialog(final String title, final Skin skin) {
             super(title, skin);
             this.txt_RoomName = new TextField("Room01", skin);
             this.btn_confirm = new TextButton("Confirm", skin);
@@ -188,30 +193,30 @@ public class MultiPlayerLobby extends SelectionStage implements PeerListener {
         }
 
         public void setupListener() {
-            this.btn_confirm.addListener(handler);
-            this.btn_cancel.addListener(handler);
+            this.btn_confirm.addListener(this.handler);
+            this.btn_cancel.addListener(this.handler);
         }
 
         public void setupLayout() {
             this.pad(20);
             this.row();
             this.add(this.txt_RoomName).center().colspan(2).row();
-            this.add(btn_confirm);
-            this.add(btn_cancel);
+            this.add(this.btn_confirm);
+            this.add(this.btn_cancel);
         }
 
         private class DialogButtonHandler extends ClickListener {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
-                if (event.getListenerActor() == btn_confirm) {
-                    if (txt_RoomName != null) {
-                        MultiPlayerLobby.this.createRoom(txt_RoomName.getText());
+                if (event.getListenerActor() == CreateRoomDialog.this.btn_confirm) {
+                    if (CreateRoomDialog.this.txt_RoomName != null) {
+                        MultiPlayerLobby.this.createRoom(CreateRoomDialog.this.txt_RoomName.getText());
                         CreateRoomDialog.this.addAction(Actions.sequence(
                                 Actions.fadeOut(0.2f), Actions.removeActor()));
                     }
-                } else if (event.getListenerActor() == btn_cancel) {
+                } else if (event.getListenerActor() == CreateRoomDialog.this.btn_cancel) {
                     CreateRoomDialog.this.addAction(Actions.sequence(Actions.fadeOut(0.2f),
                             Actions.removeActor()));
                 }

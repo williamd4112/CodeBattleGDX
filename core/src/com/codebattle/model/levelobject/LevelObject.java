@@ -24,17 +24,20 @@ import com.codebattle.utility.SoundUtil;
 
 public class LevelObject extends ScriptableObject implements StateShowable {
 
-    private TextureRegion[] frames;
-    private FrameTimer timer;
+    private final TextureRegion[] frames;
+    private final FrameTimer timer;
 
     // Optional
     private PointLight light = null;
     private PointLightMeta lightMeta = null;
     private Oscillator oscillator = null;
 
-    public LevelObject(GameStage stage, Owner owner, String source, String name, int id,
-            GameObjectType type, TextureRegion[] frames, PointLightMeta lightMeta, float sx,
-            float sy, int maxsteps, String readonlyScript, boolean isFixed) {
+    public LevelObject(final GameStage stage, final Owner owner, final String source,
+            final String name, final int id,
+            final GameObjectType type, final TextureRegion[] frames,
+            final PointLightMeta lightMeta, final float sx,
+            final float sy, final int maxsteps, final String readonlyScript,
+            final boolean isFixed) {
         super(stage, owner, source, name, id, type, sx, sy, maxsteps, readonlyScript, isFixed);
         this.frames = frames;
         this.timer = new FrameTimer(10, frames.length - 1);
@@ -52,31 +55,32 @@ public class LevelObject extends ScriptableObject implements StateShowable {
     }
 
     @Override
-    public void act(float delta) {
+    public void act(final float delta) {
         super.act(delta);
         this.timer.act();
 
         if (this.light != null) {
-            this.light.setDistance(this.lightMeta.radius + oscillator.getValue());
+            this.light.setDistance(this.lightMeta.radius + this.oscillator.getValue());
             this.light.setPosition(this.getCenterX(), this.getCenterY());
         }
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(final Batch batch, final float parentAlpha) {
         super.draw(batch, parentAlpha);
-        Color color = batch.getColor();
+        final Color color = batch.getColor();
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, parentAlpha
                 * this.getColor().a);
-        batch.draw(this.frames[timer.getFrame()], this.getX(), this.getY());
+        batch.draw(this.frames[this.timer.getFrame()], this.getX(), this.getY());
         batch.setColor(color);
     }
 
     @Override
-    public void attack(int x, int y) {
+    public void attack(final int x, final int y) {
         // Suicide avoiding
-        if (this.vx == x && this.vy == y)
+        if (this.vx == x && this.vy == y) {
             return;
+        }
 
         // Check in-range
         System.out.printf("attack@%s: ", this.getName());
@@ -86,28 +90,29 @@ public class LevelObject extends ScriptableObject implements StateShowable {
     }
 
     @Override
-    public void skill(int x, int y) {
+    public void skill(final int x, final int y) {
         // TODO Auto-generated method stub
 
     }
 
-    public boolean isInRange(int x, int y) {
-        return isInRange(this.properties.range, x, y);
+    public boolean isInRange(final int x, final int y) {
+        return this.isInRange(this.properties.range, x, y);
     }
 
-    public boolean isInRange(int range, int x, int y) {
-        int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
-        return (distance <= range) ? true : false;
+    public boolean isInRange(final int range, final int x, final int y) {
+        final int distance =
+                (int) Math.sqrt(Math.pow(x - this.vx, 2) + Math.pow(y - this.vy, 2));
+        return distance <= range ? true : false;
     }
 
     @Override
-    public void interact(int x, int y) {
+    public void interact(final int x, final int y) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onSelected(Owner owner) {
+    public void onSelected(final Owner owner) {
         SoundUtil.playSE(GameConstants.ONSELECT_SE);
 
     }
@@ -118,18 +123,18 @@ public class LevelObject extends ScriptableObject implements StateShowable {
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public void onAttacked(final Attack attack) {
         this.stage.addAnimation(new OnAttackAnimation(this));
         this.transmitDamage(attack.getATK());
     }
 
     @Override
-    public void onSkill(Skill skill, GameObject emitter) {
+    public void onSkill(final Skill skill, final GameObject emitter) {
         // System.out.println("onSkill: " + skill.animMeta.source);
         skill.execute(this, emitter, this.vx, this.vy);
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(final String owner) {
         this.owner = GameUtil.toOwner(owner);
     }
 
@@ -138,13 +143,15 @@ public class LevelObject extends ScriptableObject implements StateShowable {
                 GameConstants.VIRTUAL_SYSTEM_RESOURCE_ADDING, this);
     }
 
-    public void transmitDamage(int damage) {
-        this.stage.getVirtualSystem(owner).decreaseLift(damage);
+    public void transmitDamage(final int damage) {
+        this.stage.getVirtualSystem(this.owner).decreaseLift(damage);
     }
 
     public void scan() {
-        int lbx = this.vx - this.properties.range, lby = this.vy - this.properties.range;
-        int rtx = this.vx + this.properties.range, rty = this.vy + this.properties.range;
+        final int lbx = this.vx - this.properties.range, lby =
+                this.vy - this.properties.range;
+        final int rtx = this.vx + this.properties.range, rty =
+                this.vy + this.properties.range;
         for (int y = lby; y < rty; y++) {
             for (int x = lbx; x < rtx; x++) {
                 this.attack(x, y);
@@ -152,30 +159,32 @@ public class LevelObject extends ScriptableObject implements StateShowable {
         }
     }
 
-    public void heal(int val) {
-        int leftTopX = this.vx - this.properties.range;
-        int leftTopY = this.vy + this.properties.range;
-        int rightBottomX = this.vx + this.properties.range;
-        int rightBottomY = this.vy - this.properties.range;
+    public void heal(final int val) {
+        final int leftTopX = this.vx - this.properties.range;
+        final int leftTopY = this.vy + this.properties.range;
+        final int rightBottomX = this.vx + this.properties.range;
+        final int rightBottomY = this.vy - this.properties.range;
         for (int y = leftTopY; y > rightBottomY; y--) {
             for (int x = leftTopX; x < rightBottomX; x++) {
-                if (x == vx && y == vy)
+                if (x == this.vx && y == this.vy) {
                     continue;
-                GameMethods.heal(stage, this, val, x, y);
+                }
+                GameMethods.heal(this.stage, this, val, x, y);
             }
         }
     }
 
-    public void encharge(int val) {
-        int leftTopX = this.vx - this.properties.range;
-        int leftTopY = this.vy + this.properties.range;
-        int rightBottomX = this.vx + this.properties.range;
-        int rightBottomY = this.vy - this.properties.range;
+    public void encharge(final int val) {
+        final int leftTopX = this.vx - this.properties.range;
+        final int leftTopY = this.vy + this.properties.range;
+        final int rightBottomX = this.vx + this.properties.range;
+        final int rightBottomY = this.vy - this.properties.range;
         for (int y = leftTopY; y > rightBottomY; y--) {
             for (int x = leftTopX; x < rightBottomX; x++) {
-                if (x == vx && y == vy)
+                if (x == this.vx && y == this.vy) {
                     continue;
-                GameMethods.encharge(stage, this, val, x, y);
+                }
+                GameMethods.encharge(this.stage, this, val, x, y);
             }
         }
     }
@@ -206,7 +215,7 @@ public class LevelObject extends ScriptableObject implements StateShowable {
 
     @Override
     public String getPositionInfo() {
-        return String.format("(%d , %d)", vx, vy);
+        return String.format("(%d , %d)", this.vx, this.vy);
     }
 
     @Override
@@ -216,7 +225,7 @@ public class LevelObject extends ScriptableObject implements StateShowable {
     }
 
     @Override
-    public boolean onInteract(GameObject contacter) {
+    public boolean onInteract(final GameObject contacter) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -1,11 +1,10 @@
 package com.codebattle.gui.server.presenters;
 
-import java.io.IOException;
-
-import com.codebattle.gui.server.models.ClientItem;
 import com.codebattle.gui.server.models.Server;
 import com.codebattle.gui.server.views.ServerView;
 import com.codebattle.gui.server.views.View;
+
+import java.io.IOException;
 
 public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
     private boolean isServerRunning = false;
@@ -25,30 +24,19 @@ public class ServerPresenter extends AbstractPresenter<ServerView, Server> {
 
     /**
      * Start server.
-     * @throws IOException 
+     * @throws IOException
      */
     public void startServer() {
-        // Test
-        /*final ClientListPresenter clientListPresenter =
-                (ClientListPresenter)
-                this.getPresenterFactory().getExistedPresenter(ClientListPresenter.class);
+        try {
+            this.server = new com.codebattle.network.server.Server(8000);
+            this.server.addPresenterFactory(this.getPresenterFactory());
+            this.server.setClientListPresenter();
+            this.server.start();
 
-        clientListPresenter.addItem("Players", new ClientItem(0, "10.0.0.0", "Connecting"));
-        clientListPresenter.addItem("Players", new ClientItem(1, "10.0.0.1", "Connected"));
-        clientListPresenter.addItem("Players", new ClientItem(2, "10.0.0.2", "No response"));
-
-        clientListPresenter.addItem("Rooms", new ClientItem(0, "Room 1", "1 people"));
-        clientListPresenter.addItem("Rooms", new ClientItem(1, "Room 2", "2 people, ready"));
-        clientListPresenter.addItem("Rooms", new ClientItem(2, "Room 3", "2 people, playing"));*/
-    	
-    	try{
-    	server = new com.codebattle.network.server.Server(8000);
-    	server.addPresenterFactory(this.getPresenterFactory());
-    	server.setClientListPresenter();
-    	server.start();
-
-        this.isServerRunning = true;
-    	} catch(Exception e){}
+            this.isServerRunning = true;
+        } catch (final Exception e) {
+            throw new RuntimeException("Failed to start server.", e);
+        }
     }
 
     /**

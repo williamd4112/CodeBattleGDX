@@ -1,5 +1,8 @@
 package com.codebattle.network.server;
 
+import com.codebattle.network.Monitor;
+import com.codebattle.network.PeerListener;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -10,14 +13,11 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.codebattle.network.Monitor;
-import com.codebattle.network.PeerListener;
-
 public class SimpleServerAgent extends JFrame implements PeerListener {
 
     final public Server server;
-    private Monitor monitor;
-    private JButton btn_start;
+    private final Monitor monitor;
+    private final JButton btn_start;
 
     public SimpleServerAgent() throws IOException {
         super();
@@ -33,8 +33,8 @@ public class SimpleServerAgent extends JFrame implements PeerListener {
         this.btn_start.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent e) {
-                start();
+            public void actionPerformed(final ActionEvent e) {
+                SimpleServerAgent.this.start();
             }
 
         });
@@ -45,13 +45,13 @@ public class SimpleServerAgent extends JFrame implements PeerListener {
     }
 
     @Override
-    public void onReceivedMessage(String msg) {
+    public void onReceivedMessage(final String msg) {
         this.monitor.printMessage(msg);
 
     }
 
     @Override
-    public void onConnected(Socket socket) {
+    public void onConnected(final Socket socket) {
         this.monitor.printMessage("Client from " + socket.getRemoteSocketAddress()
                 + " is online");
 
@@ -62,17 +62,17 @@ public class SimpleServerAgent extends JFrame implements PeerListener {
         this.monitor.printMessage("***Server start listen on port 8000***");
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             new SimpleServerAgent();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onDisconnected(Socket socket) {
+    public void onDisconnected(final Socket socket) {
         this.monitor.printMessage("Client from " + socket.getRemoteSocketAddress()
                 + " disconnect.");
     }

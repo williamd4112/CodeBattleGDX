@@ -39,14 +39,16 @@ import com.codebattle.utility.TextureFactory;
  */
 
 public class GameActor extends MoveableGameObject implements StateShowable {
-    private TextureRegion[][] frames;
-    private Interval interval;
+    private final TextureRegion[][] frames;
+    private final Interval interval;
     private int frame = 0;
 
     private String alias;
 
-    public GameActor(GameStage stage, Owner owner, int id, String source, String name,
-            GameObjectType type, TextureRegion[][] frames, float sx, float sy)
+    public GameActor(final GameStage stage, final Owner owner, final int id,
+            final String source, final String name,
+            final GameObjectType type, final TextureRegion[][] frames, final float sx,
+            final float sy)
             throws Exception {
         super(stage, owner, source, name, id, type, sx, sy, type.prop.maxsteps);
         this.frames = frames;
@@ -55,9 +57,9 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(final Batch batch, final float parentAlpha) {
         super.draw(batch, parentAlpha);
-        Color color = batch.getColor();
+        final Color color = batch.getColor();
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b, parentAlpha
                 * this.getColor().a);
         batch.draw(this.frames[this.direction.val][this.frame / this.interval.val],
@@ -66,14 +68,15 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public void act(float delta) {
+    public void act(final float delta) {
         super.act(delta);
-        this.frame = (this.frame < this.interval.val * GameConstants.CHR_HSLICES - 1) ? this.frame + 1
-                : 0;
+        this.frame =
+                this.frame < this.interval.val * GameConstants.CHR_HSLICES - 1 ? this.frame + 1
+                        : 0;
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public void onAttacked(final Attack attack) {
         this.stage.addAnimation(new OnAttackAnimation(this));
         this.decreaseHP(attack.getATK());
         System.out.println("onAttacked(" + attack.getATK() + "): " + this.getName() + " : "
@@ -81,25 +84,27 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public boolean onInteract(GameObject contacter) {
+    public boolean onInteract(final GameObject contacter) {
         System.out.printf("%s contact to %s\n", contacter.getName(), this.getName());
         return false;
     }
 
     @Override
-    public void onSelected(Owner owner) {
-        SoundUtil.playSES(type.getSelectSoundNames());
+    public void onSelected(final Owner owner) {
+        SoundUtil.playSES(this.type.getSelectSoundNames());
         SoundUtil.playSE(GameConstants.ONSELECT_SE);
     }
 
     @Override
-    public void attack(int x, int y) {
-        if (!this.checkOperation())
+    public void attack(final int x, final int y) {
+        if (!this.checkOperation()) {
             return;
+        }
         this.addOperation();
         // Suicide avoiding
-        if (this.vx == x && this.vy == y)
+        if (this.vx == x && this.vy == y) {
             return;
+        }
 
         // Check in-range
         if (this.isInRange(x, y) && this.isOutMinRange(this.properties.minrange, x, y)) {
@@ -108,26 +113,29 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     }
 
     @Override
-    public void interact(int x, int y) {
+    public void interact(final int x, final int y) {
         if (this.isInRange(1, x, y)) {
             this.stage.emitInteractEvent(this, x, y);
         }
     }
 
-    public void writeCell(int x, int y, String type, String script) {
+    public void writeCell(final int x, final int y, final String type, final String script) {
         try {
-            if (!this.checkOperation())
+            if (!this.checkOperation()) {
                 return;
+            }
             this.addOperation();
-            if (!this.levelCheck(GameConstants.WRITE_LEVEL))
+            if (!this.levelCheck(GameConstants.WRITE_LEVEL)) {
                 return;
-            if (!mpCheck(GameConstants.WRITE_COST))
+            }
+            if (!this.mpCheck(GameConstants.WRITE_COST)) {
                 return;
+            }
             if (this.isInRange(this.type.prop.range, x, y)) {
-                VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
+                final VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
                 if (cell != null) {
                     cell.setScript(type, script);
-                    TargetBasedAnimation anim = new TargetBasedAnimation(stage,
+                    final TargetBasedAnimation anim = new TargetBasedAnimation(this.stage,
                             GameConstants.WRITE_ANIMMETA, cell, 0.3f);
                     anim.setEmitter(this);
                     anim.setEmitter(this);
@@ -136,28 +144,32 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void writeObject(int x, int y, String type, String script) {
+    public void writeObject(final int x, final int y, final String type, final String script) {
         try {
-            if (!this.checkOperation())
+            if (!this.checkOperation()) {
                 return;
+            }
             this.addOperation();
-            if (!this.levelCheck(GameConstants.WRITE_LEVEL))
+            if (!this.levelCheck(GameConstants.WRITE_LEVEL)) {
                 return;
-            if (!mpCheck(GameConstants.WRITE_COST))
+            }
+            if (!this.mpCheck(GameConstants.WRITE_COST)) {
                 return;
+            }
             if (this.isInRange(this.type.prop.range, x, y)) {
-                VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
-                GameObject obj = cell.getObject();
+                final VirtualCell cell = this.stage.getVirtualMap().getCell(x, y);
+                final GameObject obj = cell.getObject();
                 if (obj != null) {
                     if (obj instanceof ScriptableObject) {
                         ((ScriptableObject) obj).setScript(type, script);
-                        TargetBasedAnimation anim = new TargetBasedAnimation(stage,
-                                GameConstants.WRITE_ANIMMETA, obj, 0.3f);
+                        final TargetBasedAnimation anim =
+                                new TargetBasedAnimation(this.stage,
+                                        GameConstants.WRITE_ANIMMETA, obj, 0.3f);
                         anim.setEmitter(this);
                         anim.addSound(GameConstants.WRITE_SE);
                         anim.setEmitter(this);
@@ -165,61 +177,68 @@ public class GameActor extends MoveableGameObject implements StateShowable {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void skill(int x, int y) {
-        if (!this.checkOperation())
+    public void skill(final int x, final int y) {
+        if (!this.checkOperation()) {
             return;
+        }
         this.addOperation();
-        if (!mpCheck(this.type.getSkill().getCost()))
+        if (!this.mpCheck(this.type.getSkill().getCost())) {
             return;
+        }
         if (this.isInRange(this.type.getSkill().getRange(), x, y)) {
             System.out.println(this.getName() + " emit skill at " + x + " , " + y);
             try {
-                this.stage.addAnimation(new PortraitAnimation(stage, this));
-                this.stage.addAnimation(new SkillAnimation(stage, type.getSkill(), this));
+                this.stage.addAnimation(new PortraitAnimation(this.stage, this));
+                this.stage.addAnimation(new SkillAnimation(this.stage, this.type.getSkill(),
+                        this));
                 this.stage.emitSkillEvent(this, this.type.getSkill(), x, y);
                 this.decreaseMP(this.type.getSkill().getCost());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
 
     }
 
-    public void heal(int x, int y, int diff) {
-        if (!this.checkOperation())
+    public void heal(final int x, final int y, final int diff) {
+        if (!this.checkOperation()) {
             return;
+        }
         this.addOperation();
-        if (!this.levelCheck(GameConstants.HEAL_LEVEL))
+        if (!this.levelCheck(GameConstants.HEAL_LEVEL)) {
             return;
+        }
         try {
-            GameMethods.heal(stage, this, diff, x, y).setEmitter(this);
-        } catch (Exception e) {
+            GameMethods.heal(this.stage, this, diff, x, y).setEmitter(this);
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void encharge(int x, int y, int diff) {
-        if (!this.checkOperation())
+    public void encharge(final int x, final int y, final int diff) {
+        if (!this.checkOperation()) {
             return;
+        }
         this.addOperation();
-        if (!this.levelCheck(GameConstants.HEAL_LEVEL))
+        if (!this.levelCheck(GameConstants.HEAL_LEVEL)) {
             return;
+        }
         try {
-            GameMethods.encharge(stage, this, diff, x, y).setEmitter(this);
+            GameMethods.encharge(this.stage, this, diff, x, y).setEmitter(this);
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onSkill(Skill skill, GameObject emitter) {
+    public void onSkill(final Skill skill, final GameObject emitter) {
         System.out.println("onSkill: " + skill.animMeta.source);
         skill.execute(this, emitter, this.vx, this.vy);
     }
@@ -227,42 +246,46 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     @Override
     public void onDestroyed() {
         System.out.println(this.getName() + " is dead.");
-        this.stage.getVirtualSystem(owner).decreaseLift(this.type.prop.hp);
+        this.stage.getVirtualSystem(this.owner).decreaseLift(this.type.prop.hp);
     }
 
-    public boolean isInRange(int x, int y) {
-        return isInRange(this.properties.range, x, y);
+    public boolean isInRange(final int x, final int y) {
+        return this.isInRange(this.properties.range, x, y);
     }
 
-    public boolean isInRange(int range, int x, int y) {
-        int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
-        return (distance <= range) ? true : false;
+    public boolean isInRange(final int range, final int x, final int y) {
+        final int distance =
+                (int) Math.sqrt(Math.pow(x - this.vx, 2) + Math.pow(y - this.vy, 2));
+        return distance <= range ? true : false;
     }
 
-    public boolean isOutMinRange(int range, int x, int y) {
-        int distance = (int) Math.sqrt(Math.pow(x - vx, 2) + Math.pow(y - vy, 2));
-        return (distance >= range) ? true : false;
+    public boolean isOutMinRange(final int range, final int x, final int y) {
+        final int distance =
+                (int) Math.sqrt(Math.pow(x - this.vx, 2) + Math.pow(y - this.vy, 2));
+        return distance >= range ? true : false;
     }
 
-    private boolean levelCheck(int needLevel) {
-        return (this.type.getLevel() >= needLevel);
+    private boolean levelCheck(final int needLevel) {
+        return this.type.getLevel() >= needLevel;
     }
 
-    private boolean mpCheck(int needMp) {
-        return (this.properties.mp >= needMp);
+    private boolean mpCheck(final int needMp) {
+        return this.properties.mp >= needMp;
     }
 
     @Override
     public boolean isBlock() {
-        return (this.state == GameObjectState.DEATH) ? false : true;
+        return this.state == GameObjectState.DEATH ? false : true;
     }
 
     @Override
-    public boolean isPassiable(int x, int y) {
-        if (!this.isInbounding(x, y))
+    public boolean isPassiable(final int x, final int y) {
+        if (!this.isInbounding(x, y)) {
             return false;
-        if (this.type.through)
+        }
+        if (this.type.through) {
             return true;
+        }
         return this.stage.getVirtualMap().getVirtualCells()[y][x].isPassible();
     }
 
@@ -288,11 +311,11 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     /**
      * Setters
      */
-    public void setFrame(int frame) {
-        this.frame = (frame < GameConstants.CHR_HSLICES) ? frame : 0;
+    public void setFrame(final int frame) {
+        this.frame = frame < GameConstants.CHR_HSLICES ? frame : 0;
     }
 
-    public void rename(String alias) {
+    public void rename(final String alias) {
         this.alias = alias;
     }
 
@@ -316,11 +339,11 @@ public class GameActor extends MoveableGameObject implements StateShowable {
     @Override
     public Drawable getPortrait() {
         try {
-            Texture texture = TextureFactory.getInstance().loadTextureFromFile(
-                    source + "_portrait", ResourceType.PORTRAIT);
-            Drawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
+            final Texture texture = TextureFactory.getInstance().loadTextureFromFile(
+                    this.source + "_portrait", ResourceType.PORTRAIT);
+            final Drawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
             return drawable;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -334,6 +357,6 @@ public class GameActor extends MoveableGameObject implements StateShowable {
 
     @Override
     public String getPositionInfo() {
-        return String.format("(%d , %d)", vx, vy);
+        return String.format("(%d , %d)", this.vx, this.vy);
     }
 }

@@ -7,12 +7,13 @@ package com.codebattle.model.units;
  */
 public enum Interval
 {
-	NORMAL(20),
-	HIGH(15),
-	VERYHIGH(5);
-	
-	final public int val;
-	Interval(int val){
-		this.val = val;
-	}
+    NORMAL(20),
+    HIGH(15),
+    VERYHIGH(5);
+
+    final public int val;
+
+    Interval(final int val) {
+        this.val = val;
+    }
 }

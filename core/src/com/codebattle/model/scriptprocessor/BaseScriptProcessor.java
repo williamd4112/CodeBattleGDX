@@ -13,7 +13,7 @@ public abstract class BaseScriptProcessor {
         this.engine = this.manager.getEngineByExtension("js");
     }
 
-    public void setScript(String script) {
+    public void setScript(final String script) {
         this.script = script;
     }
 

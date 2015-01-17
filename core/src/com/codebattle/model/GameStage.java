@@ -106,10 +106,12 @@ public class GameStage extends Stage {
     // EventManager
     private final GameStageEventManager eventManager;
 
-    /*
-     * GameStage Constructor
-     * 
-     * @param - mapName : used to create map and map renderer , camera
+    /**
+     * Create a game stage
+     *
+     * @param parent        Parent scene
+     * @param mapName       Map name
+     * @throws Exception
      */
     public GameStage(final GameScene parent, final String mapName) throws Exception {
         super();

@@ -1,13 +1,13 @@
 package com.codebattle.network.server;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import com.codebattle.gui.server.models.ClientItem;
 import com.codebattle.network.dataHandle.DataHandler;
 import com.codebattle.network.dataHandle.Message;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * name: room name(this name will be stored at server's hashmap
@@ -36,25 +36,25 @@ import com.codebattle.network.dataHandle.Message;
 public class Room implements ConnectionListener {
 
     // Connection Management info
-    private String name;
-    private RoomListener server;
+    private final String name;
+    private final RoomListener server;
     private Connection connection_red;
     private Connection connection_blue;
     private int connectionNum = 0;
     private final int ID;
 
     // Game Variable
-    private String default_scene = "scene_demo";
-    private String scene_name = default_scene;
+    private final String default_scene = "scene_demo";
+    private String scene_name = this.default_scene;
     private boolean playing = false;
     private boolean redSelected = false;
     private boolean blueSelected = false;
     private int selectedPlayer = 0;
 
     // Counter for ready players
-    private Map<String, Boolean> playersReadyStates;
+    private final Map<String, Boolean> playersReadyStates;
 
-    public Room(int ID, String name, RoomListener server) {
+    public Room(final int ID, final String name, final RoomListener server) {
         this.ID = ID;
         this.name = name;
         this.server = server;
@@ -63,7 +63,7 @@ public class Room implements ConnectionListener {
         this.playersReadyStates.put("Blue", false);
     }
 
-    public boolean addConnection(Connection connection) {
+    public boolean addConnection(final Connection connection) {
         // Add to red
         if (this.connection_red == null) {
             this.connection_red = connection;
@@ -85,12 +85,12 @@ public class Room implements ConnectionListener {
      * Event Handling
      */
     @Override
-    public void onReceiveMessage(Connection connection, String rawMessage) {
+    public void onReceiveMessage(final Connection connection, final String rawMessage) {
         // routing the message to the connection(e.g. if message is a game script, then the
         // message will be routed to the blue connection
-        Connection toDestination = this.getDestination(connection);
+        final Connection toDestination = this.getDestination(connection);
         // Extract data
-        Message msg = new Message(rawMessage);
+        final Message msg = new Message(rawMessage);
         if (msg.type.equals("Room") && this.playing == false) {
             if (msg.opt.equals("Assign")) {
                 this.scene_name = msg.data.toString(); // Data: Scene name
@@ -100,9 +100,9 @@ public class Room implements ConnectionListener {
                 this.connectionNum--;
                 this.updateRoomStatus("Waiting");
                 connection.unbindRoom();
-                server.addIdleConnection(connection);
+                this.server.addIdleConnection(connection);
                 if (this.connectionNum == 0) {
-                    emitDestroyRoom(this.name);
+                    this.emitDestroyRoom(this.name);
                 }
 
             } else if (msg.opt.equals("RequestPlayerState")) {
@@ -141,12 +141,12 @@ public class Room implements ConnectionListener {
         }
     }
 
-    private Connection getDestination(Connection connection) {
-        return (connection == this.connection_red) ? this.connection_blue
+    private Connection getDestination(final Connection connection) {
+        return connection == this.connection_red ? this.connection_blue
                 : this.connection_red;
     }
 
-    private String getSource(Connection connection) {
+    private String getSource(final Connection connection) {
         if (connection == this.connection_red) {
             return "Red";
         } else {
@@ -155,19 +155,21 @@ public class Room implements ConnectionListener {
     }
 
     private void startGame() {
-        boardcast(DataHandler.startGame(scene_name));
+        this.boardcast(DataHandler.startGame(this.scene_name));
         this.playing = true;
     }
 
-    private void closeGame(Connection toDestination) { // Only sent when disconnect occurs.
-        if (toDestination != null)
+    private void closeGame(final Connection toDestination) { // Only sent when disconnect occurs.
+        if (toDestination != null) {
             toDestination.send(DataHandler.closeGame("").toString());
+        }
     }
 
     private void resetGameVariable() {
         this.scene_name = this.default_scene;
-        for (String key : this.playersReadyStates.keySet())
+        for (final String key : this.playersReadyStates.keySet()) {
             this.playersReadyStates.put(key, false);
+        }
         this.redSelected = false;
         this.blueSelected = false;
         this.selectedPlayer = 0;
@@ -175,11 +177,13 @@ public class Room implements ConnectionListener {
 
     }
 
-    private void boardcast(JSONObject messsage) {
-        if (connection_red != null)
-            connection_red.send(messsage.toString());
-        if (connection_blue != null)
-            connection_blue.send(messsage.toString());
+    private void boardcast(final JSONObject messsage) {
+        if (this.connection_red != null) {
+            this.connection_red.send(messsage.toString());
+        }
+        if (this.connection_blue != null) {
+            this.connection_blue.send(messsage.toString());
+        }
     }
 
     private void broadcastPlayerState() {
@@ -187,23 +191,23 @@ public class Room implements ConnectionListener {
     }
 
     private void broadcastStartGame() {
-        this.boardcast(DataHandler.startGame(scene_name));
+        this.boardcast(DataHandler.startGame(this.scene_name));
         this.playing = true;
     }
 
-    private void updateRoomStatus(String status) {
-        ClientItem clientItem = ((Server) server).roomItems.get(this);
+    private void updateRoomStatus(final String status) {
+        final ClientItem clientItem = ((Server) this.server).roomItems.get(this);
         clientItem.setStatus("Player Number: " + this.connectionNum + "  Status: " + status);
-        ((Server) server).clientListPresenter.updateItem("Rooms", clientItem);
+        ((Server) this.server).clientListPresenter.updateItem("Rooms", clientItem);
     }
 
-    private void updatePlayerStatus(Connection connection, String status) {
-        ClientItem clientItem = ((Server) server).connectionItems.get(connection);
+    private void updatePlayerStatus(final Connection connection, final String status) {
+        final ClientItem clientItem = ((Server) this.server).connectionItems.get(connection);
         clientItem.setStatus(status);
-        ((Server) server).clientListPresenter.updateItem("Players", clientItem);
+        ((Server) this.server).clientListPresenter.updateItem("Players", clientItem);
     }
 
-    private void setReady(String team) {
+    private void setReady(final String team) {
         if (this.playersReadyStates.containsKey(team)) {
             this.playersReadyStates.put(team, true);
             this.showReadyState();
@@ -220,33 +224,33 @@ public class Room implements ConnectionListener {
     }
 
     private void showReadyState() {
-        for (String key : this.playersReadyStates.keySet()) {
+        for (final String key : this.playersReadyStates.keySet()) {
             System.out.println(key + " : " + this.playersReadyStates.get(key));
         }
     }
 
     @Override
-    public void onDisconnect(Connection connection) {
+    public void onDisconnect(final Connection connection) {
         // this event will tell room which connection is disconnected, and send a close
         // message to another connection
         connection.unbindRoom();
         this.closeGame(this.getDestination(connection));
         this.connectionNum--;
         if (this.connectionNum == 0) {
-            emitDestroyRoom(this.name);
-            ((Server) server).clientListPresenter.removeItem("Rooms",
-                    ((Server) server).roomItems.get(this));
+            this.emitDestroyRoom(this.name);
+            ((Server) this.server).clientListPresenter.removeItem("Rooms",
+                    ((Server) this.server).roomItems.get(this));
         } else {
-            resetGameVariable();
+            this.resetGameVariable();
             this.updateRoomStatus("Waiting");
             this.updatePlayerStatus(this.getDestination(connection), "Connected");
-            ((Server) server).clientListPresenter.removeItem("Players",
-                    ((Server) server).connectionItems.get(connection));
+            ((Server) this.server).clientListPresenter.removeItem("Players",
+                    ((Server) this.server).connectionItems.get(connection));
             this.removeConnection(connection);
         }
     }
 
-    private void removeConnection(Connection connection) {
+    private void removeConnection(final Connection connection) {
         if (connection == this.connection_red) {
             this.connection_red = null;
         } else {
@@ -256,21 +260,23 @@ public class Room implements ConnectionListener {
     }
 
     private Map<String, String> getPlayerState() {
-        Map<String, String> map = new HashMap<String, String>();
-        if (this.connection_red != null)
+        final Map<String, String> map = new HashMap<String, String>();
+        if (this.connection_red != null) {
             map.put("Red", "Online");
-        else
+        } else {
             map.put("Red", "Offline");
+        }
 
-        if (this.connection_blue != null)
+        if (this.connection_blue != null) {
             map.put("Blue", "Online");
-        else
+        } else {
             map.put("Blue", "Offline");
+        }
 
         return map;
     }
 
-    public void emitDestroyRoom(String roomName) {
+    public void emitDestroyRoom(final String roomName) {
         this.server.destroyRoom(roomName);
     }
 
@@ -278,7 +284,7 @@ public class Room implements ConnectionListener {
         this.server.ChangeScene(this.name, this.scene_name);
     }
 
-    public void emitChangeName(String oldRoomName) {
+    public void emitChangeName(final String oldRoomName) {
         this.server.ChangeName(this.name, oldRoomName);
     }
 
@@ -299,6 +305,6 @@ public class Room implements ConnectionListener {
     }
 
     public boolean isFull() {
-        return connectionNum == 2 ? true : false;
+        return this.connectionNum == 2 ? true : false;
     }
 }

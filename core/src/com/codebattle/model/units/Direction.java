@@ -17,7 +17,7 @@ public enum Direction {
     final public float udx, udy;
     final public int stepX, stepY;
 
-    private Direction(int value, float udx, float udy) {
+    private Direction(final int value, final float udx, final float udy) {
         this.val = value;
         this.udx = udx;
         this.udy = udy;

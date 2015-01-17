@@ -1,9 +1,5 @@
 package com.codebattle.gui.editor;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -20,28 +16,32 @@ import com.badlogic.gdx.utils.Timer;
 import com.codebattle.gui.editor.Lexer.Line;
 import com.codebattle.gui.editor.Lexer.Token;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class JSCodeEditorCore extends Widget {
     final private static int JUMP_UP = 0, JUMP_DOWN = 1, JUMP_LASTEND = 2;
-    private JSCodeEditorStyle style;
+    private final JSCodeEditorStyle style;
 
     private JSCodeEditorMode mode = JSCodeEditorMode.VISUAL;
-    private Lexer lexer;
-    private List<Line> lines;
+    private final Lexer lexer;
+    private final List<Line> lines;
 
-    private List<JSCodeEditorStateListener> codeEditorListeners;
+    private final List<JSCodeEditorStateListener> codeEditorListeners;
 
     private int cursorRow = 0, cursorCol = 0;
     private int pivotRow = -1, pivotCol = -1;
     private int selectRow = -1, selectCol = -1;
 
     private boolean cursorBlinkSwitch = true;
-    private float padding = 20;
+    private final float padding = 20;
 
-    public JSCodeEditorCore(Skin skin) {
+    public JSCodeEditorCore(final Skin skin) {
         this.lexer = new Lexer();
         this.lines = new ArrayList<Line>();
         this.codeEditorListeners = new LinkedList<JSCodeEditorStateListener>();
-        this.lines.add(lexer.new Line());
+        this.lines.add(this.lexer.new Line());
 
         this.addListener(new JSCodeEditorListener());
 
@@ -50,35 +50,36 @@ public class JSCodeEditorCore extends Widget {
         this.initializeCursor();
     }
 
-    public void addCodeEditorListener(JSCodeEditorStateListener listener) {
+    public void addCodeEditorListener(final JSCodeEditorStateListener listener) {
         this.codeEditorListeners.add(listener);
     }
 
     public void emitCursorChangeEvent() {
-        for (JSCodeEditorStateListener listener : this.codeEditorListeners) {
-            listener.onCursorChange(mode, cursorCol, cursorRow);
+        for (final JSCodeEditorStateListener listener : this.codeEditorListeners) {
+            listener.onCursorChange(this.mode, this.cursorCol, this.cursorRow);
         }
     }
 
     public void emitCursorExceedWidthEvent() {
-        for (JSCodeEditorStateListener listener : this.codeEditorListeners) {
-            listener.onCursorExceedWidth(getWidth());
+        for (final JSCodeEditorStateListener listener : this.codeEditorListeners) {
+            listener.onCursorExceedWidth(this.getWidth());
         }
     }
 
     public void emitCursorExceedHeightEvent() {
-        for (JSCodeEditorStateListener listener : this.codeEditorListeners) {
-            listener.onCursorExceedHeight(lines.size());
+        for (final JSCodeEditorStateListener listener : this.codeEditorListeners) {
+            listener.onCursorExceedHeight(this.lines.size());
         }
     }
 
     private void initializeCursor() {
-        Timer blinkTimer = new Timer();
+        final Timer blinkTimer = new Timer();
         blinkTimer.scheduleTask(new Timer.Task() {
 
             @Override
             public void run() {
-                cursorBlinkSwitch = !cursorBlinkSwitch;
+                JSCodeEditorCore.this.cursorBlinkSwitch =
+                        !JSCodeEditorCore.this.cursorBlinkSwitch;
             }
 
         }, 0.1f, 0.1f);
@@ -86,45 +87,49 @@ public class JSCodeEditorCore extends Widget {
     }
 
     @Override
-    public void act(float delta) {
+    public void act(final float delta) {
         super.act(delta);
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void draw(final Batch batch, final float parentAlpha) {
         super.draw(batch, parentAlpha);
-        float x = getX(), y = getY(), width = getWidth(), height = getHeight();
+        final float x = this.getX(), y = this.getY(), width = this.getWidth(), height =
+                this.getHeight();
 
-        drawBackground(batch, parentAlpha, x, y, width, height);
-        drawLineNumberBackground(batch, parentAlpha, x, y, width, height);
-        drawText(batch, parentAlpha, x, y, width, height);
-        drawCursor(batch, parentAlpha, x, y);
+        this.drawBackground(batch, parentAlpha, x, y, width, height);
+        this.drawLineNumberBackground(batch, parentAlpha, x, y, width, height);
+        this.drawText(batch, parentAlpha, x, y, width, height);
+        this.drawCursor(batch, parentAlpha, x, y);
 
         // System.out.printf("(%d , %d : %d , %d)\n", this.pivotRow, this.pivotCol,
         // this.selectRow, this.selectCol);
 
     }
 
-    protected void drawBackground(Batch batch, float parentAlpha, float x, float y,
-            float width, float height) {
-        Drawable background = style.background;
+    protected void drawBackground(final Batch batch, final float parentAlpha, final float x,
+            final float y,
+            final float width, final float height) {
+        final Drawable background = this.style.background;
         batch.setColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, batch.getColor().a
                 * parentAlpha);
         background.draw(batch, x, y, width, height);
     }
 
-    protected void drawLineNumberBackground(Batch batch, float parentAlpha, float x, float y,
-            float width, float height) {
-        Drawable background = style.background;
+    protected void drawLineNumberBackground(final Batch batch, final float parentAlpha,
+            final float x, final float y,
+            final float width, final float height) {
+        final Drawable background = this.style.background;
         batch.setColor(Color.DARK_GRAY.r, Color.DARK_GRAY.g, Color.DARK_GRAY.b, parentAlpha);
-        background.draw(batch, x, y, padding, height);
+        background.draw(batch, x, y, this.padding, height);
     }
 
-    protected void drawText(Batch batch, float parentAlpha, float x, float y, float width,
-            float height) {
-        BitmapFont font = style.font;
-        float offsetX = padding, offsetY = y + this.getPrefHeight();
-        for (int i = 0; i < lines.size(); i++) {
+    protected void drawText(final Batch batch, final float parentAlpha, final float x,
+            final float y, final float width,
+            final float height) {
+        final BitmapFont font = this.style.font;
+        float offsetX = this.padding, offsetY = y + this.getPrefHeight();
+        for (int i = 0; i < this.lines.size(); i++) {
 
             // Draw Line Number
             font.setScale(0.5f);
@@ -135,104 +140,119 @@ public class JSCodeEditorCore extends Widget {
             font.setScale(1.0f);
 
             font.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, parentAlpha);
-            Line line = lines.get(i);
-            for (Token token : line.getTokens()) {
+            final Line line = this.lines.get(i);
+            for (final Token token : line.getTokens()) {
                 font.setColor(token.color.r, token.color.g, token.color.b, parentAlpha);
                 font.draw(batch, token.text, x + offsetX, offsetY);
                 offsetX += font.getBounds(token.text).width;
             }
 
             offsetY -= font.getLineHeight();
-            offsetX = padding;
+            offsetX = this.padding;
         }
     }
 
-    protected void drawCursor(Batch batch, float parentAlpha, float x, float y) {
-        if (this.getStage().getKeyboardFocus() != this)
+    protected void drawCursor(final Batch batch, final float parentAlpha, final float x,
+            final float y) {
+        if (this.getStage().getKeyboardFocus() != this) {
             return;
+        }
         batch.setColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, parentAlpha);
-        Drawable cursor = (this.mode != JSCodeEditorMode.INSERT) ? style.selection
-                : style.cursor;
-        BitmapFont font = style.font;
-        float cursorX = colToX(cursorCol, style.font.getSpaceWidth()), cursorY = y
-                + this.getPrefHeight() - (cursorRow + 1) * font.getLineHeight();
-        if (this.cursorBlinkSwitch)
-            cursor.draw(batch, x + cursorX + padding, cursorY, cursor.getMinWidth(),
+        final Drawable cursor = this.mode != JSCodeEditorMode.INSERT ? this.style.selection
+                : this.style.cursor;
+        final BitmapFont font = this.style.font;
+        final float cursorX = this.colToX(this.cursorCol, this.style.font.getSpaceWidth()), cursorY =
+                y
+                        + this.getPrefHeight() - (this.cursorRow + 1) * font.getLineHeight();
+        if (this.cursorBlinkSwitch) {
+            cursor.draw(batch, x + cursorX + this.padding, cursorY, cursor.getMinWidth(),
                     font.getLineHeight());
+        }
     }
 
     public void moveCursorRight() {
-        if (this.lines.isEmpty())
+        if (this.lines.isEmpty()) {
             return;
-        if (this.cursorCol < this.lines.get(cursorRow).length())
-            this.setCursorPosition(cursorCol + 1, cursorRow);
+        }
+        if (this.cursorCol < this.lines.get(this.cursorRow).length()) {
+            this.setCursorPosition(this.cursorCol + 1, this.cursorRow);
+        }
     }
 
     public void moveCursorLeft() {
-        if (this.lines.isEmpty())
+        if (this.lines.isEmpty()) {
             return;
-        if (this.cursorCol > 0)
-            this.setCursorPosition(cursorCol - 1, cursorRow);
+        }
+        if (this.cursorCol > 0) {
+            this.setCursorPosition(this.cursorCol - 1, this.cursorRow);
+        }
     }
 
-    private float rowToY(int row, float lineHeight) {
-        return this.getY() + this.getPrefHeight() - (cursorRow + 1)
-                * style.font.getLineHeight();
+    private float rowToY(final int row, final float lineHeight) {
+        return this.getY() + this.getPrefHeight() - (this.cursorRow + 1)
+                * this.style.font.getLineHeight();
     }
 
-    private float colToX(int col, float spaceWidth) {
-        if (lines.isEmpty())
+    private float colToX(int col, final float spaceWidth) {
+        if (this.lines.isEmpty()) {
             return 0;
-        if (this.lines.get(cursorRow) == null)
+        }
+        if (this.lines.get(this.cursorRow) == null) {
             return 0;
-        if (col >= this.lines.get(cursorRow).length())
-            col = this.lines.get(cursorRow).length();
-        return style.font.getBounds(this.lines.get(cursorRow).toString(), 0, col).width;
+        }
+        if (col >= this.lines.get(this.cursorRow).length()) {
+            col = this.lines.get(this.cursorRow).length();
+        }
+        return this.style.font.getBounds(this.lines.get(this.cursorRow).toString(), 0, col).width;
     }
 
-    private void insert(int position, StringBuffer dest, String insertion) {
-        if (dest.length() <= 0)
+    private void insert(final int position, final StringBuffer dest, final String insertion) {
+        if (dest.length() <= 0) {
             dest.append(insertion);
-        else {
+        } else {
             dest.insert(position, insertion);
         }
         this.moveCursorRight();
 
     }
 
-    private void newline(int position) {
-        if (this.lines.isEmpty()) // Empty lines
-            this.lines.add(lexer.new Line());
-        if (this.lines.get(cursorRow) == null) // null line
+    private void newline(final int position) {
+        if (this.lines.isEmpty()) {
+            this.lines.add(this.lexer.new Line());
+        }
+        if (this.lines.get(this.cursorRow) == null) {
             return;
-        if (position > this.lines.get(cursorRow).length()) // exceed position
+        }
+        if (position > this.lines.get(this.cursorRow).length()) {
             return;
-        Line line = this.lines.get(cursorRow);
+        }
+        final Line line = this.lines.get(this.cursorRow);
         if (position <= line.length()) {
-            Line newline = lexer.new Line();
+            final Line newline = this.lexer.new Line();
             if (position < line.length()) {
                 newline.append(line.substring(position));
                 line.delete(position, line.length());
             }
-            this.lines.add(cursorRow + 1, newline);
+            this.lines.add(this.cursorRow + 1, newline);
         }
     }
 
-    private void jump(int mode) {
-        if (lines.isEmpty())
+    private void jump(final int mode) {
+        if (this.lines.isEmpty()) {
             return;
+        }
         switch (mode) {
         case JUMP_DOWN:
-            this.setCursorPosition(cursorCol, cursorRow + 1);
+            this.setCursorPosition(this.cursorCol, this.cursorRow + 1);
             this.repositionAfterJump();
             break;
         case JUMP_UP:
-            this.setCursorPosition(cursorCol, cursorRow - 1);
+            this.setCursorPosition(this.cursorCol, this.cursorRow - 1);
             this.repositionAfterJump();
             break;
         case JUMP_LASTEND:
-            this.setCursorPosition(cursorCol, cursorRow - 1);
-            this.cursorCol = this.lines.get(cursorRow).length();
+            this.setCursorPosition(this.cursorCol, this.cursorRow - 1);
+            this.cursorCol = this.lines.get(this.cursorRow).length();
             break;
         default:
             break;
@@ -240,104 +260,116 @@ public class JSCodeEditorCore extends Widget {
     }
 
     private void backspace() {
-        if (lines.isEmpty())
+        if (this.lines.isEmpty()) {
             return;
-        if (lines.get(cursorRow) == null)
+        }
+        if (this.lines.get(this.cursorRow) == null) {
             return;
+        }
 
-        Line line = lines.get(cursorRow);
-        if (cursorCol > 0) {
-            --cursorCol;
-            line.deleteCharAt(cursorCol);
+        final Line line = this.lines.get(this.cursorRow);
+        if (this.cursorCol > 0) {
+            --this.cursorCol;
+            line.deleteCharAt(this.cursorCol);
         } else {
-            if (cursorCol <= 0) { // line delete
-                if (lines.size() > 1)
-                    lines.remove(cursorRow);
+            if (this.cursorCol <= 0) { // line delete
+                if (this.lines.size() > 1) {
+                    this.lines.remove(this.cursorRow);
+                }
                 this.jump(JUMP_LASTEND);
             }
         }
-        this.setCursorPosition(cursorCol, cursorRow);
+        this.setCursorPosition(this.cursorCol, this.cursorRow);
 
     }
 
     private void delete() {
-        if (lines.isEmpty())
+        if (this.lines.isEmpty()) {
             return;
-        if (lines.get(cursorRow) == null)
+        }
+        if (this.lines.get(this.cursorRow) == null) {
             return;
+        }
 
     }
 
     private void repositionAfterJump() {
-        if (this.lines.get(cursorRow) != null) {
-            if (cursorCol >= this.lines.get(cursorRow).length()) {
-                cursorCol = this.lines.get(cursorRow).length();
+        if (this.lines.get(this.cursorRow) != null) {
+            if (this.cursorCol >= this.lines.get(this.cursorRow).length()) {
+                this.cursorCol = this.lines.get(this.cursorRow).length();
             }
         }
     }
 
     private void setCursorPosition(int col, int row) {
         try {
-            if (row >= this.lines.size())
+            if (row >= this.lines.size()) {
                 row = this.lines.size() - 1;
-            else if (row < 0)
+            } else if (row < 0) {
                 row = 0;
+            }
 
-            Line line = lines.get(row);
-            if (col >= line.length())
+            final Line line = this.lines.get(row);
+            if (col >= line.length()) {
                 col = line.length();
+            }
             this.cursorRow = row;
             this.cursorCol = col;
             this.emitCursorChangeEvent();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Vector2 mouseToPosition(float x, float y) {
+    private Vector2 mouseToPosition(final float x, final float y) {
         try {
             // System.out.printf("(%f , %f)\n", x, y);
             int row = (int) ((this.getHeight() - y) / this.style.font.getLineHeight());
-            if (row >= lines.size() && row != 0)
-                row = lines.size() - 1;
-            else if (row <= 0)
+            if (row >= this.lines.size() && row != 0) {
+                row = this.lines.size() - 1;
+            } else if (row <= 0) {
                 row = 0;
-            Line line = lines.get(row);
+            }
+            final Line line = this.lines.get(row);
             int col = 0;
-            for (; col < line.length(); col++)
-                if (style.font.getBounds(line.getText(), 0, col + 1).width + this.getWidth()
-                        * 0.05f >= x)
+            for (; col < line.length(); col++) {
+                if (this.style.font.getBounds(line.getText(), 0, col + 1).width
+                        + this.getWidth()
+                        * 0.05f >= x) {
                     break;
+                }
+            }
             // System.out.printf("     (%d , %d)\n", col, row);
             return new Vector2(col, row);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return new Vector2(0, 0);
     }
 
     public void parseLines() {
-        for (Line line : this.lines) {
+        for (final Line line : this.lines) {
             line.parse();
         }
     }
 
     public String getText() {
         String str = "";
-        for (Line line : lines)
+        for (final Line line : this.lines) {
             str += line.toString();
+        }
         return str;
     }
 
-    public void setText(String s) {
-        Line line = this.lines.get(cursorRow);
+    public void setText(final String s) {
+        final Line line = this.lines.get(this.cursorRow);
         for (int i = 0; i < s.length(); i++) {
-            this.insert(cursorCol, line.getBuffer(), String.valueOf(s.charAt(i)));
-            parseLines();
+            this.insert(this.cursorCol, line.getBuffer(), String.valueOf(s.charAt(i)));
+            this.parseLines();
         }
     }
 
-    public void setMode(JSCodeEditorMode mode) {
+    public void setMode(final JSCodeEditorMode mode) {
         this.mode = mode;
         this.emitCursorChangeEvent();
     }
@@ -351,7 +383,8 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        public void enter(final InputEvent event, final float x, final float y,
+                final int pointer, final Actor fromActor) {
             // TODO Auto-generated method stub
             super.enter(event, x, y, pointer, fromActor);
             this.leftPressed = true;
@@ -360,7 +393,8 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+        public void exit(final InputEvent event, final float x, final float y,
+                final int pointer, final Actor toActor) {
             // TODO Auto-generated method stub
             super.exit(event, x, y, pointer, toActor);
             this.leftPressed = false;
@@ -368,23 +402,25 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        public void touchDragged(final InputEvent event, final float x, final float y,
+                final int pointer) {
             super.touchDragged(event, x, y, pointer);
             System.out.printf("touch drag(%f , %f)\n", x, y);
-            Vector2 pos = mouseToPosition(x, y);
-            setCursorPosition((int) pos.x, (int) pos.y);
+            final Vector2 pos = JSCodeEditorCore.this.mouseToPosition(x, y);
+            JSCodeEditorCore.this.setCursorPosition((int) pos.x, (int) pos.y);
         }
 
         @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            getStage().setKeyboardFocus(JSCodeEditorCore.this);
+        public boolean touchDown(final InputEvent event, final float x, final float y,
+                final int pointer, final int button) {
+            JSCodeEditorCore.this.getStage().setKeyboardFocus(JSCodeEditorCore.this);
             // System.out.printf("touch down(%f , %f)\n", x, y);
             switch (button) {
             case Input.Buttons.LEFT:
-                Vector2 pos = mouseToPosition(x, y);
-                setCursorPosition((int) pos.x, (int) pos.y);
-                pivotRow = (int) pos.y;
-                pivotCol = (int) pos.x;
+                final Vector2 pos = JSCodeEditorCore.this.mouseToPosition(x, y);
+                JSCodeEditorCore.this.setCursorPosition((int) pos.x, (int) pos.y);
+                JSCodeEditorCore.this.pivotRow = (int) pos.y;
+                JSCodeEditorCore.this.pivotCol = (int) pos.x;
                 break;
             default:
                 break;
@@ -393,12 +429,13 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        public void touchUp(final InputEvent event, final float x, final float y,
+                final int pointer, final int button) {
             // System.out.printf("touch up(%f , %f)\n", x, y);
             switch (button) {
             case Input.Buttons.LEFT:
-                selectRow = cursorRow;
-                selectCol = cursorCol;
+                JSCodeEditorCore.this.selectRow = JSCodeEditorCore.this.cursorRow;
+                JSCodeEditorCore.this.selectCol = JSCodeEditorCore.this.cursorCol;
                 break;
             default:
                 break;
@@ -407,31 +444,31 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public boolean keyDown(InputEvent event, int keycode) {
+        public boolean keyDown(final InputEvent event, final int keycode) {
             switch (keycode) {
             case Input.Keys.UP:
-                jump(JUMP_LASTEND);
+                JSCodeEditorCore.this.jump(JUMP_LASTEND);
                 break;
             case Input.Keys.DOWN:
-                jump(JUMP_DOWN);
+                JSCodeEditorCore.this.jump(JUMP_DOWN);
                 break;
             case Input.Keys.LEFT:
-                moveCursorLeft();
+                JSCodeEditorCore.this.moveCursorLeft();
                 break;
             case Input.Keys.RIGHT:
-                moveCursorRight();
+                JSCodeEditorCore.this.moveCursorRight();
                 break;
             case Input.Keys.BACKSPACE:
-                backspace();
+                JSCodeEditorCore.this.backspace();
                 break;
             case Input.Keys.FORWARD_DEL:
-                delete();
+                JSCodeEditorCore.this.delete();
                 break;
             case Input.Keys.INSERT:
-                setMode(JSCodeEditorMode.INSERT);
+                JSCodeEditorCore.this.setMode(JSCodeEditorMode.INSERT);
                 break;
             case Input.Keys.ESCAPE:
-                setMode(JSCodeEditorMode.VISUAL);
+                JSCodeEditorCore.this.setMode(JSCodeEditorMode.VISUAL);
                 break;
             default:
                 break;
@@ -441,35 +478,41 @@ public class JSCodeEditorCore extends Widget {
         }
 
         @Override
-        public boolean keyUp(InputEvent event, int keycode) {
+        public boolean keyUp(final InputEvent event, final int keycode) {
             // TODO Auto-generated method stub
             return super.keyUp(event, keycode);
         }
 
         @Override
-        public boolean keyTyped(InputEvent event, char character) {
-            if (character == '\r')
+        public boolean keyTyped(final InputEvent event, char character) {
+            if (character == '\r') {
                 character = '\n';
-            boolean add = style.font.containsCharacter(character);
-            boolean newline = (character == '\n');
-            boolean tab = (character == '\t');
+            }
+            final boolean add = JSCodeEditorCore.this.style.font.containsCharacter(character);
+            final boolean newline = character == '\n';
+            final boolean tab = character == '\t';
 
             if (add) {
-                Line line = lines.get(cursorRow);
-                insert(cursorCol, line.getBuffer(), String.valueOf(character));
+                final Line line =
+                        JSCodeEditorCore.this.lines.get(JSCodeEditorCore.this.cursorRow);
+                JSCodeEditorCore.this.insert(JSCodeEditorCore.this.cursorCol,
+                        line.getBuffer(), String.valueOf(character));
             }
 
             if (tab) {
-                Line line = lines.get(cursorRow);
-                for (int i = 0; i < 4; i++)
-                    insert(cursorCol, line.getBuffer(), " ");
+                final Line line =
+                        JSCodeEditorCore.this.lines.get(JSCodeEditorCore.this.cursorRow);
+                for (int i = 0; i < 4; i++) {
+                    JSCodeEditorCore.this.insert(JSCodeEditorCore.this.cursorCol,
+                            line.getBuffer(), " ");
+                }
             }
 
             if (newline) {
-                newline(cursorCol);
-                jump(JUMP_DOWN);
+                JSCodeEditorCore.this.newline(JSCodeEditorCore.this.cursorCol);
+                JSCodeEditorCore.this.jump(JUMP_DOWN);
             }
-            parseLines();
+            JSCodeEditorCore.this.parseLines();
             return super.keyTyped(event, character);
         }
 
@@ -478,9 +521,9 @@ public class JSCodeEditorCore extends Widget {
     @Override
     public float getPrefWidth() {
         float maxLen = this.getWidth();
-        for (Line line : lines) {
-            float lineLen = style.font.getBounds(line.toString()).width
-                    + style.font.getSpaceWidth() * 10;
+        for (final Line line : this.lines) {
+            final float lineLen = this.style.font.getBounds(line.toString()).width
+                    + this.style.font.getSpaceWidth() * 10;
             if (lineLen > maxLen) {
                 maxLen = lineLen;
                 this.fire(new ChangeListener.ChangeEvent());
@@ -493,7 +536,7 @@ public class JSCodeEditorCore extends Widget {
 
     @Override
     public float getPrefHeight() {
-        float realHeight = this.lines.size() * style.font.getLineHeight();
+        final float realHeight = this.lines.size() * this.style.font.getLineHeight();
         if (realHeight > this.getHeight()) {
             this.setHeight(realHeight);
         }
@@ -514,8 +557,9 @@ public class JSCodeEditorCore extends Widget {
         public JSCodeEditorStyle() {
         }
 
-        public JSCodeEditorStyle(BitmapFont font, Color fontColor, Drawable cursor,
-                Drawable selection, Drawable background) {
+        public JSCodeEditorStyle(final BitmapFont font, final Color fontColor,
+                final Drawable cursor,
+                final Drawable selection, final Drawable background) {
             this.background = background;
             this.cursor = cursor;
             this.font = font;
@@ -523,21 +567,25 @@ public class JSCodeEditorCore extends Widget {
             this.selection = selection;
         }
 
-        public JSCodeEditorStyle(JSCodeEditorStyle style) {
+        public JSCodeEditorStyle(final JSCodeEditorStyle style) {
             this.messageFont = style.messageFont;
-            if (style.messageFontColor != null)
+            if (style.messageFontColor != null) {
                 this.messageFontColor = new Color(style.messageFontColor);
+            }
             this.background = style.background;
             this.focusedBackground = style.focusedBackground;
             this.disabledBackground = style.disabledBackground;
             this.cursor = style.cursor;
             this.font = style.font;
-            if (style.fontColor != null)
+            if (style.fontColor != null) {
                 this.fontColor = new Color(style.fontColor);
-            if (style.focusedFontColor != null)
+            }
+            if (style.focusedFontColor != null) {
                 this.focusedFontColor = new Color(style.focusedFontColor);
-            if (style.disabledFontColor != null)
+            }
+            if (style.disabledFontColor != null) {
                 this.disabledFontColor = new Color(style.disabledFontColor);
+            }
             this.selection = style.selection;
         }
     }

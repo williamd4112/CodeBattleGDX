@@ -4,90 +4,91 @@ import com.codebattle.utility.GameUtil;
 
 public class GameActorProxy {
     final private GameActor actor;
-    private String alias;
+    private final String alias;
 
-    public GameActorProxy(GameActor actor) {
+    public GameActorProxy(final GameActor actor) {
         this.actor = actor;
         this.alias = actor.getAlias();
     }
 
-    public void moveLeft(int step) {
+    public void moveLeft(final int step) {
         this.actor.moveLeft(step);
     }
 
-    public void moveRight(int step) {
+    public void moveRight(final int step) {
         this.actor.moveRight(step);
     }
 
-    public void moveUp(int step) {
+    public void moveUp(final int step) {
         this.actor.moveUp(step);
     }
 
-    public void moveDown(int step) {
+    public void moveDown(final int step) {
         this.actor.moveDown(step);
     }
 
-    public void attack(int x, int y) {
-        actor.attack(x, y);
+    public void attack(final int x, final int y) {
+        this.actor.attack(x, y);
     }
 
-    public void attackUp(int step) {
-        actor.attack(actor.getVX(), actor.getVY() + step);
+    public void attackUp(final int step) {
+        this.actor.attack(this.actor.getVX(), this.actor.getVY() + step);
     }
 
-    public void attackDown(int step) {
-        actor.attack(actor.getVX(), actor.getVY() - step);
+    public void attackDown(final int step) {
+        this.actor.attack(this.actor.getVX(), this.actor.getVY() - step);
     }
 
-    public void attackLeft(int step) {
-        actor.attack(actor.getVX() - step, actor.getVY());
+    public void attackLeft(final int step) {
+        this.actor.attack(this.actor.getVX() - step, this.actor.getVY());
     }
 
-    public void attackRight(int step) {
-        actor.attack(actor.getVX() + step, actor.getVY());
+    public void attackRight(final int step) {
+        this.actor.attack(this.actor.getVX() + step, this.actor.getVY());
     }
 
-    public void writeCell(int x, int y, String type, String script) {
-        actor.writeCell(x, y, type, script);
+    public void writeCell(final int x, final int y, final String type, final String script) {
+        this.actor.writeCell(x, y, type, script);
     }
 
-    public void writeObject(int x, int y, String type, String script) {
-        actor.writeObject(x, y, type, script);
+    public void writeObject(final int x, final int y, final String type, final String script) {
+        this.actor.writeObject(x, y, type, script);
     }
 
-    public void skill(int x, int y) {
-        actor.skill(x, y);
+    public void skill(final int x, final int y) {
+        this.actor.skill(x, y);
     }
 
-    public void heal(int x, int y, int diff) {
-        actor.heal(x, y, diff);
+    public void heal(final int x, final int y, final int diff) {
+        this.actor.heal(x, y, diff);
     }
 
-    public void interact(int x, int y) {
-        actor.interact(x, y);
+    public void interact(final int x, final int y) {
+        this.actor.interact(x, y);
     }
 
-    public boolean isPassiable(int x, int y) {
-        return actor.isPassiable(x, y);
+    public boolean isPassiable(final int x, final int y) {
+        return this.actor.isPassiable(x, y);
     }
 
-    public boolean isPassable(String dir, int step) {
-        return actor.isPassiable(GameUtil.toDirection(dir), step);
+    public boolean isPassable(final String dir, final int step) {
+        return this.actor.isPassiable(GameUtil.toDirection(dir), step);
     }
 
-    public boolean confront(int x, int y) {
-        return (actor.stage.getVirtualMap().getCell(x, y).getObject() == null) ? false : true;
+    public boolean confront(final int x, final int y) {
+        return this.actor.stage.getVirtualMap().getCell(x, y).getObject() == null ? false
+                : true;
     }
 
     public boolean isOverstep() {
-        return (actor.getSteps() >= actor.getProp().maxsteps);
+        return this.actor.getSteps() >= this.actor.getProp().maxsteps;
     }
 
     public String getAlias() {
         return this.alias;
     }
 
-    public void rename(String alias) {
+    public void rename(final String alias) {
         this.actor.rename(alias);
     }
 }

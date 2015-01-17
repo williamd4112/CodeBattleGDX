@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class Connection extends Thread {
 
     // Network
-	private final int ID;
+    private final int ID;
     private final Socket clientSocket;
     private final BufferedReader reader;
     private final PrintWriter writer;
@@ -34,7 +34,7 @@ public class Connection extends Thread {
     private Player player;
 
     public Connection(final int ID, final Socket clientSocket) throws IOException {
-    	this.ID = ID;
+        this.ID = ID;
         this.clientSocket = clientSocket;
         this.reader = new BufferedReader(new InputStreamReader(
                 this.clientSocket.getInputStream()));
@@ -42,7 +42,7 @@ public class Connection extends Thread {
         this.timer = new ConnectionTimer();
     }
 
-    public void bind(ConnectionListener listener) {
+    public void bind(final ConnectionListener listener) {
         if (listener.getClass()
                 .equals(Server.class)) {
             if (this.server == null) {
@@ -62,9 +62,9 @@ public class Connection extends Thread {
             }
         }
     }
-    
+
     public void unbindRoom() {
-    	this.room = null;
+        this.room = null;
     }
 
     @Override
@@ -82,14 +82,13 @@ public class Connection extends Thread {
             while (!this.clientSocket.isClosed()) {
                 if ((msg = this.reader.readLine()) != null) {
                     this.emitReceiveMessage(this, msg);
-                } else
+                } else {
                     break;
+                }
             }
-        }
-        catch (final Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             this.emitDisconnect(this);
         }
     }
@@ -133,12 +132,12 @@ public class Connection extends Thread {
     public Socket getSocket() {
         return this.clientSocket;
     }
-    
+
     public int getID() {
-    	return this.ID;
+        return this.ID;
     }
 
-    public void setPlayer(String name) {
+    public void setPlayer(final String name) {
         this.player = new Player(name);
     }
 
@@ -153,23 +152,24 @@ public class Connection extends Thread {
 
         @Override
         public void run() {
-            timer.schedule(new TimerTask() {
+            this.timer.schedule(new TimerTask() {
 
                 @Override
                 public void run() {
-                    emitDisconnect(Connection.this);
+                    Connection.this.emitDisconnect(Connection.this);
                 }
 
-            }, TimeUnit.SECONDS.toMillis(interval), TimeUnit.SECONDS.toMillis(interval));
+            }, TimeUnit.SECONDS.toMillis(this.interval),
+                    TimeUnit.SECONDS.toMillis(this.interval));
         }
 
         @Override
-        public void onReceiveMessage(Connection connection, String msg) {
+        public void onReceiveMessage(final Connection connection, final String msg) {
             this.start();
         }
 
         @Override
-        public void onDisconnect(Connection connection) {
+        public void onDisconnect(final Connection connection) {
 
         }
 

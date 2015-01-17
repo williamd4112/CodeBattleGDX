@@ -1,11 +1,11 @@
 package com.codebattle.model.event;
 
+import com.codebattle.model.GameStage;
+import com.codebattle.model.meta.GameMethod;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.codebattle.model.GameStage;
-import com.codebattle.model.meta.GameMethod;
 
 public class GameEvent {
 
@@ -20,7 +20,8 @@ public class GameEvent {
     final private List<GameMethod> conditions;
     final private List<GameMethod> effects;
 
-    public GameEvent(GameStage stage, String name, String trigger, GameEventType type) {
+    public GameEvent(final GameStage stage, final String name, final String trigger,
+            final GameEventType type) {
         this.stage = stage;
         this.name = name;
         this.trigger = trigger;
@@ -31,17 +32,19 @@ public class GameEvent {
 
     public boolean validate() {
         try {
-            for (GameMethod m : conditions)
-                if (!m.validate())
+            for (final GameMethod m : this.conditions) {
+                if (!m.validate()) {
                     return false;
+                }
+            }
             return true;
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -50,8 +53,9 @@ public class GameEvent {
 
     public void execute() throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        for (GameMethod m : this.effects)
+        for (final GameMethod m : this.effects) {
             m.execute();
+        }
     }
 
     public String getName() {
@@ -70,15 +74,15 @@ public class GameEvent {
         return this.id;
     }
 
-    public void setID(long id) {
+    public void setID(final long id) {
         this.id = id;
     }
 
-    public void addEffectMethod(GameMethod m) {
+    public void addEffectMethod(final GameMethod m) {
         this.effects.add(m);
     }
 
-    public void addConditionMethod(GameMethod m) {
+    public void addConditionMethod(final GameMethod m) {
         this.conditions.add(m);
     }
 

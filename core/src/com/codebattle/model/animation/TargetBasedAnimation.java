@@ -35,7 +35,8 @@ public class TargetBasedAnimation extends BaseAnimation {
     // Optional
     protected MoveableGameObject emitter = null;
 
-    public TargetBasedAnimation(GameStage stage, Animation animMeta, GameObject target)
+    public TargetBasedAnimation(final GameStage stage, final Animation animMeta,
+            final GameObject target)
             throws Exception {
         super();
         this.stage = stage;
@@ -43,8 +44,9 @@ public class TargetBasedAnimation extends BaseAnimation {
         this.target = target;
     }
 
-    public TargetBasedAnimation(GameStage stage, Animation animMeta, GameObject target,
-            float scale) throws Exception {
+    public TargetBasedAnimation(final GameStage stage, final Animation animMeta,
+            final GameObject target,
+            final float scale) throws Exception {
         super();
         this.stage = stage;
         this.animMeta = animMeta;
@@ -52,8 +54,9 @@ public class TargetBasedAnimation extends BaseAnimation {
         this.scale = scale;
     }
 
-    public TargetBasedAnimation(GameStage stage, Animation animMeta, VirtualCell cell,
-            float scale) throws Exception {
+    public TargetBasedAnimation(final GameStage stage, final Animation animMeta,
+            final VirtualCell cell,
+            final float scale) throws Exception {
         super();
         this.stage = stage;
         this.animMeta = animMeta;
@@ -63,66 +66,72 @@ public class TargetBasedAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update(float delta) {
-        if (this.target != null)
-            this.stage.setCameraTarget(target);
-        else
-            this.stage.setCameraTarget(cell);
-        if (this.duration % this.interval == 0)
+    public void update(final float delta) {
+        if (this.target != null) {
+            this.stage.setCameraTarget(this.target);
+        } else {
+            this.stage.setCameraTarget(this.cell);
+        }
+        if (this.duration % this.interval == 0) {
             this.frame = AnimationUtil.frameOscillate(this.frame, 0, this.frames.length - 1);
+        }
         this.duration--;
 
     }
 
     @Override
-    public void draw(Batch batch, Camera camera, float delta) {
-        float x = (target == null) ? cell.getX() : target.getX();
-        float y = (target == null) ? cell.getY() : target.getY();
-        batch.draw(this.frames[frame], x + GameConstants.CELL_SIZE / 2 - frameWidth * scale
-                / 2, y + GameConstants.CELL_SIZE / 2 - frameHeight * scale / 2, frameWidth
-                * scale, frameHeight * scale);
+    public void draw(final Batch batch, final Camera camera, final float delta) {
+        final float x = this.target == null ? this.cell.getX() : this.target.getX();
+        final float y = this.target == null ? this.cell.getY() : this.target.getY();
+        batch.draw(this.frames[this.frame], x + GameConstants.CELL_SIZE / 2 - this.frameWidth
+                * this.scale
+                / 2, y + GameConstants.CELL_SIZE / 2 - this.frameHeight * this.scale / 2,
+                this.frameWidth
+                        * this.scale, this.frameHeight * this.scale);
 
     }
 
     @Override
     public boolean isFinished() {
-        return (this.duration <= 0);
+        return this.duration <= 0;
     }
 
     @Override
     public void setup() {
         try {
             this.frames = TextureFactory.getInstance().loadAnimationFramesFromFile(
-                    animMeta.source, animMeta.region);
-            this.repeat = animMeta.repeat;
-            this.interval = animMeta.interval;
-            this.duration = this.repeat * frames.length * this.interval;
+                    this.animMeta.source, this.animMeta.region);
+            this.repeat = this.animMeta.repeat;
+            this.interval = this.animMeta.interval;
+            this.duration = this.repeat * this.frames.length * this.interval;
             this.frameWidth = this.frames[0].getRegionWidth();
             this.frameHeight = this.frames[0].getRegionHeight();
-            SoundUtil.playSES(sounds);
-            if (this.emitter != null)
-                emitter.setDirection(Direction.HOLD_ATK);
-        } catch (Exception e) {
+            SoundUtil.playSES(this.sounds);
+            if (this.emitter != null) {
+                this.emitter.setDirection(Direction.HOLD_ATK);
+            }
+        } catch (final Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public void setScale(float scale) {
+    public void setScale(final float scale) {
         this.scale = scale;
     }
 
-    public void setEmitter(MoveableGameObject emitter) {
+    public void setEmitter(final MoveableGameObject emitter) {
         this.emitter = emitter;
     }
 
-    public void addSound(String sound) {
+    public void addSound(final String sound) {
         this.sounds.add(sound);
     }
 
     @Override
     public void finished() {
-        if (this.emitter != null)
-            emitter.setDirection(Direction.HOLD_DEF);
+        if (this.emitter != null) {
+            this.emitter.setDirection(Direction.HOLD_DEF);
+        }
     }
 }

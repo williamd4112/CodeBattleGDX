@@ -1,8 +1,5 @@
 package com.codebattle.model.startup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,21 +12,24 @@ import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.TextureFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainMenuStage extends Stage {
     final StartupScene parent;
 
     private Table table;
 
-    private List<TextButton> buttons;
-    private TextButton btn_exit;
-    private TextButton btn_tutorial;
-    private TextButton btn_multi;
+    private final List<TextButton> buttons;
+    private final TextButton btn_exit;
+    private final TextButton btn_tutorial;
+    private final TextButton btn_multi;
 
-    private ButtonHandler buttonHandler;
+    private final ButtonHandler buttonHandler;
 
     private Drawable background;
 
-    public MainMenuStage(StartupScene parent) {
+    public MainMenuStage(final StartupScene parent) {
         super();
         this.parent = parent;
         this.table = new Table();
@@ -37,27 +37,27 @@ public class MainMenuStage extends Stage {
         try {
             this.background = TextureFactory.getInstance().loadDrawable(
                     "StartupSceneBackground.png", ResourceType.PICTURE);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         this.table = new Table();
         this.table.setFillParent(true);
-        this.addActor(table);
+        this.addActor(this.table);
         this.buttons = new ArrayList<TextButton>();
 
         this.btn_tutorial = new TextButton("Tutorial", GameConstants.DEFAULT_SKIN);
         this.btn_tutorial.addListener(this.buttonHandler);
-        this.buttons.add(btn_tutorial);
+        this.buttons.add(this.btn_tutorial);
 
         this.btn_multi = new TextButton("MultiPlayer", GameConstants.DEFAULT_SKIN);
         this.btn_multi.addListener(this.buttonHandler);
-        this.buttons.add(btn_multi);
+        this.buttons.add(this.btn_multi);
 
         this.btn_exit = new TextButton("Exit", GameConstants.DEFAULT_SKIN);
         this.btn_exit.addListener(this.buttonHandler);
-        this.buttons.add(btn_exit);
+        this.buttons.add(this.btn_exit);
 
-        for (TextButton b : buttons) {
+        for (final TextButton b : this.buttons) {
             this.table.add(b).prefWidth(Gdx.graphics.getWidth() * 0.2f).row();
         }
         Gdx.input.setInputProcessor(this);
@@ -74,20 +74,22 @@ public class MainMenuStage extends Stage {
 
     private class ButtonHandler extends ClickListener {
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
-            if (event.getListenerActor() == btn_exit) {
+            if (event.getListenerActor() == MainMenuStage.this.btn_exit) {
                 Gdx.app.exit();
-            } else if (event.getListenerActor() == btn_tutorial) {
+            } else if (event.getListenerActor() == MainMenuStage.this.btn_tutorial) {
                 try {
-                    parent.setStage(new TutorialListStage(parent));
+                    MainMenuStage.this.parent.setStage(new TutorialListStage(
+                            MainMenuStage.this.parent));
                     MainMenuStage.this.dispose();
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
 
-            } else if (event.getListenerActor() == btn_multi) {
-                parent.setStage(new MultiPlayerLobby(parent));
+            } else if (event.getListenerActor() == MainMenuStage.this.btn_multi) {
+                MainMenuStage.this.parent.setStage(new MultiPlayerLobby(
+                        MainMenuStage.this.parent));
                 MainMenuStage.this.dispose();
             }
         }

@@ -24,8 +24,9 @@ public class MovementAnimation extends BaseAnimation {
      * @param direction
      * @param steps
      */
-    public MovementAnimation(GameStage stage, MoveableGameObject actor, Direction direction,
-            int steps) {
+    public MovementAnimation(final GameStage stage, final MoveableGameObject actor,
+            final Direction direction,
+            final int steps) {
         this.stage = stage;
         this.obj = actor;
         this.speed = actor.getSpeed();
@@ -34,8 +35,9 @@ public class MovementAnimation extends BaseAnimation {
         this.pixelDiff = steps * GameConstants.CELL_SIZE;
     }
 
-    public MovementAnimation(GameStage stage, GameObject obj, Direction direction, int steps,
-            Speed speed) {
+    public MovementAnimation(final GameStage stage, final GameObject obj,
+            final Direction direction, final int steps,
+            final Speed speed) {
         this.stage = stage;
         this.obj = obj;
         this.speed = speed;
@@ -50,7 +52,7 @@ public class MovementAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(final float delta) {
         this.stage.setCameraTarget(this.obj);
         if (this.pixelDiff > 0) {
             this.obj.moveBy(this.dx, this.dy);
@@ -60,7 +62,7 @@ public class MovementAnimation extends BaseAnimation {
 
     @Override
     public boolean isFinished() {
-        return (this.pixelDiff <= 0) ? true : false;
+        return this.pixelDiff <= 0 ? true : false;
     }
 
     @Override
@@ -70,16 +72,17 @@ public class MovementAnimation extends BaseAnimation {
 
     @Override
     public void finished() {
-        if (this.obj instanceof MoveableGameObject)
+        if (this.obj instanceof MoveableGameObject) {
             ((MoveableGameObject) this.obj).setDirection(Direction.HOLD_DEF);
+        }
     }
 
     @Override
-    public void draw(Batch batch, Camera camera, float delta) {
+    public void draw(final Batch batch, final Camera camera, final float delta) {
 
     }
 
-    public void setSpeed(Speed speed) {
+    public void setSpeed(final Speed speed) {
         this.speed = speed;
     }
 

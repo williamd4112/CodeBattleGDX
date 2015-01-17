@@ -1,5 +1,8 @@
 package com.codebattle.network.client;
 
+import com.codebattle.network.PeerListener;
+import com.codebattle.network.dataHandle.DataHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,9 +15,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import com.codebattle.network.PeerListener;
-import com.codebattle.network.dataHandle.DataHandler;
-
 public class Client {
 
     // Network IO
@@ -23,11 +23,11 @@ public class Client {
     private int serverPort;
     private BufferedReader reader;
     private PrintWriter writer;
-    private ListenThread listenThread;
-    private TimerThread timerThread;
+    private final ListenThread listenThread;
+    private final TimerThread timerThread;
 
     // Event listeners
-    private Stack<PeerListener> listeners;
+    private final Stack<PeerListener> listeners;
 
     public Client() {
         this.listeners = new Stack<PeerListener>();
@@ -35,23 +35,23 @@ public class Client {
         this.timerThread = new TimerThread();
     }
 
-    public void connectToServer(String serverIP, String serverPort) {
+    public void connectToServer(final String serverIP, final String serverPort) {
         this.serverIP = serverIP;
         this.serverPort = Integer.parseInt(serverPort);
 
         try {
-            if (socket == null) {
+            if (this.socket == null) {
                 this.socket = new Socket(this.serverIP, this.serverPort);
                 this.reader = new BufferedReader(new InputStreamReader(
                         this.socket.getInputStream()));
                 this.writer = new PrintWriter(new OutputStreamWriter(
                         this.socket.getOutputStream()));
-                start();
-                this.emitConnectEvent(socket);
+                this.start();
+                this.emitConnectEvent(this.socket);
             }
-        } catch (UnknownHostException e) {
+        } catch (final UnknownHostException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
@@ -65,20 +65,21 @@ public class Client {
      * Event handling
      * emitReceiveMessage only for top listener
      */
-    private void emitReceiveMessage(String msg) {
+    private void emitReceiveMessage(final String msg) {
         if (!this.listeners.isEmpty()) {
-            PeerListener p = this.listeners.peek();
+            final PeerListener p = this.listeners.peek();
             System.out.println("emitReceiveMessage@" + p.getClass() + ": " + msg);
             p.onReceivedMessage(msg);
         }
     }
 
-    private void emitConnectEvent(Socket socket) {
-        for (PeerListener p : this.listeners)
+    private void emitConnectEvent(final Socket socket) {
+        for (final PeerListener p : this.listeners) {
             p.onConnected(socket);
+        }
     }
 
-    public void addPeerListener(PeerListener listener) {
+    public void addPeerListener(final PeerListener listener) {
         this.listeners.add(listener);
     }
 
@@ -86,7 +87,7 @@ public class Client {
         this.listeners.pop();
     }
 
-    public void send(String msg) {
+    public void send(final String msg) {
         this.writer.println(msg);
         this.writer.flush();
     }
@@ -96,13 +97,13 @@ public class Client {
         public void run() {
             try {
                 String rawMessage = null;
-                while (!socket.isClosed()) {
+                while (!Client.this.socket.isClosed()) {
                     if ((rawMessage = Client.this.reader.readLine()) != null) {
-                        emitReceiveMessage(rawMessage);
+                        Client.this.emitReceiveMessage(rawMessage);
                         // System.out.println("Raw: " + rawMessage);
                     }
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
@@ -114,14 +115,15 @@ public class Client {
 
         @Override
         public void run() {
-            timer.schedule(new TimerTask() {
+            this.timer.schedule(new TimerTask() {
 
                 @Override
                 public void run() {
                     Client.this.send(DataHandler.report().toString());
                 }
 
-            }, TimeUnit.SECONDS.toMillis(interval), TimeUnit.SECONDS.toMillis(interval));
+            }, TimeUnit.SECONDS.toMillis(this.interval),
+                    TimeUnit.SECONDS.toMillis(this.interval));
         }
     }
 }

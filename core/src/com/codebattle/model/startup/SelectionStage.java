@@ -37,16 +37,16 @@ abstract public class SelectionStage extends Stage {
         this.btn_exit.addListener(new ClickListener() {
 
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(final InputEvent event, final float x, final float y) {
                 super.clicked(event, x, y);
                 parent.setStage(new MainMenuStage(parent));
-                dispose();
+                SelectionStage.this.dispose();
             }
 
         });
 
         this.table = new Table();
-        this.addActor(table);
+        this.addActor(this.table);
         this.table.setFillParent(true);
         this.layout();
 
@@ -54,11 +54,11 @@ abstract public class SelectionStage extends Stage {
     }
 
     public void layout() {
-        this.table.add(title).colspan(2).row();
-        this.table.add(topbar).right().colspan(2).row();
-        this.table.add(new ScrollPane(list)).expand().fill().left().top();
-        this.table.add(info).prefWidth(0.3f * Gdx.graphics.getWidth()).row();
-        this.table.add(btn_select).center().fill();
-        this.table.add(btn_exit).center().fill();
+        this.table.add(this.title).colspan(2).row();
+        this.table.add(this.topbar).right().colspan(2).row();
+        this.table.add(new ScrollPane(this.list)).expand().fill().left().top();
+        this.table.add(this.info).prefWidth(0.3f * Gdx.graphics.getWidth()).row();
+        this.table.add(this.btn_select).center().fill();
+        this.table.add(this.btn_exit).center().fill();
     }
 }

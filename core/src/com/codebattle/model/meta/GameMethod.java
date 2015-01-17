@@ -1,10 +1,10 @@
 package com.codebattle.model.meta;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import com.badlogic.gdx.utils.XmlReader;
 import com.codebattle.utility.GameMethods;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Define a executeable method in GameMethods from xml element
@@ -12,24 +12,25 @@ import com.codebattle.utility.GameMethods;
  *
  */
 public class GameMethod {
-    private Method method;
-    private Bundle args;
+    private final Method method;
+    private final Bundle args;
 
-    public GameMethod(XmlReader.Element methodElement) throws NoSuchMethodException,
+    public GameMethod(final XmlReader.Element methodElement) throws NoSuchMethodException,
             SecurityException {
         // Parsing method name
-        String methodName = methodElement.getAttribute("name");
+        final String methodName = methodElement.getAttribute("name");
         this.method = GameMethods.class.getMethod(methodName, Bundle.class);
 
         // Parsing args
         this.args = new Bundle();
-        for (XmlReader.Element argElement : methodElement.getChildrenByName("arg")) {
-            String key = argElement.get("key");
-            String value = (argElement.getText() == null) ? "" : argElement.getText();
-            for (int i = 0; i < argElement.getChildCount(); i++)
+        for (final XmlReader.Element argElement : methodElement.getChildrenByName("arg")) {
+            final String key = argElement.get("key");
+            String value = argElement.getText() == null ? "" : argElement.getText();
+            for (int i = 0; i < argElement.getChildCount(); i++) {
                 value += argElement.getChild(i).toString();
+            }
             // System.out.printf("key: %s\n value:%s \n", key, value);
-            args.bind(key, value);
+            this.args.bind(key, value);
         }
     }
 
@@ -41,7 +42,7 @@ public class GameMethod {
      */
     public void execute() throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        this.method.invoke(this, args);
+        this.method.invoke(this, this.args);
     }
 
     /**
@@ -53,10 +54,10 @@ public class GameMethod {
      */
     public boolean validate() throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        return (Boolean) this.method.invoke(this, args);
+        return (Boolean) this.method.invoke(this, this.args);
     }
 
-    public void bind(String key, Object value) {
+    public void bind(final String key, final Object value) {
         this.args.bind(key, value);
     }
 }

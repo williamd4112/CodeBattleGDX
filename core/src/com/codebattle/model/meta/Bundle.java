@@ -15,14 +15,14 @@ import java.util.Map;
  *
  */
 public class Bundle {
-    private Map<String, Object> map = new HashMap<String, Object>();
+    private final Map<String, Object> map = new HashMap<String, Object>();
 
-    public void bind(String key, Object val) {
+    public void bind(final String key, final Object val) {
         this.map.put(key, val);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T extract(String key, Class<T> type) {
+    public <T> T extract(final String key, final Class<T> type) {
         return (T) this.map.get(key);
     }
 }

@@ -7,9 +7,10 @@ import com.codebattle.utility.SoundUtil;
 
 public class SkillAnimation extends TargetBasedAnimation {
 
-    private Skill skill;
+    private final Skill skill;
 
-    public SkillAnimation(GameStage stage, Skill skill, GameObject target) throws Exception {
+    public SkillAnimation(final GameStage stage, final Skill skill, final GameObject target)
+            throws Exception {
         super(stage, skill.animMeta, target);
         this.skill = skill;
 
@@ -23,7 +24,7 @@ public class SkillAnimation extends TargetBasedAnimation {
     @Override
     public void setup() {
         super.setup();
-        SoundUtil.playSES(skill.getSoundNames());
+        SoundUtil.playSES(this.skill.getSoundNames());
     }
 
 }

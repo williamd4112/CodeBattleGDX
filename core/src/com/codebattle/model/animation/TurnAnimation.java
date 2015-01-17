@@ -10,7 +10,7 @@ public class TurnAnimation extends BaseAnimation {
     final Direction direction;
     final MoveableGameObject obj;
 
-    public TurnAnimation(MoveableGameObject obj, Direction direction) {
+    public TurnAnimation(final MoveableGameObject obj, final Direction direction) {
         this.obj = obj;
         this.direction = direction;
     }
@@ -21,13 +21,13 @@ public class TurnAnimation extends BaseAnimation {
     }
 
     @Override
-    public void update(float delta) {
-        this.obj.setDirection(direction);
+    public void update(final float delta) {
+        this.obj.setDirection(this.direction);
     }
 
     @Override
     public boolean isFinished() {
-        return (this.obj.getDirection() == this.direction) ? true : false;
+        return this.obj.getDirection() == this.direction ? true : false;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TurnAnimation extends BaseAnimation {
     }
 
     @Override
-    public void draw(Batch batch, Camera camera, float delta) {
+    public void draw(final Batch batch, final Camera camera, final float delta) {
 
     }
 }

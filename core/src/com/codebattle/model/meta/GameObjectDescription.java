@@ -1,11 +1,11 @@
 package com.codebattle.model.meta;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.codebattle.model.Readable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Store actor's data including
@@ -32,7 +32,8 @@ public class GameObjectDescription implements Readable {
      */
     final public Map<String, GameObjectType> types;
 
-    public GameObjectDescription(Element context) throws NoSuchMethodException, SecurityException {
+    public GameObjectDescription(final Element context) throws NoSuchMethodException,
+            SecurityException {
         this();
         this.read(context);
     }
@@ -42,11 +43,11 @@ public class GameObjectDescription implements Readable {
     }
 
     @Override
-    public void read(Element context) throws NoSuchMethodException, SecurityException {
+    public void read(final Element context) throws NoSuchMethodException, SecurityException {
         this.source = context.getChildByName("source")
                 .getText();
-        for (XmlReader.Element type : context.getChildrenByNameRecursively("type")) {
-            GameObjectType gameActorType = new GameObjectType(type);
+        for (final XmlReader.Element type : context.getChildrenByNameRecursively("type")) {
+            final GameObjectType gameActorType = new GameObjectType(type);
             this.types.put(gameActorType.prop.typeName, gameActorType);
         }
     }
@@ -54,8 +55,8 @@ public class GameObjectDescription implements Readable {
     @Override
     public String toString() {
         String basic = "";
-        for (String key : this.types.keySet()) {
-            GameObjectType type = this.types.get(key);
+        for (final String key : this.types.keySet()) {
+            final GameObjectType type = this.types.get(key);
             basic += String.format(
                     "Type: %s\nHp: %d\nMp: %d\nAtk: %d\nDef: %d\nRange: %d\nMaxsteps: %d\n",
                     key, type.prop.hp, type.prop.mp, type.prop.atk, type.prop.def,

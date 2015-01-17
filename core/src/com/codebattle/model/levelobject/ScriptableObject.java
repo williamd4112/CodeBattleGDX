@@ -1,8 +1,5 @@
 package com.codebattle.model.levelobject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.codebattle.model.GameObject;
 import com.codebattle.model.GameStage;
 import com.codebattle.model.MoveableGameObject;
@@ -13,27 +10,33 @@ import com.codebattle.model.meta.Skill;
 import com.codebattle.model.scriptprocessor.ObjectScriptProcessor;
 import com.codebattle.model.units.Direction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 abstract public class ScriptableObject extends MoveableGameObject {
 
-    private Map<String, String> scripts;
+    private final Map<String, String> scripts;
 
     final private String readonlyScript;
 
     final private boolean isFixed;
 
-    public ScriptableObject(GameStage stage, Owner owner, String source, String name, int id,
-            GameObjectType type, float sx, float sy, int maxsteps, String readonlyScript,
-            boolean isFixed) {
+    public ScriptableObject(final GameStage stage, final Owner owner, final String source,
+            final String name, final int id,
+            final GameObjectType type, final float sx, final float sy, final int maxsteps,
+            final String readonlyScript,
+            final boolean isFixed) {
         super(stage, owner, source, name, id, type, sx, sy, maxsteps);
         this.scripts = new HashMap<String, String>();
-        this.readonlyScript = (readonlyScript == null) ? null : readonlyScript;
+        this.readonlyScript = readonlyScript == null ? null : readonlyScript;
         this.isFixed = isFixed;
     }
 
     @Override
-    public void move(Direction direction, int pace) {
-        if (this.isFixed)
+    public void move(final Direction direction, final int pace) {
+        if (this.isFixed) {
             return;
+        }
         super.move(direction, pace);
     }
 
@@ -44,42 +47,42 @@ abstract public class ScriptableObject extends MoveableGameObject {
     }
 
     @Override
-    public void attack(int x, int y) {
+    public void attack(final int x, final int y) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public boolean onInteract(GameObject contacter) {
+    public boolean onInteract(final GameObject contacter) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void interact(int x, int y) {
+    public void interact(final int x, final int y) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void skill(int x, int y) {
+    public void skill(final int x, final int y) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onSelected(Owner owner) {
+    public void onSelected(final Owner owner) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onAttacked(Attack attack) {
+    public void onAttacked(final Attack attack) {
         this.execute("onAttacked");
     }
 
     @Override
-    public void onSkill(Skill skill, GameObject emitter) {
+    public void onSkill(final Skill skill, final GameObject emitter) {
         this.execute("onSkill");
 
     }
@@ -91,11 +94,11 @@ abstract public class ScriptableObject extends MoveableGameObject {
     }
 
     public void onUpdate() {
-        this.loadScriptProcessor(readonlyScript);
+        this.loadScriptProcessor(this.readonlyScript);
         this.execute("onUpdate");
     }
 
-    public void setScript(String key, String value) {
+    public void setScript(final String key, final String value) {
         if (!this.scripts.containsKey(key)) {
             this.scripts.put(key, value);
         } else {
@@ -104,16 +107,17 @@ abstract public class ScriptableObject extends MoveableGameObject {
         }
     }
 
-    public void execute(String key) {
+    public void execute(final String key) {
         if (this.scripts.containsKey(key)) {
-            loadScriptProcessor(this.scripts.get(key));
+            this.loadScriptProcessor(this.scripts.get(key));
         }
     }
 
-    private void loadScriptProcessor(String script) {
-        if (script == null)
+    private void loadScriptProcessor(final String script) {
+        if (script == null) {
             return;
-        ObjectScriptProcessor processor = new ObjectScriptProcessor(this);
+        }
+        final ObjectScriptProcessor processor = new ObjectScriptProcessor(this);
         processor.setScript(script);
         processor.run();
     }

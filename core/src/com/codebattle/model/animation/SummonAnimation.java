@@ -9,11 +9,11 @@ import com.codebattle.utility.GameConstants;
 
 public class SummonAnimation extends TargetBasedAnimation {
 
-    private PointLight light;
+    private final PointLight light;
 
-    public SummonAnimation(GameStage stage, GameObject target) throws Exception {
+    public SummonAnimation(final GameStage stage, final GameObject target) throws Exception {
         super(stage, GameConstants.SUMMON_ANIMMETA, target);
-        PointLightMeta lightMeta = GameConstants.SUMMON_LIGHTMETA;
+        final PointLightMeta lightMeta = GameConstants.SUMMON_LIGHTMETA;
         lightMeta.x = (int) target.getX() + GameConstants.CELL_SIZE / 2;
         lightMeta.y = (int) target.getY() + GameConstants.CELL_SIZE / 2;
         this.light = this.stage.addPointLight(lightMeta);

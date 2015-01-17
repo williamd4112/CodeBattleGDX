@@ -1,10 +1,5 @@
 package com.codebattle.model.startup;
 
-import java.net.Socket;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,11 +21,16 @@ import com.codebattle.utility.GameConstants;
 import com.codebattle.utility.ResourceType;
 import com.codebattle.utility.TextureFactory;
 
+import org.json.JSONObject;
+
+import java.net.Socket;
+import java.util.Map;
+
 public class MultiPlayerRoom extends Stage implements PeerListener {
 
-    private Client client;
+    private final Client client;
 
-    private String[] scenes = { "scene_demo", "multiplay_1", "tutorial2" };
+    private final String[] scenes = { "scene_demo", "multiplay_1", "tutorial2" };
 
     final public StartupScene parentScene;
     final public MultiPlayerLobby lobbyStage;
@@ -42,7 +42,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
     private String team = null;
     private Map<Object, Object> playerState = null;
 
-    public MultiPlayerRoom(MultiPlayerLobby lobbyStage) {
+    public MultiPlayerRoom(final MultiPlayerLobby lobbyStage) {
         super();
         // Init network
         this.client = lobbyStage.getClient();
@@ -54,12 +54,12 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
             this.view = new View(GameConstants.DEFAULT_SKIN);
             this.controller = new Controller();
             this.view.setupLayout();
-            this.view.setupListener(controller);
-        } catch (Exception e) {
+            this.view.setupListener(this.controller);
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         this.view.setFillParent(true);
-        this.addActor(view);
+        this.addActor(this.view);
 
         Gdx.input.setInputProcessor(this);
 
@@ -74,7 +74,7 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
     }
 
     public void ready() {
-        this.client.send(DataHandler.ready(team).toString());
+        this.client.send(DataHandler.ready(this.team).toString());
     }
 
     public void start() {
@@ -83,10 +83,12 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
             @Override
             public void run() {
                 try {
-                    parentScene.getParent().setScene(
-                            new MultiPlayerGameScene(parentScene.getParent(),
-                                    MultiPlayerRoom.this, sceneName, team));
-                } catch (Exception e) {
+                    MultiPlayerRoom.this.parentScene.getParent().setScene(
+                            new MultiPlayerGameScene(
+                                    MultiPlayerRoom.this.parentScene.getParent(),
+                                    MultiPlayerRoom.this, MultiPlayerRoom.this.sceneName,
+                                    MultiPlayerRoom.this.team));
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
 
@@ -96,15 +98,15 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
     }
 
     @Override
-    public void onReceivedMessage(String rawMessage) {
+    public void onReceivedMessage(final String rawMessage) {
         try {
-            Message msg = new Message(rawMessage);
+            final Message msg = new Message(rawMessage);
             if (msg.type.equals("Room")) {
                 // Receive : Player state
                 if (msg.opt.equals("PlayerState")) {
                     this.playerState = DataHandler.JsonToMap((JSONObject) msg.data);
                     // Setting portrait
-                    for (Object key : this.playerState.keySet()) {
+                    for (final Object key : this.playerState.keySet()) {
                         if (this.playerState.get(key).equals("Online")) {
                             this.view.setPlayerPortrait((String) key);
                         } else {
@@ -124,37 +126,37 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
                 }
             }
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
-    public void onConnected(Socket socket) {
+    public void onConnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onDisconnected(Socket socket) {
+    public void onDisconnected(final Socket socket) {
         // TODO Auto-generated method stub
 
     }
 
     private class View extends Table {
 
-        private Label title;
+        private final Label title;
 
-        private Image red_image, blue_image;
-        private List<Object> available_scenes;
-        private TextButton btn_changeScene;
+        private final Image red_image, blue_image;
+        private final List<Object> available_scenes;
+        private final TextButton btn_changeScene;
 
-        private VerticalGroup selectArea;
-        private TextButton btn_start;
-        private TextButton btn_exit;
+        private final VerticalGroup selectArea;
+        private final TextButton btn_start;
+        private final TextButton btn_exit;
 
-        public View(Skin skin) throws Exception {
+        public View(final Skin skin) throws Exception {
             super();
             this.title = new Label("Room", skin);
 
@@ -164,31 +166,31 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
                     "default_portrait", ResourceType.PORTRAIT));
             this.selectArea = new VerticalGroup();
             this.available_scenes = new List<Object>(skin);
-            this.available_scenes.setItems(scenes);
+            this.available_scenes.setItems(MultiPlayerRoom.this.scenes);
             this.btn_changeScene = new TextButton("Assign", skin);
-            this.selectArea.addActor(available_scenes);
-            this.selectArea.addActor(btn_changeScene);
+            this.selectArea.addActor(this.available_scenes);
+            this.selectArea.addActor(this.btn_changeScene);
 
             this.btn_start = new TextButton("Start", skin);
             this.btn_exit = new TextButton("Exit", skin);
         }
 
-        public void setupListener(Controller controller) {
+        public void setupListener(final Controller controller) {
             this.btn_start.addListener(controller);
             this.btn_exit.addListener(controller);
         }
 
         public void setupLayout() {
-            this.add(title).top().colspan(3).row();
-            this.add(red_image);
-            this.add(blue_image);
-            this.add(selectArea).expand().fill().top().right();
+            this.add(this.title).top().colspan(3).row();
+            this.add(this.red_image);
+            this.add(this.blue_image);
+            this.add(this.selectArea).expand().fill().top().right();
             this.row();
-            this.add(btn_start).fillX();
-            this.add(btn_exit).fillX();
+            this.add(this.btn_start).fillX();
+            this.add(this.btn_exit).fillX();
         }
 
-        public void setTitle(String team) {
+        public void setTitle(final String team) {
             this.title.setText(team);
         }
 
@@ -197,10 +199,11 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
 
                 @Override
                 public void run() {
-                    if (key.equals("Red"))
-                        setRed("Lancer");
-                    else if (key.equals("Blue"))
-                        setBlue("Saber");
+                    if (key.equals("Red")) {
+                        View.this.setRed("Lancer");
+                    } else if (key.equals("Blue")) {
+                        View.this.setBlue("Saber");
+                    }
                 }
 
             });
@@ -210,29 +213,30 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    if (key.equals("Red"))
-                        setRed("default");
-                    else if (key.equals("Blue"))
-                        setBlue("default");
+                    if (key.equals("Red")) {
+                        View.this.setRed("default");
+                    } else if (key.equals("Blue")) {
+                        View.this.setBlue("default");
+                    }
                 }
 
             });
         }
 
-        private void setRed(String source) {
+        private void setRed(final String source) {
             try {
                 this.red_image.setDrawable(TextureFactory.getInstance().loadDrawable(
                         source + "_portrait", ResourceType.PORTRAIT));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
 
-        private void setBlue(String source) {
+        private void setBlue(final String source) {
             try {
                 this.blue_image.setDrawable(TextureFactory.getInstance().loadDrawable(
                         source + "_portrait", ResourceType.PORTRAIT));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -242,10 +246,10 @@ public class MultiPlayerRoom extends Stage implements PeerListener {
     private class Controller extends ClickListener {
 
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
-            if (event.getListenerActor() == view.btn_start) {
-                ready();
+            if (event.getListenerActor() == MultiPlayerRoom.this.view.btn_start) {
+                MultiPlayerRoom.this.ready();
             }
         }
 

@@ -4,11 +4,11 @@ public class Player {
 
     private String name;
 
-    public Player(String name) {
+    public Player(final String name) {
         this.name = name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

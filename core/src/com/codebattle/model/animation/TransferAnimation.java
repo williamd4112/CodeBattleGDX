@@ -8,10 +8,11 @@ import com.codebattle.model.meta.Animation;
 import com.codebattle.utility.GameConstants;
 
 public class TransferAnimation extends TargetBasedAnimation {
-    private int destX, destY;
+    private final int destX, destY;
 
-    public TransferAnimation(GameStage stage, Animation animMeta, GameObject target, int x,
-            int y) throws Exception {
+    public TransferAnimation(final GameStage stage, final Animation animMeta,
+            final GameObject target, final int x,
+            final int y) throws Exception {
         super(stage, animMeta, target);
         this.destX = x * GameConstants.CELL_SIZE;
         this.destY = y * GameConstants.CELL_SIZE;
@@ -21,15 +22,17 @@ public class TransferAnimation extends TargetBasedAnimation {
     @Override
     public void setup() {
         super.setup();
-        this.target.setPosition(destX, destY);
+        this.target.setPosition(this.destX, this.destY);
     }
 
     @Override
-    public void draw(Batch batch, Camera camera, float delta) {
+    public void draw(final Batch batch, final Camera camera, final float delta) {
         super.draw(batch, camera, delta);
-        batch.draw(this.frames[frame], destX + GameConstants.CELL_SIZE / 2 - frameWidth
-                * scale / 2, destY + GameConstants.CELL_SIZE / 2 - frameHeight * scale / 2,
-                frameWidth * scale, frameHeight * scale);
+        batch.draw(this.frames[this.frame], this.destX + GameConstants.CELL_SIZE / 2
+                - this.frameWidth
+                * this.scale / 2, this.destY + GameConstants.CELL_SIZE / 2 - this.frameHeight
+                * this.scale / 2,
+                this.frameWidth * this.scale, this.frameHeight * this.scale);
     }
 
     @Override

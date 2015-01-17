@@ -7,31 +7,32 @@ import com.codebattle.scene.StartupScene;
 
 public class TutorialListStage extends SelectionStage {
 
-    private Object[] options = { "tutorial1", "tutorial2" };
-    private ButtonHandler handler;
+    private final Object[] options = { "tutorial1", "tutorial2" };
+    private final ButtonHandler handler;
 
-    public TutorialListStage(StartupScene parent) {
+    public TutorialListStage(final StartupScene parent) {
         super(parent);
-        this.list.setItems(options);
+        this.list.setItems(this.options);
         this.handler = new ButtonHandler();
-        this.btn_select.addListener(handler);
+        this.btn_select.addListener(this.handler);
 
     }
 
     private class ButtonHandler extends ClickListener {
 
         @Override
-        public void clicked(InputEvent event, float x, float y) {
+        public void clicked(final InputEvent event, final float x, final float y) {
             super.clicked(event, x, y);
-            if (event.getListenerActor() == btn_select) {
+            if (event.getListenerActor() == TutorialListStage.this.btn_select) {
                 try {
-                    parent.getParent()
+                    TutorialListStage.this.parent.getParent()
                             .setScene(
-                                    new SinglePlayerGameScene(parent.getParent(),
-                                            list.getSelected()
+                                    new SinglePlayerGameScene(
+                                            TutorialListStage.this.parent.getParent(),
+                                            TutorialListStage.this.list.getSelected()
                                                     .toString()));
                     TutorialListStage.this.dispose();
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
