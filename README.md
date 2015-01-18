@@ -6,6 +6,8 @@ Play RPG game while practicing code!
 
 ## Play
 
+Download binaries from release.
+
 Use local server and clients:
 
 1. Open server
