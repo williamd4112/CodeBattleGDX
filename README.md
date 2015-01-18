@@ -19,6 +19,12 @@ Use local server and clients:
 7. Press Start on both sides
 8. Fight!
 
+### Example code
+
+```javascript
+
+```
+
 ## Develop
 
 1. Use Eclipse
