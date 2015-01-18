@@ -1,383 +1,378 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="44" height="44" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="44" height="44" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="048-Sewer01" tilewidth="32" tileheight="32">
   <image source="../graphics/tilesets/048-Sewer01.png" width="256" height="768"/>
   <terraintypes>
    <terrain name="新地形" tile="-1"/>
   </terraintypes>
-  <tile id="4">
-   <properties>
-    <property name="passiable" value="0"/>
-   </properties>
-  </tile>
   <tile id="7">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="15">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="21">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="22">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="23">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="29">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="30">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="31">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="37">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="38">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="39">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="40">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="41">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="42">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="43">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="44">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="45">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="46">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="47">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="48">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="49">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="50">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="51">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="52">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="53">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="54">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="55">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="56">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="57">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="58">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="59">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="64">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="65">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="66">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="67">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="72">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="73">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="74">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="75">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="80">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="81">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="82">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="83">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="88">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="89">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="90">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="91">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="112">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="113">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="114">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="115">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="116">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="117">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="120">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="121">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="122">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="123">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="124">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="125">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="152">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="154">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="155">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="160">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="162">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="163">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="168">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="169">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="170">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="176">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="177">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="178">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="184">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="185">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="186">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
  </tileset>
@@ -385,12 +380,12 @@
   <image source="../graphics/tilesets/047-Mine01.png" width="256" height="864"/>
   <tile id="3">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
   <tile id="12">
    <properties>
-    <property name="passiable" value="0"/>
+    <property name="passable" value="0"/>
    </properties>
   </tile>
  </tileset>
@@ -430,6 +425,11 @@
    eJzlmDtPwzAQgKOWPwBMUASETECXFpBQmFi7tUwhU+kETDwlnr+dsxqrp+Oc2O7VSdSTPmE1tu+LWuzTJVF7IgZO6pZwCOU6rFvCIZRrWow3gS0D2wFcbPIr11Ex3gF2DfQC+Nrkn1j6KkzvLkVZbh/fOsG+Nt+H4sgSqXVVv8e4ZK8EuLAEv3fPYR3OT30Txvc4mp9vJtKCSzROmc+pb9V8Dc5F9zhlfAfR/Hzro8+egGfghZlvCprLNnAuuscZMz+LFu+q4wP4BL4C+OJcdI9bZv5ICJpLag8aWRfew0DebZ7vVLl1eGaBffFZkXj6csHd+VX3olQt4uPrcydK1SJt870HpwcDjw309Yl19h3D725i4KbTPN/M8L+jyNfUl6tBqR9Xm0r64jug6mznalB6v9HnXG24jK9LfaVq0D6BrqfPudpQxRSc7gzMHHyvS3x1DYprb7o+JXO42nCZcPHdBw4IdD19flijr836wYaoXmW+pvrqc4GrB11qQF9f136YVH9Hal3VHdOG/g713TPA3VPSSPq69Gl8ce2PxsiPu/PpuS85vor+1yLY16cfteooy13Wj1KcF39fgTfgPYAvzjUkcDVHHi2+Hz3+Bn6A3wC+OFdKwDWHPo+l+lGrAt9nvn2YkEj0jer0bXq01fcPVAHN1Q==
   </data>
  </layer>
+ <layer name="test1" width="44" height="44" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAABqHkAAAQ==
+  </data>
+ </layer>
  <layer name="圖塊層 4" width="44" height="44">
   <data encoding="base64" compression="zlib">
    eJztmEFuwjAQRU2FIpZcpxyBq/QMVc9B6Q420FXbVdsTFHaciLEgimUNtv/YTuLiJ80Cxx4/RYwziVKVCs7jZGgDjNJ8K/fJG8WpucTTg3vuDMyNzg9hpTrf9XVsMeHrbW79XjBzzHX2/FvzEDjf0Hw+X9c6qe/ztPN9mWJrpb4xOYb25XDlOJLn4Rp/DZY3la+u+dZhLcwRQmm+qdA1b/qOHV1DrS9aQ0OA+B6b7nxA6y0ViG/MeZaK0nyRM3UMvgil+Zr9ZAlnn+2LPFty9Q8utqrz3YD7pfKV9jBoX5rKV/p8++++HCn6s9z7xa6P8Y3Zl/t/hKBrvvXdyFJUKl5ufa9Bx3MQ8n1HOi45N/U73qu6nB/cfcjZB9i+M8uHw7zO3Yc+fefK77uj2FO859OC8Pl8UHxSfFEs+5JyYPpIrveNz+eb4ofitzcjN2PzuRfOOwF04g==
@@ -450,9 +450,14 @@
    eJzt070KgzAUhuEQ6EXYTtWp9P5nh7Y4eSfqZJ1K8YScIZM4mJ/S94FvCYEccviMAQAApamsMWfNxeaeZttLcpUZa01j/VmJHpJecgv+9G792TPTTMiPvsVRUt8GeXfUTD+w41lmfGuWgnfs9uj2+Qn+9Ks7xv+K3bf2dMwdJ0Xfuh2z7LlD3wAAAACktAIkjCoj
   </data>
  </layer>
- <layer name="块层 8" width="44" height="44">
+ <layer name="most up layer" width="44" height="44">
   <data encoding="base64" compression="zlib">
-   eJztziEBAAAMAjDM+1e+IARmS7AEAAAAAACgbh0AYOoBPGgABg==
+   eJzt1LENgDAMBMDIWwAVUKHsvx9FirAAJEZ30vdf2F8KADCjNVqyOKIFslmi/9uW4Ib36P92Juh7PTrWgX1tKnzDpr5rlk0FAAD+7QZOYgOx
+  </data>
+ </layer>
+ <layer name="inpassiable" width="44" height="44" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt00EOgDAIBEBe0/8/0ZOJMVEKhcC2uwkX09KpoojIAClpYDiltHQ7fzdvdejNTdb8Ru2z9LGeFeFd6UEvvWheLTt4vbGYZ++E4P36Fh29nvnr4F2520ne93MEr3UPvfne2XXR+5/rLT0qvZ4eVd6omYzwenpVetHeb4ZXS7bXen730JubrPld/b929Y6f51WledC8CHWn2jHrpJdeZO8FoLm24Q==
   </data>
  </layer>
 </map>
