@@ -22,7 +22,10 @@ Use local server and clients:
 ### Example code
 
 ```javascript
-
+Lancer.skill(18, 23);
+Saber.skill(10, 11);
+Lancer.moveRight(1);
+vs.createGameActor('Saber', 'light', 22, 24);
 ```
 
 ## Develop
