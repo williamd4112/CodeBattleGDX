@@ -6,6 +6,8 @@ Play RPG game while practicing code!
 
 ## Play
 
+### Install
+
 Download binaries from release.
 
 Use local server and clients:
@@ -27,6 +29,12 @@ Saber.skill(10, 11);
 Lancer.moveRight(1);
 vs.createGameActor('Saber', 'light', 22, 24);
 ```
+
+### Instructions
+
+Players can only control their own units.
+When you click a unit, you can know which team it belongs to by the color displayed on the ground, and more details are shown in the lower-left panel containing some APIs you can call.
+Due to lack of time, not all APIs are displayed in the panel, you could look at the file  `/CodeBattleGDX-core/src/com/codebattle/model/gameactor/GameActorProxy.java` which contains all usable APIs.
 
 ## Develop
 
