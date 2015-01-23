@@ -1,5 +1,7 @@
 # Code Battle
 
+Software studio course final project. 
+
 A gamification project.
 
 Play RPG game while practicing code!
@@ -54,3 +56,7 @@ Run as Java Application:
 
 Run as Java Application:
 `/CodeBattleGDX-desktop/src/com/codebattle/game/desktop/DesktopLauncher.java`
+
+## Credit
+
+Sprites are downloaded from [The Spriters Resource](http://www.spriters-resource.com/)
