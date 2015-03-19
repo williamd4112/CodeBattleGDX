@@ -26,10 +26,11 @@ Use local server and clients:
 ### Example code
 
 ```javascript
-Lancer.skill(18, 23);
+Lancer.skill(18, 23); //emit skill at (18,23)
 Saber.skill(10, 11);
-Lancer.moveRight(1);
-vs.createGameActor('Saber', 'light', 22, 24);
+Lancer.moveRight(1); //move right 1 step
+Wizard1.skill(12,11);
+vs.createGameActor('Saber', 'light', 22, 24); //create game actor, Sabe
 ```
 
 ### Instructions
