@@ -40,6 +40,11 @@ When you click a unit, you can know which team it belongs to by the color displa
 
 Due to lack of time, not all APIs are displayed in the panel, you could look at the file  `/CodeBattleGDX-core/src/com/codebattle/model/gameactor/GameActorProxy.java` which contains all usable APIs.
 
+### Multiplayers
+
+When the server is online, players can create room on the server, another player can join the room.
+After both players clicked the start button, the game will start.
+
 ## Develop
 
 1. Use Eclipse
